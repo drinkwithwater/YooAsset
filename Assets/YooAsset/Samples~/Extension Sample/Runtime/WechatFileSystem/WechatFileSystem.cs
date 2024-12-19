@@ -115,17 +115,27 @@ internal class WechatFileSystem : IFileSystem
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
-    public virtual FSClearAllBundleFilesOperation ClearAllBundleFilesAsync()
+    public virtual FSClearCacheBundleFilesOperation ClearCacheBundleFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
     {
-        var operation = new WXFSClearAllBundleFilesOperation(this);
-        OperationSystem.StartOperation(PackageName, operation);
-        return operation;
-    }
-    public virtual FSClearUnusedBundleFilesOperation ClearUnusedBundleFilesAsync(PackageManifest manifest)
-    {
-        var operation = new WXFSClearUnusedBundleFilesAsync(this, manifest);
-        OperationSystem.StartOperation(PackageName, operation);
-        return operation;
+        if (clearMode == EFileClearMode.ClearAllBundleFiles.ToString())
+        {
+            var operation = new WXFSClearAllBundleFilesOperation(this);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
+        }
+        else if (clearMode == EFileClearMode.ClearUnusedBundleFiles.ToString())
+        {
+            var operation = new WXFSClearUnusedBundleFilesAsync(this, manifest);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
+        }
+        else
+        {
+            string error = $"Invalid clear mode : {clearMode}";
+            var operation = new FSClearCacheBundleFilesCompleteOperation(error);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
+        }
     }
     public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
     {
