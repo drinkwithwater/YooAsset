@@ -32,6 +32,9 @@ namespace YooAsset.Editor
 
             var clearBuildCacheToggle = Root.Q<Toggle>("ClearBuildCache");
             UIElementsTools.SetElementVisible(clearBuildCacheToggle, false);
+
+            var useAssetDependencyToggle = Root.Q<Toggle>("UseAssetDependency");
+            UIElementsTools.SetElementVisible(useAssetDependencyToggle, false);
         }
 
         /// <summary>

@@ -9,6 +9,11 @@ namespace YooAsset.Editor
         public bool SimulateBuild { private set; get; }
 
         /// <summary>
+        /// 使用资源依赖数据库
+        /// </summary>
+        public bool UseAssetDependencyDB { private set; get; }
+        
+        /// <summary>
         /// 包裹名称
         /// </summary>
         public string PackageName { private set; get; }
@@ -49,11 +54,12 @@ namespace YooAsset.Editor
         public IIgnoreRule IgnoreRule { private set; get; }
 
 
-        public CollectCommand(bool simulateBuild, string packageName,
-            bool enableAddressable, bool locationToLower, bool includeAssetGUID, 
+        public CollectCommand(bool simulateBuild, bool useAssetDependencyDB, string packageName,
+            bool enableAddressable, bool locationToLower, bool includeAssetGUID,
             bool autoCollectShaders, bool uniqueBundleName, IIgnoreRule ignoreRule)
         {
             SimulateBuild = simulateBuild;
+            UseAssetDependencyDB = useAssetDependencyDB;
             PackageName = packageName;
             EnableAddressable = enableAddressable;
             LocationToLower = locationToLower;
@@ -65,6 +71,17 @@ namespace YooAsset.Editor
             // 着色器统一全名称
             var packRuleResult = DefaultPackRule.CreateShadersPackRuleResult();
             ShadersBundleName = packRuleResult.GetBundleName(packageName, uniqueBundleName);
+        }
+
+        private AssetDependencyCache _assetDependency;
+        public AssetDependencyCache AssetDependency
+        {
+            get
+            {
+                if (_assetDependency == null)
+                    _assetDependency = new AssetDependencyCache(UseAssetDependencyDB);
+                return _assetDependency;
+            }
         }
     }
 }

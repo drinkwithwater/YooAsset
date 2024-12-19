@@ -50,7 +50,13 @@ namespace YooAsset.Editor
         /// 清空构建缓存文件
         /// </summary>
         public bool ClearBuildCacheFiles = false;
-        
+
+        /// <summary>
+        /// 使用资源依赖缓存数据库
+        /// 说明：开启此项可以极大提高资源收集速度
+        /// </summary>
+        public bool UseAssetDependencyDB = false;
+
         /// <summary>
         /// 启用共享资源打包
         /// </summary>

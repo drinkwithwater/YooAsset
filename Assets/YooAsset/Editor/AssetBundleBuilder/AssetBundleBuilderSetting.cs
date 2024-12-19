@@ -89,5 +89,17 @@ namespace YooAsset.Editor
             string key = $"{Application.productName}_{packageName}_{buildPipeline}_ClearBuildCache";
             EditorPrefs.SetInt(key, clearBuildCache ? 1 : 0);
         }
+
+        // UseAssetDependencyDB
+        public static bool GetPackageUseAssetDependencyDB(string packageName, EBuildPipeline buildPipeline)
+        {
+            string key = $"{Application.productName}_{packageName}_{buildPipeline}_UseAssetDependencyDB";
+            return EditorPrefs.GetInt(key, 0) > 0;
+        }
+        public static void SetPackageUseAssetDependencyDB(string packageName, EBuildPipeline buildPipeline, bool useAssetDependencyDB)
+        {
+            string key = $"{Application.productName}_{packageName}_{buildPipeline}_UseAssetDependencyDB";
+            EditorPrefs.SetInt(key, useAssetDependencyDB ? 1 : 0);
+        }
     }
 }

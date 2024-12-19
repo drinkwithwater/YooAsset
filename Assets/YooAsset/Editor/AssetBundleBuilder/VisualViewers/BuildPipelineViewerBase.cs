@@ -28,6 +28,7 @@ namespace YooAsset.Editor
         private EnumField _copyBuildinFileOptionField;
         private TextField _copyBuildinFileTagsField;
         private Toggle _clearBuildCacheToggle;
+        private Toggle _useAssetDependencyDBToggle;
 
         public BuildPipelineViewerBase(string packageName, EBuildPipeline buildPipeline, BuildTarget buildTarget, VisualElement parent)
         {
@@ -138,6 +139,15 @@ namespace YooAsset.Editor
             _clearBuildCacheToggle.RegisterValueChangedCallback(evt =>
             {
                 AssetBundleBuilderSetting.SetPackageClearBuildCache(PackageName, BuildPipeline, _clearBuildCacheToggle.value);
+            });
+
+            // 使用资源依赖数据库
+            bool useAssetDependencyDB = AssetBundleBuilderSetting.GetPackageUseAssetDependencyDB(PackageName, BuildPipeline);
+            _useAssetDependencyDBToggle = Root.Q<Toggle>("UseAssetDependency");
+            _useAssetDependencyDBToggle.SetValueWithoutNotify(useAssetDependencyDB);
+            _useAssetDependencyDBToggle.RegisterValueChangedCallback(evt =>
+            {
+                AssetBundleBuilderSetting.SetPackageUseAssetDependencyDB(PackageName, BuildPipeline, _useAssetDependencyDBToggle.value);
             });
 
             // 构建按钮

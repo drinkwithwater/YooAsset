@@ -63,6 +63,7 @@ namespace YooAsset.Editor
 
         // 构建参数
         public bool ClearBuildCacheFiles;
+        public bool UseAssetDependencyDB;
         public bool EnableSharePackRule;
         public string EncryptionClassName;
         public EFileNameStyle FileNameStyle;

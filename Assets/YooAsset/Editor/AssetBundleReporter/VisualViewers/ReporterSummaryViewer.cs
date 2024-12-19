@@ -78,6 +78,7 @@ namespace YooAsset.Editor
             _items.Add(new ItemWrapper(string.Empty, string.Empty));
             _items.Add(new ItemWrapper("Build Params", string.Empty));
             _items.Add(new ItemWrapper("Clear Build Cache Files", $"{buildReport.Summary.ClearBuildCacheFiles}"));
+            _items.Add(new ItemWrapper("Use Asset Dependency DB", $"{buildReport.Summary.UseAssetDependencyDB}"));
             _items.Add(new ItemWrapper("Enable Share Pack Rule", $"{buildReport.Summary.EnableSharePackRule}"));
             _items.Add(new ItemWrapper("Encryption Class Name", buildReport.Summary.EncryptionClassName));
             _items.Add(new ItemWrapper("FileNameStyle", $"{buildReport.Summary.FileNameStyle}"));

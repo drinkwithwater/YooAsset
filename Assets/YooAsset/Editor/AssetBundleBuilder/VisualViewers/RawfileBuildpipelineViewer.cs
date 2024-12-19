@@ -28,6 +28,7 @@ namespace YooAsset.Editor
             var buildinFileCopyOption = AssetBundleBuilderSetting.GetPackageBuildinFileCopyOption(PackageName, BuildPipeline);
             var buildinFileCopyParams = AssetBundleBuilderSetting.GetPackageBuildinFileCopyParams(PackageName, BuildPipeline);
             var clearBuildCache = AssetBundleBuilderSetting.GetPackageClearBuildCache(PackageName, BuildPipeline);
+            var useAssetDependencyDB = AssetBundleBuilderSetting.GetPackageUseAssetDependencyDB(PackageName, BuildPipeline);
 
             RawFileBuildParameters buildParameters = new RawFileBuildParameters();
             buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
@@ -41,6 +42,7 @@ namespace YooAsset.Editor
             buildParameters.BuildinFileCopyOption = buildinFileCopyOption;
             buildParameters.BuildinFileCopyParams = buildinFileCopyParams;
             buildParameters.ClearBuildCacheFiles = clearBuildCache;
+            buildParameters.UseAssetDependencyDB = useAssetDependencyDB;
             buildParameters.EncryptionServices = CreateEncryptionInstance();
 
             RawFileBuildPipeline pipeline = new RawFileBuildPipeline();

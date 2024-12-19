@@ -991,7 +991,7 @@ namespace YooAsset.Editor
                 try
                 {
                     IIgnoreRule ignoreRule = AssetBundleCollectorSettingData.GetIgnoreRuleInstance(_ignoreRulePopupField.value.ClassName);
-                    CollectCommand command = new CollectCommand(true,
+                    CollectCommand command = new CollectCommand(true, false,
                         _packageNameTxt.value,
                         _enableAddressableToogle.value,
                         _locationToLowerToogle.value,

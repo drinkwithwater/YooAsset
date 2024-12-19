@@ -20,7 +20,8 @@ namespace YooAsset.Editor
             Dictionary<string, BuildAssetInfo> allBuildAssetInfos = new Dictionary<string, BuildAssetInfo>(1000);
 
             // 1. 获取所有收集器收集的资源
-            var collectResult = AssetBundleCollectorSettingData.Setting.GetPackageAssets(simulateBuild, packageName);
+            bool useAssetDependencyDB = buildParameters.UseAssetDependencyDB;
+            var collectResult = AssetBundleCollectorSettingData.Setting.GetPackageAssets(simulateBuild, useAssetDependencyDB, packageName);
             List<CollectAssetInfo> allCollectAssets = collectResult.CollectAssets;
 
             // 2. 剔除未被引用的依赖项资源

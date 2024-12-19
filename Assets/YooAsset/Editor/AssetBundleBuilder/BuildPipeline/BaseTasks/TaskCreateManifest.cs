@@ -137,6 +137,9 @@ namespace YooAsset.Editor
                     result.Add(packageAsset);
                 }
             }
+
+            // 按照AssetPath排序
+            result.Sort((a, b) => a.AssetPath.CompareTo(b.AssetPath));
             return result;
         }
 
@@ -151,6 +154,9 @@ namespace YooAsset.Editor
                 var packageBundle = bundleInfo.CreatePackageBundle();
                 result.Add(packageBundle);
             }
+            
+            // 按照BundleName排序
+            result.Sort((a, b) => a.BundleName.CompareTo(b.BundleName));
 
             // 注意：缓存资源包索引
             for (int index = 0; index < result.Count; index++)
