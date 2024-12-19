@@ -171,8 +171,9 @@ internal class WechatFileSystem : IFileSystem
         }
 
         _wxFileSystemMgr = WX.GetFileSystemManager();
-        _fileCacheRoot = WX.env.USER_DATA_PATH; //注意：如果有子目录，请修改此处！
-        //_fileCacheRoot = PathUtility.Combine(WX.PluginCachePath, $"StreamingAssets/WebGL");
+       _fileCacheRoot = $"{WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE";
+       //_fileCacheRoot = $"{WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/子目录"; //注意：如果有子目录，请修改此处！
+       //_fileCacheRoot = PathUtility.Combine(WX.PluginCachePath, $"StreamingAssets/WebGL");
     }
     public virtual void OnUpdate()
     {
