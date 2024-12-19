@@ -13,6 +13,7 @@ namespace YooAsset.Editor
     internal abstract class BuildPipelineViewerBase
     {
         private const int StyleWidth = 400;
+        private const int LabelMinWidth = 180;
 
         protected readonly string PackageName;
         protected readonly BuildTarget BuildTarget;
@@ -149,6 +150,17 @@ namespace YooAsset.Editor
             {
                 AssetBundleBuilderSetting.SetPackageUseAssetDependencyDB(PackageName, BuildPipeline, _useAssetDependencyDBToggle.value);
             });
+
+            // 对齐文本间距
+            UIElementsTools.SetElementLabelMinWidth(_buildOutputField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_buildVersionField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_compressionField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_encryptionField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_outputNameStyleField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_copyBuildinFileOptionField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_copyBuildinFileTagsField, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_clearBuildCacheToggle, LabelMinWidth);
+            UIElementsTools.SetElementLabelMinWidth(_useAssetDependencyDBToggle, LabelMinWidth);
 
             // 构建按钮
             var buildButton = Root.Q<Button>("Build");
