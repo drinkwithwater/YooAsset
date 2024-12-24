@@ -46,5 +46,19 @@ namespace YooAsset
             throw new System.NotImplementedException(); 
 #endif
         }
+
+        /// <summary>
+        /// 是否请求的本地文件
+        /// </summary>
+        public static bool IsRequestLocalFile(string url)
+        {
+            //TODO : UNITY_STANDALONE_OSX平台目前无法确定
+            if (url.StartsWith("file:"))
+                return true;
+            if (url.StartsWith("jar:file:"))
+                return true;
+
+            return false;
+        }
     }
 }

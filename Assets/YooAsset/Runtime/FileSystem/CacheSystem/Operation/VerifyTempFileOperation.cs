@@ -70,7 +70,7 @@ namespace YooAsset
         {
             while (true)
             {
-                // 注意：等待子线程验证文件完毕
+                //TODO : 等待子线程验证文件完毕，该操作会挂起主线程
                 InternalOnUpdate();
                 if (IsDone)
                     break;
