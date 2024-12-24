@@ -100,14 +100,9 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return false;
 
-            if (Provider is DatabaseSceneProvider)
+            if (Provider is SceneProvider)
             {
-                var provider = Provider as DatabaseSceneProvider;
-                provider.UnSuspendLoad();
-            }
-            else if (Provider is BundledSceneProvider)
-            {
-                var provider = Provider as BundledSceneProvider;
+                var provider = Provider as SceneProvider;
                 provider.UnSuspendLoad();
             }
             else
@@ -125,14 +120,9 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return false;
 
-            if (Provider is DatabaseSceneProvider)
+            if (Provider is SceneProvider)
             {
-                var temp = Provider as DatabaseSceneProvider;
-                return temp.SceneMode == LoadSceneMode.Single;
-            }
-            else if (Provider is BundledSceneProvider)
-            {
-                var temp = Provider as BundledSceneProvider;
+                var temp = Provider as SceneProvider;
                 return temp.SceneMode == LoadSceneMode.Single;
             }
             else

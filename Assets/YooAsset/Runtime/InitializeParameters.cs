@@ -91,23 +91,6 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 创建默认的内置文件系统参数（原生文件）
-        /// </summary>
-        /// <param name="decryptionServices">加密文件解密服务类</param>
-        /// <param name="verifyLevel">缓存文件的校验等级</param>
-        /// <param name="rootDirectory">内置文件的根路径</param>
-        public static FileSystemParameters CreateDefaultBuildinRawFileSystemParameters(IDecryptionServices decryptionServices = null, EFileVerifyLevel verifyLevel = EFileVerifyLevel.Middle, string rootDirectory = null)
-        {
-            string fileSystemClass = typeof(DefaultBuildinFileSystem).FullName;
-            var fileSystemParams = new FileSystemParameters(fileSystemClass, rootDirectory);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, decryptionServices);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.FILE_VERIFY_LEVEL, verifyLevel);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.APPEND_FILE_EXTENSION, true);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.RAW_FILE_BUILD_PIPELINE, true);
-            return fileSystemParams;
-        }
-
-        /// <summary>
         /// 创建默认的缓存文件系统参数
         /// </summary>
         /// <param name="remoteServices">远端资源地址查询服务类</param>
@@ -121,25 +104,6 @@ namespace YooAsset
             fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
             fileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, decryptionServices);
             fileSystemParams.AddParameter(FileSystemParametersDefine.FILE_VERIFY_LEVEL, verifyLevel);
-            return fileSystemParams;
-        }
-
-        /// <summary>
-        /// 创建默认的缓存文件系统参数（原生文件）
-        /// </summary>
-        /// <param name="remoteServices">远端资源地址查询服务类</param>
-        /// <param name="decryptionServices">加密文件解密服务类</param>
-        /// <param name="verifyLevel">缓存文件的校验等级</param>
-        /// <param name="rootDirectory">文件系统的根目录</param>
-        public static FileSystemParameters CreateDefaultCacheRawFileSystemParameters(IRemoteServices remoteServices, IDecryptionServices decryptionServices = null, EFileVerifyLevel verifyLevel = EFileVerifyLevel.Middle, string rootDirectory = null)
-        {
-            string fileSystemClass = typeof(DefaultCacheFileSystem).FullName;
-            var fileSystemParams = new FileSystemParameters(fileSystemClass, rootDirectory);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, decryptionServices);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.FILE_VERIFY_LEVEL, verifyLevel);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.APPEND_FILE_EXTENSION, true);
-            fileSystemParams.AddParameter(FileSystemParametersDefine.RAW_FILE_BUILD_PIPELINE, true);
             return fileSystemParams;
         }
 

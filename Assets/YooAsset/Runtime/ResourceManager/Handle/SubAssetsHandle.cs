@@ -67,13 +67,13 @@ namespace YooAsset
         /// <summary>
         /// 子资源对象集合
         /// </summary>
-        public IReadOnlyList<UnityEngine.Object> AllAssetObjects
+        public IReadOnlyList<UnityEngine.Object> SubAssetObjects
         {
             get
             {
                 if (IsValidWithWarning == false)
                     return null;
-                return Provider.AllAssetObjects;
+                return Provider.SubAssetObjects;
             }
         }
 
@@ -87,7 +87,7 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return null;
 
-            foreach (var assetObject in Provider.AllAssetObjects)
+            foreach (var assetObject in Provider.SubAssetObjects)
             {
                 if (assetObject.name == assetName && assetObject is TObject)
                     return assetObject as TObject;
@@ -106,8 +106,8 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return null;
 
-            List<TObject> ret = new List<TObject>(Provider.AllAssetObjects.Length);
-            foreach (var assetObject in Provider.AllAssetObjects)
+            List<TObject> ret = new List<TObject>(Provider.SubAssetObjects.Length);
+            foreach (var assetObject in Provider.SubAssetObjects)
             {
                 var retObject = assetObject as TObject;
                 if (retObject != null)

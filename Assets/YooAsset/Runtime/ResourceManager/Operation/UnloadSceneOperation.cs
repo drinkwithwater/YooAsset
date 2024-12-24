@@ -32,14 +32,9 @@ namespace YooAsset
             _provider = provider;
 
             // 注意：卸载场景前必须先解除挂起操作
-            if (provider is DatabaseSceneProvider)
+            if (provider is SceneProvider)
             {
-                var temp = provider as DatabaseSceneProvider;
-                temp.UnSuspendLoad();
-            }
-            else if (provider is BundledSceneProvider)
-            {
-                var temp = provider as BundledSceneProvider;
+                var temp = provider as SceneProvider;
                 temp.UnSuspendLoad();
             }
             else
