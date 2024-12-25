@@ -1,6 +1,7 @@
 ﻿#if UNITY_WEBGL && BYTEMINIGAME
 using UnityEngine;
 using UnityEngine.Networking;
+using WeChatWASM;
 using YooAsset;
 
 internal class BGFSLoadBundleOperation : FSLoadBundleOperation
@@ -48,9 +49,19 @@ internal class BGFSLoadBundleOperation : FSLoadBundleOperation
 
             if (CheckRequestResult())
             {
-                _steps = ESteps.Done;
-                Result = (_webRequest.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
-                Status = EOperationStatus.Succeed;
+                var assetBundle = (_webRequest.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
+                if (assetBundle == null)
+                {
+                    _steps = ESteps.Done;
+                    Error = $"{nameof(DownloadHandlerAssetBundle)} loaded asset bundle is null !";
+                    Status = EOperationStatus.Failed;
+                }
+                else
+                {
+                    _steps = ESteps.Done;
+                    Result = new AssetBundleResult(_fileSystem, _bundle, assetBundle, null);
+                    Status = EOperationStatus.Succeed;
+                }
             }
             else
             {

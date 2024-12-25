@@ -126,15 +126,19 @@ internal class ByteGameFileSystem : IFileSystem
     }
     public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)
     {
-        var operation = new BGFSLoadBundleOperation(this, bundle);
-        OperationSystem.StartOperation(PackageName, operation);
-        return operation;
-    }
-    public virtual void UnloadBundleFile(PackageBundle bundle, object result)
-    {
-        AssetBundle assetBundle = result as AssetBundle;
-        if (assetBundle != null)
-            assetBundle.Unload(true);
+        if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
+        {
+            var operation = new BGFSLoadBundleOperation(this, bundle);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
+        }
+        else
+        {
+            string error = $"{nameof(ByteGameFileSystem)} not support load bundle type : {bundle.BundleType}";
+            var operation = new FSLoadBundleCompleteOperation(error);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
+        }
     }
 
     public virtual void SetParameter(string name, object value)
@@ -190,15 +194,19 @@ internal class ByteGameFileSystem : IFileSystem
         return false;
     }
 
-    public virtual byte[] ReadFileData(PackageBundle bundle)
+    public virtual string GetBundleFilePath(PackageBundle bundle)
     {
         throw new System.NotImplementedException();
     }
-    public virtual string ReadFileText(PackageBundle bundle)
+    public virtual byte[] ReadBundleFileData(PackageBundle bundle)
     {
         throw new System.NotImplementedException();
     }
-    
+    public virtual string ReadBundleFileText(PackageBundle bundle)
+    {
+        throw new System.NotImplementedException();
+    }
+
     #region 内部方法
     private string GetCacheFileLoadPath(PackageBundle bundle)
     {
