@@ -257,6 +257,7 @@ namespace YooAsset
             return _playModeImpl.ClearCacheBundleFilesAsync(clearMode, clearParam);
         }
 
+        #region 包裹信息
         /// <summary>
         /// 获取当前激活包裹的版本信息
         /// </summary>
@@ -283,6 +284,7 @@ namespace YooAsset
             DebugCheckInitialize();
             return _playModeImpl.ActiveManifest.GetPackageDetails();
         }
+        #endregion
 
         #region 资源回收
         /// <summary>
