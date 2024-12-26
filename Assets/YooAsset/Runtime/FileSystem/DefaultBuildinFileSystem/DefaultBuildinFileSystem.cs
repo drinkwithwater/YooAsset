@@ -317,9 +317,9 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 记录内置文件信息
+        /// 记录文件信息
         /// </summary>
-        public bool RecordBuildinFile(string bundleGUID, FileWrapper wrapper)
+        public bool RecordCatalogFile(string bundleGUID, FileWrapper wrapper)
         {
             if (_wrappers.ContainsKey(bundleGUID))
             {

@@ -133,11 +133,11 @@ namespace YooAsset
 
         public virtual bool Belong(PackageBundle bundle)
         {
-            return true;
+            return _wrappers.ContainsKey(bundle.BundleGUID);
         }
         public virtual bool Exists(PackageBundle bundle)
         {
-            return true;
+            return _wrappers.ContainsKey(bundle.BundleGUID);
         }
         public virtual bool NeedDownload(PackageBundle bundle)
         {
@@ -201,9 +201,9 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 记录文件信息
+        /// 记录内置文件信息
         /// </summary>
-        public bool RecordFile(string bundleGUID, FileWrapper wrapper)
+        public bool RecordCatalogFile(string bundleGUID, FileWrapper wrapper)
         {
             if (_wrappers.ContainsKey(bundleGUID))
             {
