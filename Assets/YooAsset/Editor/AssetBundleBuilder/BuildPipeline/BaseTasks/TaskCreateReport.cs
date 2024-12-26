@@ -28,6 +28,7 @@ namespace YooAsset.Editor
                 buildReport.Summary.BuildSeconds = BuildRunner.TotalSeconds;
                 buildReport.Summary.BuildTarget = buildParameters.BuildTarget;
                 buildReport.Summary.BuildPipeline = buildParameters.BuildPipeline;
+                buildReport.Summary.BuildBundleType = buildParameters.BuildBundleType;
                 buildReport.Summary.BuildPackageName = buildParameters.PackageName;
                 buildReport.Summary.BuildPackageVersion = buildParameters.PackageVersion;
                 buildReport.Summary.BuildPackageNote = buildParameters.PackageNote;
