@@ -48,7 +48,15 @@ namespace YooAsset
 
                 if (_initUnpackFIleSystemOp.Status == EOperationStatus.Succeed)
                 {
-                    _steps = ESteps.LoadCatalogFile;
+                    if (_fileSystem.DisableCatalogFile)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Succeed;
+                    }
+                    else
+                    {
+                        _steps = ESteps.LoadCatalogFile;
+                    }
                 }
                 else
                 {

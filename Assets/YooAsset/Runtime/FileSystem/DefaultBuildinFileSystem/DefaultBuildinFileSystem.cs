@@ -64,6 +64,11 @@ namespace YooAsset
         public bool AppendFileExtension { private set; get; } = false;
 
         /// <summary>
+        /// 自定义参数：禁用Catalog目录查询文件
+        /// </summary>
+        public bool DisableCatalogFile { private set; get; } = false;
+
+        /// <summary>
         ///  自定义参数：解密方法类
         /// </summary>
         public IDecryptionServices DecryptionServices { private set; get; }
@@ -138,6 +143,10 @@ namespace YooAsset
             {
                 AppendFileExtension = (bool)value;
             }
+            else if (name == FileSystemParametersDefine.DISABLE_CATALOG_FILE)
+            {
+                DisableCatalogFile = (bool)value;
+            }
             else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
             {
                 DecryptionServices = (IDecryptionServices)value;
@@ -172,10 +181,14 @@ namespace YooAsset
 
         public virtual bool Belong(PackageBundle bundle)
         {
+            if (DisableCatalogFile)
+                return true;
             return _wrappers.ContainsKey(bundle.BundleGUID);
         }
         public virtual bool Exists(PackageBundle bundle)
         {
+            if (DisableCatalogFile)
+                return true;
             return _wrappers.ContainsKey(bundle.BundleGUID);
         }
         public virtual bool NeedDownload(PackageBundle bundle)
@@ -304,9 +317,9 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 记录文件信息
+        /// 记录内置文件信息
         /// </summary>
-        public bool RecordFile(string bundleGUID, FileWrapper wrapper)
+        public bool RecordBuildinFile(string bundleGUID, FileWrapper wrapper)
         {
             if (_wrappers.ContainsKey(bundleGUID))
             {
