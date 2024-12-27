@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
+﻿
 namespace YooAsset
 {
-    public class RawFileHandle : HandleBase, IDisposable
+    public class RawFileHandle : HandleBase
     {
         private System.Action<RawFileHandle> _callback;
 
@@ -46,22 +43,6 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return;
             Provider.WaitForAsyncComplete();
-        }
-
-        /// <summary>
-        /// 释放资源句柄
-        /// </summary>
-        public void Release()
-        {
-            this.ReleaseInternal();
-        }
-
-        /// <summary>
-        /// 释放资源句柄
-        /// </summary>
-        public void Dispose()
-        {
-            this.ReleaseInternal();
         }
 
 

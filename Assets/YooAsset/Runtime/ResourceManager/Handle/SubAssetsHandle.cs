@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace YooAsset
 {
-    public sealed class SubAssetsHandle : HandleBase, IDisposable
+    public sealed class SubAssetsHandle : HandleBase
     {
         private System.Action<SubAssetsHandle> _callback;
 
@@ -45,22 +44,6 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return;
             Provider.WaitForAsyncComplete();
-        }
-
-        /// <summary>
-        /// 释放资源句柄
-        /// </summary>
-        public void Release()
-        {
-            this.ReleaseInternal();
-        }
-
-        /// <summary>
-        /// 释放资源句柄
-        /// </summary>
-        public void Dispose()
-        {
-            this.ReleaseInternal();
         }
 
 

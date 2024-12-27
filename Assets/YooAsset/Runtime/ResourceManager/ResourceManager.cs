@@ -290,7 +290,7 @@ namespace YooAsset
                 {
                     if (sceneHandle.SceneObject == scene)
                     {
-                        sceneHandle.ReleaseInternal();
+                        sceneHandle.Release();
                         removeList.Add(sceneHandle);
                     }
                 }

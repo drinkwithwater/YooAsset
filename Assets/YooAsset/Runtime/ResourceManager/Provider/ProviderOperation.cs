@@ -239,7 +239,7 @@ namespace YooAsset
             for (int i = _handles.Count - 1; i >= 0; i--)
             {
                 var handle = _handles[i];
-                handle.ReleaseInternal();
+                handle.Release();
             }
         }
 
