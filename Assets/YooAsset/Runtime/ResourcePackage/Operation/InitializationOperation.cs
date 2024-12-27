@@ -385,7 +385,7 @@ namespace YooAsset
             if (_steps == ESteps.InitWebRemoteFileSystem)
             {
                 if (_initWebRemoteFileSystemOp == null)
-                    _initWebRemoteFileSystemOp = _impl.WebServerFileSystem.InitializeFileSystemAsync();
+                    _initWebRemoteFileSystemOp = _impl.WebRemoteFileSystem.InitializeFileSystemAsync();
 
                 Progress = _initWebRemoteFileSystemOp.Progress;
                 if (_initWebRemoteFileSystemOp.IsDone == false)
