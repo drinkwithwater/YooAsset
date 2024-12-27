@@ -129,7 +129,7 @@ namespace YooAsset
         /// <param name="disableUnityWebCache">禁用Unity的网络缓存</param>
         public static FileSystemParameters CreateDefaultWebRemoteFileSystemParameters(IRemoteServices remoteServices, bool disableUnityWebCache = false)
         {
-            string fileSystemClass = typeof(DefaultWebServerFileSystem).FullName;
+            string fileSystemClass = typeof(DefaultWebRemoteFileSystem).FullName;
             var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
             fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
             fileSystemParams.AddParameter(FileSystemParametersDefine.DISABLE_UNITY_WEB_CACHE, disableUnityWebCache);
