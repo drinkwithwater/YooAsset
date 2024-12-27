@@ -57,7 +57,13 @@ namespace YooAsset
                 _initializeError = string.Empty;
                 _initializeStatus = EOperationStatus.None;
 
-                _resourceManager = null;
+                // 销毁资源管理器
+                if (_resourceManager != null)
+                {
+                    _resourceManager.Destroy();
+                    _resourceManager = null;
+                }
+
                 _bundleQuery = null;
                 _playModeImpl = null;
             }
@@ -73,6 +79,13 @@ namespace YooAsset
 
             // 检测初始化参数合法性
             CheckInitializeParameters(parameters);
+
+            // 销毁资源管理器
+            if (_resourceManager != null)
+            {
+                _resourceManager.Destroy();
+                _resourceManager = null;
+            }
 
             // 创建资源管理器
             InitializationOperation initializeOperation;

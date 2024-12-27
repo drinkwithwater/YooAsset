@@ -113,25 +113,6 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 是否为主场景
-        /// </summary>
-        public bool IsMainScene()
-        {
-            if (IsValidWithWarning == false)
-                return false;
-
-            if (Provider is SceneProvider)
-            {
-                var temp = Provider as SceneProvider;
-                return temp.SceneMode == LoadSceneMode.Single;
-            }
-            else
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        /// <summary>
         /// 异步卸载子场景
         /// </summary>
         public UnloadSceneOperation UnloadAsync()
@@ -147,17 +128,6 @@ namespace YooAsset
                 return operation;
             }
 
-            // 如果是主场景
-            if (IsMainScene())
-            {
-                string error = $"Cannot unload main scene. Use {nameof(YooAssets.LoadSceneAsync)} method to change the main scene !";
-                YooLogger.Error(error);
-                var operation = new UnloadSceneOperation(error);
-                OperationSystem.StartOperation(packageName, operation);
-                return operation;
-            }
-
-            // 卸载子场景
             // 注意：如果场景正在加载过程，必须等待加载完成后才可以卸载该场景。
             {
                 var operation = new UnloadSceneOperation(Provider);

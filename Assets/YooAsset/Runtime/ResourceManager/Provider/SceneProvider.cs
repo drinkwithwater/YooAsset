@@ -12,17 +12,6 @@ namespace YooAsset
         private bool _suspendLoad;
         private FSLoadSceneOperation _loadSceneOp;
 
-        /// <summary>
-        /// 场景加载模式
-        /// </summary>
-        public LoadSceneMode SceneMode
-        {
-            get
-            {
-                return _loadParams.loadSceneMode;
-            }
-        }
-
         public SceneProvider(ResourceManager manager, string providerGUID, AssetInfo assetInfo, LoadSceneParameters loadParams, bool suspendLoad) : base(manager, providerGUID, assetInfo)
         {
             _loadParams = loadParams;

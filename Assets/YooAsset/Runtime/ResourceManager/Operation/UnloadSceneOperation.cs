@@ -12,7 +12,7 @@ namespace YooAsset
         {
             None,
             CheckError,
-            PrepareDone,
+            WaitDone,
             UnLoadScene,
             Done,
         }
@@ -61,10 +61,10 @@ namespace YooAsset
                     return;
                 }
 
-                _steps = ESteps.PrepareDone;
+                _steps = ESteps.WaitDone;
             }
 
-            if (_steps == ESteps.PrepareDone)
+            if (_steps == ESteps.WaitDone)
             {
                 if (_provider.IsDone == false)
                     return;
@@ -93,14 +93,19 @@ namespace YooAsset
                 if (_asyncOp == null)
                 {
                     _asyncOp = SceneManager.UnloadSceneAsync(_provider.SceneObject);
-                    _provider.ResourceMgr.UnloadSubScene(_provider.SceneName);
+                    if (_asyncOp == null)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = "Unload scene failed, see the console logs !";
+                        return;
+                    }
                 }
 
                 Progress = _asyncOp.progress;
                 if (_asyncOp.isDone == false)
                     return;
 
-                _provider.ResourceMgr.TryUnloadUnusedAsset(_provider.MainAssetInfo);
                 _steps = ESteps.Done;
                 Status = EOperationStatus.Succeed;
             }

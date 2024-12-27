@@ -9,12 +9,10 @@ namespace YooAsset
 {
     internal class ResourceManager
     {
-        // 全局场景句柄集合
-        private readonly static Dictionary<string, SceneHandle> _sceneHandles = new Dictionary<string, SceneHandle>(100);
-        private static long _sceneCreateCount = 0;
-
         internal readonly Dictionary<string, ProviderOperation> _providerDic = new Dictionary<string, ProviderOperation>(5000);
         internal readonly Dictionary<string, LoadBundleFileOperation> _loaderDic = new Dictionary<string, LoadBundleFileOperation>(5000);
+        internal readonly List<SceneHandle> _sceneHandles = new List<SceneHandle>(100);
+        private long _sceneCreateIndex = 0;
         private IBundleQuery _bundleQuery;
 
         /// <summary>
@@ -34,6 +32,15 @@ namespace YooAsset
         public void Initialize(InitializeParameters initializeParameters, IBundleQuery bundleServices)
         {
             _bundleQuery = bundleServices;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        /// <summary>
+        /// 销毁管理器
+        /// </summary>
+        public void Destroy()
+        {
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         /// <summary>
@@ -93,14 +100,8 @@ namespace YooAsset
                 return completedProvider.CreateHandle<SceneHandle>();
             }
 
-            // 如果加载的是主场景，则卸载所有缓存的场景
-            if (loadSceneParams.loadSceneMode == LoadSceneMode.Single)
-            {
-                UnloadAllScene();
-            }
-
             // 注意：同一个场景的ProviderGUID每次加载都会变化
-            string providerGUID = $"{assetInfo.GUID}-{++_sceneCreateCount}";
+            string providerGUID = $"{assetInfo.GUID}-{++_sceneCreateIndex}";
             ProviderOperation provider;
             {
                 provider = new SceneProvider(this, providerGUID, assetInfo, loadSceneParams, suspendLoad);
@@ -112,7 +113,7 @@ namespace YooAsset
             provider.Priority = priority;
             var handle = provider.CreateHandle<SceneHandle>();
             handle.PackageName = PackageName;
-            _sceneHandles.Add(providerGUID, handle);
+            _sceneHandles.Add(handle);
             return handle;
         }
 
@@ -224,56 +225,6 @@ namespace YooAsset
             return provider.CreateHandle<RawFileHandle>();
         }
 
-
-        internal void UnloadSubScene(string sceneName)
-        {
-            List<string> removeKeys = new List<string>();
-            foreach (var valuePair in _sceneHandles)
-            {
-                var sceneHandle = valuePair.Value;
-                if (sceneHandle.SceneName == sceneName)
-                {
-                    // 释放子场景句柄
-                    sceneHandle.ReleaseInternal();
-                    removeKeys.Add(valuePair.Key);
-                }
-            }
-
-            foreach (string key in removeKeys)
-            {
-                _sceneHandles.Remove(key);
-            }
-        }
-        internal void UnloadAllScene()
-        {
-            // 释放所有场景句柄
-            foreach (var valuePair in _sceneHandles)
-            {
-                valuePair.Value.ReleaseInternal();
-            }
-            _sceneHandles.Clear();
-        }
-        internal void ClearSceneHandle()
-        {
-            // 释放资源包下的所有场景
-            if (_bundleQuery.ManifestValid())
-            {
-                string packageName = PackageName;
-                List<string> removeList = new List<string>();
-                foreach (var valuePair in _sceneHandles)
-                {
-                    if (valuePair.Value.PackageName == packageName)
-                    {
-                        removeList.Add(valuePair.Key);
-                    }
-                }
-                foreach (var key in removeList)
-                {
-                    _sceneHandles.Remove(key);
-                }
-            }
-        }
-
         internal LoadBundleFileOperation CreateMainBundleFileLoader(AssetInfo assetInfo)
         {
             BundleInfo bundleInfo = _bundleQuery.GetMainBundleInfo(assetInfo);
@@ -329,6 +280,25 @@ namespace YooAsset
                 return value;
             else
                 return null;
+        }
+        private void OnSceneUnloaded(Scene scene)
+        {
+            List<SceneHandle> removeList = new List<SceneHandle>();
+            foreach (var sceneHandle in _sceneHandles)
+            {
+                if (sceneHandle.IsValid)
+                {
+                    if (sceneHandle.SceneObject == scene)
+                    {
+                        sceneHandle.ReleaseInternal();
+                        removeList.Add(sceneHandle);
+                    }
+                }
+            }
+            foreach (var sceneHandle in removeList)
+            {
+                _sceneHandles.Remove(sceneHandle);
+            }
         }
 
         #region 调试信息

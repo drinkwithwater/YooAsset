@@ -21,11 +21,6 @@ namespace YooAsset
         public string ProviderGUID { private set; get; }
 
         /// <summary>
-        /// 所属资源系统
-        /// </summary>
-        public ResourceManager ResourceMgr { private set; get; }
-
-        /// <summary>
         /// 资源信息
         /// </summary>
         public AssetInfo MainAssetInfo { private set; get; }
@@ -79,7 +74,6 @@ namespace YooAsset
 
         public ProviderOperation(ResourceManager manager, string providerGUID, AssetInfo assetInfo)
         {
-            ResourceMgr = manager;
             ProviderGUID = providerGUID;
             MainAssetInfo = assetInfo;
 
