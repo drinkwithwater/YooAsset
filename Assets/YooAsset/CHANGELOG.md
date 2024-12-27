@@ -2,6 +2,57 @@
 
 All notable changes to this package will be documented in this file.
 
+## [2.2.6-preview] - 2024-12-27
+
+### Improvements
+
+- 增强了对Steam平台DLC拓展包的支持。
+
+  ```csharp
+  // 新增参数关闭Catalog目录查询内置文件的功能
+  var fileSystemParams = CreateDefaultBuildinFileSystemParameters();
+  fileSystemParams .AddParameter(FileSystemParametersDefine.DISABLE_CATALOG_FILE, true);
+  ```
+
+- 资源句柄基类提供了统一的Release方法。
+
+  ```csharp
+  public abstract class HandleBase : IEnumerator, IDisposable
+  {
+      /// <summary>
+      /// 释放资源句柄
+      /// </summary>
+      public void Release();
+  
+      /// <summary>
+      /// 释放资源句柄
+      /// </summary>
+      public void Dispose();
+  }
+  ```
+
+- 优化了场景卸载逻辑。
+
+  ```csharp
+  //框架内不在区分主场景和附加场景。
+  //场景卸载后自动释放资源句柄。
+  ```
+
+### Fixed
+
+- 修复了Unity2020版本提示的脚本编译错误。
+- (#417) 修复了DefaultWebServerFileSystem文件系统内Catalog未起效的问题。
+
+### Added
+
+- 新增示例文件 GetCacheBundleSizeOperation.cs
+
+  可以获取指定Package的缓存资源总大小。
+
+### Removed
+
+- 移除了SceneHandle.IsMainScene()方法。
+
 ## [2.2.5-preview] - 2024-12-25
 
 依赖的ScriptableBuildPipeline (SBP) 插件库版本切换为1.21.25版本！
