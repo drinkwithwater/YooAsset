@@ -106,14 +106,14 @@ namespace YooAsset
             if (IsValidWithWarning == false)
                 return null;
 
-            List<TObject> ret = new List<TObject>(Provider.SubAssetObjects.Length);
+            List<TObject> result = new List<TObject>(Provider.SubAssetObjects.Length);
             foreach (var assetObject in Provider.SubAssetObjects)
             {
                 var retObject = assetObject as TObject;
                 if (retObject != null)
-                    ret.Add(retObject);
+                    result.Add(retObject);
             }
-            return ret.ToArray();
+            return result.ToArray();
         }
     }
 }
