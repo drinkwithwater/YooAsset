@@ -25,28 +25,32 @@ namespace YooAsset
         /// </summary>
         public static string ConvertToWWWPath(string path)
         {
-            string urlPath;
+            string url;
+
+            // 获取对应平台的URL地址
 #if UNITY_EDITOR
-            urlPath = StringUtility.Format("file:///{0}", path);
+            url = StringUtility.Format("file:///{0}", path);
 #elif UNITY_WEBGL
-            urlPath = path;
+            url = path;
 #elif UNITY_IPHONE
-            urlPath = StringUtility.Format("file://{0}", path);
+            url = StringUtility.Format("file://{0}", path);
 #elif UNITY_ANDROID
             if (path.StartsWith("jar:file://"))
-                urlPath = path;
+                url = path;
             else
-                urlPath = StringUtility.Format("jar:file://{0}", path);
+                url = StringUtility.Format("jar:file://{0}", path);
 #elif UNITY_STANDALONE_OSX
-            urlPath = new System.Uri(path).ToString();
+            url = new System.Uri(path).ToString();
 #elif UNITY_STANDALONE
-            urlPath = StringUtility.Format("file:///{0}", path);
+            url = StringUtility.Format("file:///{0}", path);
 #elif UNITY_OPENHARMONY
-            urlPath = StringUtility.Format("file://{0}", path);
+            url = StringUtility.Format("file://{0}", path);
 #else
             throw new System.NotImplementedException();
 #endif
-            return urlPath.Replace("+", "%2B").Replace("#", "%23").Replace("?", "%3F");
+
+            // For some special cases when users have special characters in their devices, url paths can not be identified correctly.
+            return url.Replace("+", "%2B").Replace("#", "%23").Replace("?", "%3F");
         }
 
         /// <summary>
