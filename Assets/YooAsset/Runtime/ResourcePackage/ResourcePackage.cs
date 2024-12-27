@@ -209,7 +209,7 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 向网络端请求最新的资源版本
+        /// 请求最新的资源版本
         /// </summary>
         /// <param name="appendTimeTicks">在URL末尾添加时间戳</param>
         /// <param name="timeout">超时时间（默认值：60秒）</param>
@@ -220,9 +220,9 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 向网络端请求并更新清单
+        /// 加载指定版本的资源清单
         /// </summary>
-        /// <param name="packageVersion">更新的包裹版本</param>
+        /// <param name="packageVersion">包裹版本</param>
         /// <param name="timeout">超时时间（默认值：60秒）</param>
         public UpdatePackageManifestOperation UpdatePackageManifestAsync(string packageVersion, int timeout = 60)
         {
@@ -240,7 +240,7 @@ namespace YooAsset
         /// <summary>
         /// 预下载指定版本的包裹资源
         /// </summary>
-        /// <param name="packageVersion">下载的包裹版本</param>
+        /// <param name="packageVersion">包裹版本</param>
         /// <param name="timeout">超时时间（默认值：60秒）</param>
         public PreDownloadContentOperation PreDownloadContentAsync(string packageVersion, int timeout = 60)
         {
@@ -272,7 +272,7 @@ namespace YooAsset
 
         #region 包裹信息
         /// <summary>
-        /// 获取当前激活包裹的版本信息
+        /// 获取当前加载包裹的版本信息
         /// </summary>
         public string GetPackageVersion()
         {
@@ -281,7 +281,7 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 获取当前激活包裹的备注信息
+        /// 获取当前加载包裹的备注信息
         /// </summary>
         public string GetPackageNote()
         {
@@ -290,7 +290,7 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 获取当前激活包裹的详细信息
+        /// 获取当前加载包裹的详细信息
         /// </summary>
         public PackageDetails GetPackageDetails()
         {

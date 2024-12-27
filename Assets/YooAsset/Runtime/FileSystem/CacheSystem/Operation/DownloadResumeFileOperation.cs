@@ -155,7 +155,7 @@ namespace YooAsset
             // 重新尝试下载
             if (_steps == ESteps.TryAgain)
             {
-                //TODO : 拷贝本地文件失败后不再尝试！
+                //TODO 拷贝本地文件失败后不再尝试！
                 if (_isReuqestLocalFile)
                 {
                     Status = EOperationStatus.Failed;
@@ -188,7 +188,7 @@ namespace YooAsset
         }
         internal override void InternalWaitForAsyncComplete()
         {
-            //TODO : 防止下载器挂起陷入无限死循环！
+            //TODO 防止下载器挂起陷入无限死循环！
             if (_steps == ESteps.None)
             {
                 InternalOnStart();
@@ -196,7 +196,7 @@ namespace YooAsset
 
             while (true)
             {
-                //TODO :  如果是导入或解压本地文件，执行等待完毕
+                //TODO 如果是导入或解压本地文件，执行等待完毕
                 if (_isReuqestLocalFile)
                 {
                     InternalOnUpdate();
