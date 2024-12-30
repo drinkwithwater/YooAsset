@@ -76,7 +76,7 @@ namespace YooAsset
                 {
                     if (IsWaitForAsyncComplete)
                     {
-                        // 场景加载无法强制异步转同步
+                        // 注意：场景加载无法强制异步转同步
                         YooLogger.Error("The scene is loading asyn !");
                     }
                     else
@@ -109,6 +109,11 @@ namespace YooAsset
                 }
             }
 #endif
+        }
+        internal override void InternalWaitForAsyncComplete()
+        {
+            //TODO 场景加载不支持异步转同步，为了支持同步加载方法需要实现该方法！
+            InternalOnUpdate();
         }
         public override void UnSuspendLoad()
         {
