@@ -26,7 +26,8 @@ namespace YooAsset
             DirectoryInfo rootDirectory = new DirectoryInfo(rootPath);
             if (rootDirectory.Exists == false)
             {
-                throw new System.Exception($"Can not found StreamingAssets root directory : {rootPath}");
+                UnityEngine.Debug.LogWarning($"Can not found StreamingAssets root directory : {rootPath}");
+                return;
             }
 
             // 搜索所有Package目录
