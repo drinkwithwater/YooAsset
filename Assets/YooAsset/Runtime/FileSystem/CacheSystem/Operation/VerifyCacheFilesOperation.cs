@@ -72,7 +72,7 @@ namespace YooAsset
                     int result = verifyElement.Result;
                     if (result != 0)
                     {
-                        _verifyingList.Remove(verifyElement);
+                        _verifyingList.RemoveAt(i);
                         RecordVerifyFile(verifyElement);
                     }
                 }
