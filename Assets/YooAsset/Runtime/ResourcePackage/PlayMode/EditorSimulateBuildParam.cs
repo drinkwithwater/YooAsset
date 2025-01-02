@@ -6,7 +6,7 @@ namespace YooAsset
         /// <summary>
         /// 包裹名称
         /// </summary>
-        public string PackageName;
+        public readonly string PackageName;
 
         /// <summary>
         /// 模拟构建管线名称
@@ -29,5 +29,10 @@ namespace YooAsset
         /// 注意：执行方法必须满足 BindingFlags.Public | BindingFlags.Static
         /// </summary>
         public string InvokeMethodName = "SimulateBuild";
+
+        public EditorSimulateBuildParam(string packageName)
+        {
+            PackageName = packageName;
+        }
     }
 }
