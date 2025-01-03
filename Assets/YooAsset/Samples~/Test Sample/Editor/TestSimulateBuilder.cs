@@ -22,7 +22,7 @@ public static class TestSimulateBuilder
             buildParameters.BuildBundleType = (int)EBuildBundleType.VirtualBundle;
             buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
             buildParameters.PackageName = packageName;
-            buildParameters.PackageVersion = "Simulate";
+            buildParameters.PackageVersion = "ESBP_Simulate";
             buildParameters.FileNameStyle = EFileNameStyle.HashName;
             buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
             buildParameters.BuildinFileCopyParams = string.Empty;
@@ -50,7 +50,7 @@ public static class TestSimulateBuilder
             buildParameters.BuildBundleType = (int)EBuildBundleType.AssetBundle;
             buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
             buildParameters.PackageName = packageName;
-            buildParameters.PackageVersion = "Simulate";
+            buildParameters.PackageVersion = "SBP_Simulate";
             buildParameters.EnableSharePackRule = true;
             buildParameters.VerifyBuildingResult = true;
             buildParameters.FileNameStyle = EFileNameStyle.HashName;
@@ -83,7 +83,7 @@ public static class TestSimulateBuilder
             buildParameters.BuildBundleType = (int)EBuildBundleType.AssetBundle;
             buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
             buildParameters.PackageName = packageName;
-            buildParameters.PackageVersion = "Simulate";
+            buildParameters.PackageVersion = "BBP_Simulate";
             buildParameters.EnableSharePackRule = true;
             buildParameters.VerifyBuildingResult = true;
             buildParameters.FileNameStyle = EFileNameStyle.HashName;
@@ -116,7 +116,7 @@ public static class TestSimulateBuilder
             buildParameters.BuildBundleType = (int)EBuildBundleType.RawBundle;
             buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
             buildParameters.PackageName = packageName;
-            buildParameters.PackageVersion = "Simulate";
+            buildParameters.PackageVersion = "RFBP_Simulate";
             buildParameters.VerifyBuildingResult = true;
             buildParameters.FileNameStyle = EFileNameStyle.HashName;
             buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
