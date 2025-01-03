@@ -19,23 +19,23 @@ public class BuildinFileSystemTester : IPrebuildSetup, IPostBuildCleanup
 #if UNITY_EDITOR
         // 构建TestPackage
         {
-            var simulateParams = new EditorSimulateBuildParam(AssetBundleCollectorDefine.TestPackageName);
-            simulateParams.BuildPipelineName = "ScriptableBuildPipeline";
-            simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
-            simulateParams.InvokeClassFullName = "TestSimulateBuilder";
-            simulateParams.InvokeMethodName = "SimulateBuild";
-            var simulateResult = EditorSimulateModeHelper.SimulateBuild(simulateParams);
+            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.TestPackageName);
+            buildParams.BuildPipelineName = "ScriptableBuildPipeline";
+            buildParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
+            buildParams.InvokeClassFullName = "TestPackageBuilder";
+            buildParams.InvokeMethodName = "BuildPackage";
+            var simulateResult = PakcageInvokeBuilder.InvokeBuilder(buildParams);
             UnityEditor.EditorPrefs.SetString(BFS_TEST_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 
         // 构建RawPackage
         {
-            var simulateParams = new EditorSimulateBuildParam(AssetBundleCollectorDefine.RawPackageName);
-            simulateParams.BuildPipelineName = "RawFileBuildPipeline";
-            simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
-            simulateParams.InvokeClassFullName = "TestSimulateBuilder";
-            simulateParams.InvokeMethodName = "SimulateBuild";
-            var simulateResult = EditorSimulateModeHelper.SimulateBuild(simulateParams);
+            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.RawPackageName);
+            buildParams.BuildPipelineName = "RawFileBuildPipeline";
+            buildParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
+            buildParams.InvokeClassFullName = "TestPackageBuilder";
+            buildParams.InvokeMethodName = "BuildPackage";
+            var simulateResult = PakcageInvokeBuilder.InvokeBuilder(buildParams);
             UnityEditor.EditorPrefs.SetString(BFS_RAW_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 #endif

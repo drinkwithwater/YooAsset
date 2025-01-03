@@ -19,23 +19,23 @@ public class EditorFileSystemTester : IPrebuildSetup, IPostBuildCleanup
 #if UNITY_EDITOR
         // 构建TestPackage
         {
-            var simulateParams = new EditorSimulateBuildParam(AssetBundleCollectorDefine.TestPackageName);
+            var simulateParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.TestPackageName);
             simulateParams.BuildPipelineName = "EditorSimulateBuildPipeline";
             simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
-            simulateParams.InvokeClassFullName = "TestSimulateBuilder";
-            simulateParams.InvokeMethodName = "SimulateBuild";
-            var simulateResult = EditorSimulateModeHelper.SimulateBuild(simulateParams);
+            simulateParams.InvokeClassFullName = "TestPackageBuilder";
+            simulateParams.InvokeMethodName = "BuildPackage";
+            var simulateResult = PakcageInvokeBuilder.InvokeBuilder(simulateParams);
             UnityEditor.EditorPrefs.SetString(EFS_TEST_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 
         // 构建RawPackage
         {
-            var simulateParams = new EditorSimulateBuildParam(AssetBundleCollectorDefine.RawPackageName);
+            var simulateParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.RawPackageName);
             simulateParams.BuildPipelineName = "EditorSimulateBuildPipeline";
             simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
-            simulateParams.InvokeClassFullName = "TestSimulateBuilder";
-            simulateParams.InvokeMethodName = "SimulateBuild";
-            var simulateResult = EditorSimulateModeHelper.SimulateBuild(simulateParams);
+            simulateParams.InvokeClassFullName = "TestPackageBuilder";
+            simulateParams.InvokeMethodName = "BuildPackage";
+            var simulateResult = PakcageInvokeBuilder.InvokeBuilder(simulateParams);
             UnityEditor.EditorPrefs.SetString(EFS_RAW_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 #endif

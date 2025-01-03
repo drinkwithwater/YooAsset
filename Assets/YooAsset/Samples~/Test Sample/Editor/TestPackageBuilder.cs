@@ -3,12 +3,12 @@ using UnityEngine;
 using YooAsset;
 using YooAsset.Editor;
 
-public static class TestSimulateBuilder
+public static class TestPackageBuilder
 {
     /// <summary>
-    /// 模拟构建
+    /// 构建资源包
     /// </summary>
-    public static EditorSimulateBuildResult SimulateBuild(EditorSimulateBuildParam buildParam)
+    public static PackageInvokeBuildResult BuildPackage(PackageInvokeBuildParam buildParam)
     {
         string packageName = buildParam.PackageName;
         string buildPipelineName = buildParam.BuildPipelineName;
@@ -31,7 +31,7 @@ public static class TestSimulateBuilder
             BuildResult buildResult = pipeline.Run(buildParameters, false);
             if (buildResult.Success)
             {
-                var reulst = new EditorSimulateBuildResult();
+                var reulst = new PackageInvokeBuildResult();
                 reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
                 return reulst;
             }
@@ -64,7 +64,7 @@ public static class TestSimulateBuilder
             BuildResult buildResult = pipeline.Run(buildParameters, false);
             if (buildResult.Success)
             {
-                var reulst = new EditorSimulateBuildResult();
+                var reulst = new PackageInvokeBuildResult();
                 reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
                 return reulst;
             }
@@ -97,7 +97,7 @@ public static class TestSimulateBuilder
             BuildResult buildResult = pipeline.Run(buildParameters, false);
             if (buildResult.Success)
             {
-                var reulst = new EditorSimulateBuildResult();
+                var reulst = new PackageInvokeBuildResult();
                 reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
                 return reulst;
             }
@@ -128,7 +128,7 @@ public static class TestSimulateBuilder
             BuildResult buildResult = pipeline.Run(buildParameters, false);
             if (buildResult.Success)
             {
-                var reulst = new EditorSimulateBuildResult();
+                var reulst = new PackageInvokeBuildResult();
                 reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
                 return reulst;
             }
