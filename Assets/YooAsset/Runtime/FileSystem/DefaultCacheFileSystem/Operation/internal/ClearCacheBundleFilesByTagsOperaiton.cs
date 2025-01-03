@@ -2,7 +2,7 @@
 
 namespace YooAsset
 {
-    internal class ClearCacheFilesByTagsOperaiton : FSClearCacheBundleFilesOperation
+    internal class ClearCacheBundleFilesByTagsOperaiton : FSClearCacheFilesOperation
     {
         private enum ESteps
         {
@@ -13,7 +13,7 @@ namespace YooAsset
             Done,
         }
 
-        private readonly ICacheSystem _cacheSystem;
+        private readonly DefaultCacheFileSystem _fileSystem;
         private readonly PackageManifest _manifest;
         private readonly object _clearParam;
         private string[] _tags;
@@ -21,9 +21,9 @@ namespace YooAsset
         private int _clearFileTotalCount = 0;
         private ESteps _steps = ESteps.None;
 
-        internal ClearCacheFilesByTagsOperaiton(ICacheSystem cacheSystem, PackageManifest manifest, object clearParam)
+        internal ClearCacheBundleFilesByTagsOperaiton(DefaultCacheFileSystem fileSystem, PackageManifest manifest, object clearParam)
         {
-            _cacheSystem = cacheSystem;
+            _fileSystem = fileSystem;
             _manifest = manifest;
             _clearParam = clearParam;
         }
@@ -82,7 +82,7 @@ namespace YooAsset
                 for (int i = _clearBundleGUIDs.Count - 1; i >= 0; i--)
                 {
                     string bundleGUID = _clearBundleGUIDs[i];
-                    _cacheSystem.DeleteCacheFile(bundleGUID);
+                    _fileSystem.DeleteCacheBundleFile(bundleGUID);
                     _clearBundleGUIDs.RemoveAt(i);
                     if (OperationSystem.IsBusy)
                         break;
@@ -102,7 +102,7 @@ namespace YooAsset
         }
         private List<string> GetTagsBundleGUIDs()
         {
-            var allBundleGUIDs = _cacheSystem.GetAllCachedBundleGUIDs();
+            var allBundleGUIDs = _fileSystem.GetAllCachedBundleGUIDs();
             List<string> result = new List<string>(allBundleGUIDs.Count);
             foreach (var bundleGUID in allBundleGUIDs)
             {

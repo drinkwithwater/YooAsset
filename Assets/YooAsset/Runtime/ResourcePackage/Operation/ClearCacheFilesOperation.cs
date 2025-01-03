@@ -1,10 +1,10 @@
 ﻿
 namespace YooAsset
 {
-    public abstract class ClearCacheBundleFilesOperation : AsyncOperationBase
+    public abstract class ClearCacheFilesOperation : AsyncOperationBase
     {
     }
-    internal sealed class ClearCacheBundleFilesImplOperation : ClearCacheBundleFilesOperation
+    internal sealed class ClearCacheFilesImplOperation : ClearCacheFilesOperation
     {
         private enum ESteps
         {
@@ -21,12 +21,12 @@ namespace YooAsset
         private readonly IFileSystem _fileSystemC;
         private readonly string _clearMode;
         private readonly object _clearParam;
-        private FSClearCacheBundleFilesOperation _clearCacheBundleFilesOpA;
-        private FSClearCacheBundleFilesOperation _clearCacheBundleFilesOpB;
-        private FSClearCacheBundleFilesOperation _clearCacheBundleFilesOpC;
+        private FSClearCacheFilesOperation _clearCacheFilesOpA;
+        private FSClearCacheFilesOperation _clearCacheFilesOpB;
+        private FSClearCacheFilesOperation _clearCacheFilesOpC;
         private ESteps _steps = ESteps.None;
         
-        internal ClearCacheBundleFilesImplOperation(IPlayMode impl, IFileSystem fileSystemA, IFileSystem fileSystemB, IFileSystem fileSystemC, string clearMode, object clearParam)
+        internal ClearCacheFilesImplOperation(IPlayMode impl, IFileSystem fileSystemA, IFileSystem fileSystemB, IFileSystem fileSystemC, string clearMode, object clearParam)
         {
             _impl = impl;
             _fileSystemA = fileSystemA;
@@ -52,14 +52,14 @@ namespace YooAsset
                     return;
                 }
 
-                if (_clearCacheBundleFilesOpA == null)
-                    _clearCacheBundleFilesOpA = _fileSystemA.ClearCacheBundleFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
+                if (_clearCacheFilesOpA == null)
+                    _clearCacheFilesOpA = _fileSystemA.ClearCacheFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
 
-                Progress = _clearCacheBundleFilesOpA.Progress;
-                if (_clearCacheBundleFilesOpA.IsDone == false)
+                Progress = _clearCacheFilesOpA.Progress;
+                if (_clearCacheFilesOpA.IsDone == false)
                     return;
 
-                if (_clearCacheBundleFilesOpA.Status == EOperationStatus.Succeed)
+                if (_clearCacheFilesOpA.Status == EOperationStatus.Succeed)
                 {
                     _steps = ESteps.ClearFileSystemB;
                 }
@@ -67,7 +67,7 @@ namespace YooAsset
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = _clearCacheBundleFilesOpA.Error;
+                    Error = _clearCacheFilesOpA.Error;
                 }
             }
 
@@ -79,14 +79,14 @@ namespace YooAsset
                     return;
                 }
 
-                if (_clearCacheBundleFilesOpB == null)
-                    _clearCacheBundleFilesOpB = _fileSystemB.ClearCacheBundleFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
+                if (_clearCacheFilesOpB == null)
+                    _clearCacheFilesOpB = _fileSystemB.ClearCacheFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
 
-                Progress = _clearCacheBundleFilesOpB.Progress;
-                if (_clearCacheBundleFilesOpB.IsDone == false)
+                Progress = _clearCacheFilesOpB.Progress;
+                if (_clearCacheFilesOpB.IsDone == false)
                     return;
 
-                if (_clearCacheBundleFilesOpB.Status == EOperationStatus.Succeed)
+                if (_clearCacheFilesOpB.Status == EOperationStatus.Succeed)
                 {
                     _steps = ESteps.ClearFileSystemC;
                 }
@@ -94,7 +94,7 @@ namespace YooAsset
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = _clearCacheBundleFilesOpB.Error;
+                    Error = _clearCacheFilesOpB.Error;
                 }
             }
 
@@ -107,14 +107,14 @@ namespace YooAsset
                     return;
                 }
 
-                if (_clearCacheBundleFilesOpC == null)
-                    _clearCacheBundleFilesOpC = _fileSystemC.ClearCacheBundleFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
+                if (_clearCacheFilesOpC == null)
+                    _clearCacheFilesOpC = _fileSystemC.ClearCacheFilesAsync(_impl.ActiveManifest, _clearMode, _clearParam);
 
-                Progress = _clearCacheBundleFilesOpC.Progress;
-                if (_clearCacheBundleFilesOpC.IsDone == false)
+                Progress = _clearCacheFilesOpC.Progress;
+                if (_clearCacheFilesOpC.IsDone == false)
                     return;
 
-                if (_clearCacheBundleFilesOpC.Status == EOperationStatus.Succeed)
+                if (_clearCacheFilesOpC.Status == EOperationStatus.Succeed)
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Succeed;
@@ -123,7 +123,7 @@ namespace YooAsset
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = _clearCacheBundleFilesOpC.Error;
+                    Error = _clearCacheFilesOpC.Error;
                 }
             }
         }

@@ -1,14 +1,14 @@
 ﻿
 namespace YooAsset
 {
-    internal class CacheWrapper
+    internal class RecordFileElement
     {
         public string InfoFilePath { private set; get; }
         public string DataFilePath { private set; get; }
         public string DataFileCRC { private set; get; }
         public long DataFileSize { private set; get; }
         
-        public CacheWrapper(string infoFilePath, string dataFilePath, string dataFileCRC, long dataFileSize)
+        public RecordFileElement(string infoFilePath, string dataFilePath, string dataFileCRC, long dataFileSize)
         {
             InfoFilePath = infoFilePath;
             DataFilePath = dataFilePath;

@@ -1,15 +1,19 @@
 ﻿
 namespace YooAsset
 {
-    internal abstract class FSClearCacheBundleFilesOperation : AsyncOperationBase
+    internal abstract class FSClearCacheFilesOperation : AsyncOperationBase
     {
     }
 
-    internal sealed class FSClearCacheBundleFilesCompleteOperation : FSClearCacheBundleFilesOperation
+    internal sealed class FSClearCacheFilesCompleteOperation : FSClearCacheFilesOperation
     {
         private readonly string _error;
 
-        internal FSClearCacheBundleFilesCompleteOperation(string error)
+        internal FSClearCacheFilesCompleteOperation()
+        {
+            _error = null;
+        }
+        internal FSClearCacheFilesCompleteOperation(string error)
         {
             _error = error;
         }

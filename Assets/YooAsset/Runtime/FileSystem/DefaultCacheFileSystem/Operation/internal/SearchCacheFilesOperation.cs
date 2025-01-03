@@ -15,9 +15,7 @@ namespace YooAsset
             Done,
         }
 
-        private readonly ICacheSystem _cacheSystem;
-        private readonly string _packageName;
-        private readonly bool _appendFileExtension;
+        private readonly DefaultCacheFileSystem _fileSystem;
         private IEnumerator<DirectoryInfo> _filesEnumerator = null;
         private float _verifyStartTime;
         private ESteps _steps = ESteps.None;
@@ -25,14 +23,12 @@ namespace YooAsset
         /// <summary>
         /// 需要验证的元素
         /// </summary>
-        public readonly List<CacheFileElement> Result = new List<CacheFileElement>(5000);
+        public readonly List<VerifyFileElement> Result = new List<VerifyFileElement>(5000);
 
 
-        internal SearchCacheFilesOperation(ICacheSystem cacheSystem, string packageName, bool appendFileExtension)
+        internal SearchCacheFilesOperation(DefaultCacheFileSystem fileSystem)
         {
-            _cacheSystem = cacheSystem;
-            _packageName = packageName;
-            _appendFileExtension = appendFileExtension;   
+            _fileSystem = fileSystem;
         }
         internal override void InternalOnStart()
         {
@@ -46,7 +42,7 @@ namespace YooAsset
 
             if (_steps == ESteps.Prepare)
             {
-                DirectoryInfo rootDirectory = new DirectoryInfo(_cacheSystem.GetCacheFileRoot());
+                DirectoryInfo rootDirectory = new DirectoryInfo(_fileSystem.GetCacheBundleFilesRoot());
                 if (rootDirectory.Exists)
                 {
                     var directorieInfos = rootDirectory.EnumerateDirectories();
@@ -84,23 +80,23 @@ namespace YooAsset
                 foreach (var chidDirectory in childDirectories)
                 {
                     string bundleGUID = chidDirectory.Name;
-                    if (_cacheSystem.IsRecordFile(bundleGUID))
+                    if (_fileSystem.IsRecordBundleFile(bundleGUID))
                         continue;
 
                     // 创建验证元素类
                     string fileRootPath = chidDirectory.FullName;
-                    string dataFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.SaveBundleDataFileName}";
-                    string infoFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.SaveBundleInfoFileName}";
+                    string dataFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.BundleDataFileName}";
+                    string infoFilePath = $"{fileRootPath}/{ DefaultCacheFileSystemDefine.BundleInfoFileName}";
 
                     // 存储的数据文件追加文件格式
-                    if (_appendFileExtension)
+                    if (_fileSystem.AppendFileExtension)
                     {
                         string dataFileExtension = FindDataFileExtension(chidDirectory);
                         if (string.IsNullOrEmpty(dataFileExtension) == false)
                             dataFilePath += dataFileExtension;
                     }
 
-                    var element = new CacheFileElement(_packageName, bundleGUID, fileRootPath, dataFilePath, infoFilePath);
+                    var element = new VerifyFileElement(_fileSystem.PackageName, bundleGUID, fileRootPath, dataFilePath, infoFilePath);
                     Result.Add(element);
                 }
 
@@ -116,7 +112,7 @@ namespace YooAsset
             var fileInfos = directoryInfo.GetFiles();
             foreach (var fileInfo in fileInfos)
             {
-                if (fileInfo.Name.StartsWith(DefaultCacheFileSystemDefine.SaveBundleDataFileName))
+                if (fileInfo.Name.StartsWith(DefaultCacheFileSystemDefine.BundleDataFileName))
                 {
                     dataFileExtension = fileInfo.Extension;
                     break;

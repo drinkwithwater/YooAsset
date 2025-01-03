@@ -7,9 +7,7 @@ namespace YooAsset
 {
     internal sealed class DownloadResumeFileOperation : DefaultDownloadFileOperation
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICacheSystem _cacheSystem;
-        private readonly List<long> _responseCodes;
+        private readonly DefaultCacheFileSystem _fileSystem;
         private DownloadHandlerFileRange _downloadHandle;
         private VerifyTempFileOperation _verifyOperation;
         private bool _isReuqestLocalFile;
@@ -18,16 +16,14 @@ namespace YooAsset
         private ESteps _steps = ESteps.None;
 
 
-        internal DownloadResumeFileOperation(IFileSystem fileSystem, ICacheSystem cacheSystem, PackageBundle bundle, DownloadParam param, List<long> responseCodes) : base(bundle, param)
+        internal DownloadResumeFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
         {
             _fileSystem = fileSystem;
-            _cacheSystem = cacheSystem;
-            _responseCodes = responseCodes;
         }
         internal override void InternalOnStart()
         {
             _isReuqestLocalFile = DownloadSystemHelper.IsRequestLocalFile(Param.MainURL);
-            _tempFilePath = _cacheSystem.GetTempFilePath(Bundle);
+            _tempFilePath = _fileSystem.GetTempFilePath(Bundle);
             _steps = ESteps.CheckExists;
         }
         internal override void InternalOnUpdate()
@@ -129,7 +125,7 @@ namespace YooAsset
 
                 if (_verifyOperation.Status == EOperationStatus.Succeed)
                 {
-                    if (_cacheSystem.WriteCacheFile(Bundle, _tempFilePath))
+                    if (_fileSystem.WriteCacheBundleFile(Bundle, _tempFilePath))
                     {
                         Status = EOperationStatus.Succeed;
                         _steps = ESteps.Done;
@@ -247,11 +243,11 @@ namespace YooAsset
         }
         private void ClearTempFileWhenError()
         {
-            if (_responseCodes == null)
+            if (_fileSystem.ResumeDownloadResponseCodes == null)
                 return;
 
             //说明：如果遇到以下错误返回码，验证失败直接删除文件
-            if (_responseCodes.Contains(HttpCode))
+            if (_fileSystem.ResumeDownloadResponseCodes.Contains(HttpCode))
             {
                 if (File.Exists(_tempFilePath))
                     File.Delete(_tempFilePath);

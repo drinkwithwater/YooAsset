@@ -2,7 +2,7 @@
 
 namespace YooAsset
 {
-    internal class CacheFileElement
+    internal class VerifyFileElement
     {
         public string PackageName { private set; get; }
         public string BundleGUID { private set; get; }
@@ -18,7 +18,7 @@ namespace YooAsset
         /// </summary>
         public volatile int Result = 0;
 
-        public CacheFileElement(string packageName, string bundleGUID, string fileRootPath, string dataFilePath, string infoFilePath)
+        public VerifyFileElement(string packageName, string bundleGUID, string fileRootPath, string dataFilePath, string infoFilePath)
         {
             PackageName = packageName;
             BundleGUID = bundleGUID;

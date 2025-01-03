@@ -19,10 +19,10 @@ namespace YooAsset
             Done,
         }
 
-        private readonly ICacheSystem _cacheSystem;
-        private readonly EFileVerifyLevel _verifyLevel;
-        private List<CacheFileElement> _waitingList;
-        private List<CacheFileElement> _verifyingList;
+        private readonly DefaultCacheFileSystem _fileSystem;
+        private readonly EFileVerifyLevel _fileVerifyLevel;
+        private List<VerifyFileElement> _waitingList;
+        private List<VerifyFileElement> _verifyingList;
         private int _verifyMaxNum;
         private int _verifyTotalCount;
         private float _verifyStartTime;
@@ -31,11 +31,11 @@ namespace YooAsset
         private ESteps _steps = ESteps.None;
 
 
-        internal VerifyCacheFilesOperation(ICacheSystem cacheSystem, EFileVerifyLevel verifyLevel, List<CacheFileElement> elements)
+        internal VerifyCacheFilesOperation(DefaultCacheFileSystem fileSystem, List<VerifyFileElement> elements)
         {
-            _cacheSystem = cacheSystem;
-            _verifyLevel = verifyLevel;
+            _fileSystem = fileSystem;
             _waitingList = elements;
+            _fileVerifyLevel = fileSystem.FileVerifyLevel;
         }
         internal override void InternalOnStart()
         {
@@ -59,7 +59,7 @@ namespace YooAsset
                 if (_verifyMaxNum < 1)
                     _verifyMaxNum = 1;
 
-                _verifyingList = new List<CacheFileElement>(_verifyMaxNum);
+                _verifyingList = new List<VerifyFileElement>(_verifyMaxNum);
                 _steps = ESteps.UpdateVerify;
             }
 
@@ -118,22 +118,21 @@ namespace YooAsset
         }
         private void VerifyInThread(object obj)
         {
-            CacheFileElement element = (CacheFileElement)obj;
-            int verifyResult = (int)VerifyingCacheFile(element, _verifyLevel);
+            VerifyFileElement element = (VerifyFileElement)obj;
+            int verifyResult = (int)VerifyingCacheFile(element, _fileVerifyLevel);
             element.Result = verifyResult;
         }
-        private void RecordVerifyFile(CacheFileElement element)
+        private void RecordVerifyFile(VerifyFileElement element)
         {
             if (element.Result == (int)EFileVerifyResult.Succeed)
             {
                 _succeedCount++;
-                var fileWrapper = new CacheWrapper(element.InfoFilePath, element.DataFilePath, element.DataFileCRC, element.DataFileSize);
-                _cacheSystem.RecordFile(element.BundleGUID, fileWrapper);
+                var recordFileElement = new RecordFileElement(element.InfoFilePath, element.DataFilePath, element.DataFileCRC, element.DataFileSize);
+                _fileSystem.RecordBundleFile(element.BundleGUID, recordFileElement);
             }
             else
             {
                 _failedCount++;
-
                 YooLogger.Warning($"Failed to verify file {element.Result} and delete files : {element.FileRootPath}");
                 element.DeleteFiles();
             }
@@ -142,7 +141,7 @@ namespace YooAsset
         /// <summary>
         /// 验证缓存文件（子线程内操作）
         /// </summary>
-        private EFileVerifyResult VerifyingCacheFile(CacheFileElement element, EFileVerifyLevel verifyLevel)
+        private EFileVerifyResult VerifyingCacheFile(VerifyFileElement element, EFileVerifyLevel verifyLevel)
         {
             try
             {
@@ -160,7 +159,7 @@ namespace YooAsset
                         return EFileVerifyResult.InfoFileNotExisted;
 
                     // 解析信息文件获取验证数据
-                    _cacheSystem.ReadInfoFile(element.InfoFilePath, out element.DataFileCRC, out element.DataFileSize);
+                    _fileSystem.ReadBundleInfoFile(element.InfoFilePath, out element.DataFileCRC, out element.DataFileSize);
                 }
             }
             catch (Exception)

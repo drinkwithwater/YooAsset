@@ -6,22 +6,20 @@ namespace YooAsset
 {
     internal sealed class DownloadNormalFileOperation : DefaultDownloadFileOperation
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICacheSystem _cacheSystem;
+        private readonly DefaultCacheFileSystem _fileSystem;
         private VerifyTempFileOperation _verifyOperation;
         private bool _isReuqestLocalFile;
         private string _tempFilePath;
         private ESteps _steps = ESteps.None;
 
-        internal DownloadNormalFileOperation(IFileSystem fileSystem, ICacheSystem cacheSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
+        internal DownloadNormalFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
         {
             _fileSystem = fileSystem;
-            _cacheSystem = cacheSystem;
         }
         internal override void InternalOnStart()
         {
             _isReuqestLocalFile = DownloadSystemHelper.IsRequestLocalFile(Param.MainURL);
-            _tempFilePath = _cacheSystem.GetTempFilePath(Bundle);
+            _tempFilePath = _fileSystem.GetTempFilePath(Bundle);
             _steps = ESteps.CheckExists;
         }
         internal override void InternalOnUpdate()
@@ -106,7 +104,7 @@ namespace YooAsset
 
                 if (_verifyOperation.Status == EOperationStatus.Succeed)
                 {
-                    if (_cacheSystem.WriteCacheFile(Bundle, _tempFilePath))
+                    if (_fileSystem.WriteCacheBundleFile(Bundle, _tempFilePath))
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Succeed;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace YooAsset
 {
-    internal sealed class ClearAllCacheFilesOperation : FSClearCacheBundleFilesOperation
+    internal sealed class ClearAllCacheBundleFilesOperation : FSClearCacheFilesOperation
     {
         private enum ESteps
         {
@@ -13,15 +13,15 @@ namespace YooAsset
             Done,
         }
 
-        private readonly ICacheSystem _cacheSystem;
+        private readonly DefaultCacheFileSystem _fileSystem;
         private List<string> _allBundleGUIDs;
         private int _fileTotalCount = 0;
         private ESteps _steps = ESteps.None;
 
 
-        internal ClearAllCacheFilesOperation(ICacheSystem cacheSystem)
+        internal ClearAllCacheBundleFilesOperation(DefaultCacheFileSystem fileSystem)
         {
-            _cacheSystem = cacheSystem;
+            _fileSystem = fileSystem;
         }
         internal override void InternalOnStart()
         {
@@ -34,7 +34,7 @@ namespace YooAsset
 
             if (_steps == ESteps.GetAllCacheFiles)
             {
-                _allBundleGUIDs = _cacheSystem.GetAllCachedBundleGUIDs();
+                _allBundleGUIDs = _fileSystem.GetAllCachedBundleGUIDs();
                 _fileTotalCount = _allBundleGUIDs.Count;
                 _steps = ESteps.ClearAllCacheFiles;
                 YooLogger.Log($"Found all cache files count : {_fileTotalCount}");
@@ -45,7 +45,7 @@ namespace YooAsset
                 for (int i = _allBundleGUIDs.Count - 1; i >= 0; i--)
                 {
                     string bundleGUID = _allBundleGUIDs[i];
-                    _cacheSystem.DeleteCacheFile(bundleGUID);
+                    _fileSystem.DeleteCacheBundleFile(bundleGUID);
                     _allBundleGUIDs.RemoveAt(i);
                     if (OperationSystem.IsBusy)
                         break;
