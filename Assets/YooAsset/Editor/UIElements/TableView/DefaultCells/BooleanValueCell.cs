@@ -6,7 +6,7 @@ namespace YooAsset.Editor
     public class BooleanValueCell : ITableCell, IComparable
     {
         public object CellValue { set; get; }
-        public string HeaderTitle { private set; get; }
+        public string SearchTag { private set; get; }
         public bool BooleanValue
         {
             get
@@ -15,9 +15,9 @@ namespace YooAsset.Editor
             }
         }
 
-        public BooleanValueCell(string headerTitle, object cellValue)
+        public BooleanValueCell(string searchTag, object cellValue)
         {
-            HeaderTitle = headerTitle;
+            SearchTag = searchTag;
             CellValue = cellValue;
         }
         public object GetDisplayObject()

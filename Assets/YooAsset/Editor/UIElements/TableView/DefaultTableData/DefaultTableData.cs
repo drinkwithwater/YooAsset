@@ -24,29 +24,29 @@ namespace YooAsset.Editor
             var cell = new ButtonCell();
             Cells.Add(cell);
         }
-        public void AddAssetPathCell(string headerTitle, string path)
+        public void AddAssetPathCell(string searchTag, string path)
         {
-            var cell = new AssetPathCell(headerTitle, path);
+            var cell = new AssetPathCell(searchTag, path);
             Cells.Add(cell);
         }
-        public void AddStringValueCell(string headerTitle, string value)
+        public void AddStringValueCell(string searchTag, string value)
         {
-            var cell = new StringValueCell(headerTitle, value);
+            var cell = new StringValueCell(searchTag, value);
             Cells.Add(cell);
         }
-        public void AddLongValueCell(string headerTitle, long value)
+        public void AddLongValueCell(string searchTag, long value)
         {
-            var cell = new IntegerValueCell(headerTitle, value);
+            var cell = new IntegerValueCell(searchTag, value);
             Cells.Add(cell);
         }
-        public void AddDoubleValueCell(string headerTitle, double value)
+        public void AddDoubleValueCell(string searchTag, double value)
         {
-            var cell = new SingleValueCell(headerTitle, value);
+            var cell = new SingleValueCell(searchTag, value);
             Cells.Add(cell);
         }
-        public void AddBoolValueCell(string headerTitle, bool value)
+        public void AddBoolValueCell(string searchTag, bool value)
         {
-            var cell = new BooleanValueCell(headerTitle, value);
+            var cell = new BooleanValueCell(searchTag, value);
             Cells.Add(cell);
         }
         #endregion
