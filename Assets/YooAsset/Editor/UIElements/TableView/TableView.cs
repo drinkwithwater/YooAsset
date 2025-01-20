@@ -90,6 +90,16 @@ namespace YooAsset.Editor
         }
 
         /// <summary>
+        /// 设置标题
+        /// </summary>
+        public void SetHeaderTitle(string elementName, string headerTitle)
+        {
+            var toolbarBtn = _toolbar.Q<ToolbarButton>(elementName);
+            if (toolbarBtn != null)
+                toolbarBtn.text = headerTitle;
+        }
+
+        /// <summary>
         /// 添加单元列
         /// </summary>
         public void AddColumn(TableColumn column)

@@ -34,14 +34,19 @@ namespace YooAsset.Editor
             var cell = new StringValueCell(headerTitle, value);
             Cells.Add(cell);
         }
-        public void AddIntegerValueCell(string headerTitle, long value)
+        public void AddLongValueCell(string headerTitle, long value)
         {
             var cell = new IntegerValueCell(headerTitle, value);
             Cells.Add(cell);
         }
-        public void AddSingleValueCell(string headerTitle, double value)
+        public void AddDoubleValueCell(string headerTitle, double value)
         {
             var cell = new SingleValueCell(headerTitle, value);
+            Cells.Add(cell);
+        }
+        public void AddBoolValueCell(string headerTitle, bool value)
+        {
+            var cell = new BooleanValueCell(headerTitle, value);
             Cells.Add(cell);
         }
         #endregion
