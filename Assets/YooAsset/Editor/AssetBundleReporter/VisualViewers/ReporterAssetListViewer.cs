@@ -69,7 +69,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("AssetPath", "AssetPath", columnStyle);
+                var column = new TableColumn("AssetPath", "Asset Path", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -96,7 +96,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("MainBundle", "MainBundle", columnStyle);
+                var column = new TableColumn("MainBundle", "Main Bundle", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -125,7 +125,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("DependBundles", "DependBundles", columnStyle);
+                var column = new TableColumn("DependBundles", "Depend Bundles", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -152,7 +152,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("FileSize", "FileSize", columnStyle);
+                var column = new TableColumn("FileSize", "File Size", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -180,7 +180,7 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = false;
-                var column = new TableColumn("FileHash", "FileHash", columnStyle);
+                var column = new TableColumn("FileHash", "File Hash", columnStyle);
                 column.MakeCell = () =>
                 {
                     var label = new Label();
@@ -277,10 +277,6 @@ namespace YooAsset.Editor
             }
             _dependTableView.itemsSource = sourceDatas;
             _dependTableView.RebuildView();
-
-            // 刷新标题
-            string headerTitle = $"DependBundles ({mainBundle.DependBundles.Count})";
-            _dependTableView.SetHeaderTitle("DependBundles", headerTitle);
         }
         private void OnClickAssetTableView(PointerDownEvent evt, ITableData data)
         {
