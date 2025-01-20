@@ -15,9 +15,10 @@ namespace YooAsset.Editor
             }
         }
 
-        public SingleValueCell(string headerTitle)
+        public SingleValueCell(string headerTitle, object cellValue)
         {
             HeaderTitle = headerTitle;
+            CellValue = cellValue;
         }
         public object GetDisplayObject()
         {

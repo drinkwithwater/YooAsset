@@ -15,6 +15,13 @@ namespace YooAsset.Editor
     /// </summary>
     public class TableView : VisualElement
     {
+        /// <summary>
+        ///  Instantiates a TableView using data from a UXML file.
+        /// </summary>
+        public new class UxmlFactory : UxmlFactory<TableView, UxmlTraits>
+        {
+        }
+
         private readonly Toolbar _toolbar;
         private readonly ListView _listView;
 
@@ -55,6 +62,11 @@ namespace YooAsset.Editor
         /// </summary>
         public Action<TableColumn> ClickTableHeadEvent;
 
+        /// <summary>
+        /// 单元视图变化事件
+        /// </summary>
+        public Action<ITableData> SelectionChangedEvent;
+
 
         public TableView()
         {
@@ -65,6 +77,15 @@ namespace YooAsset.Editor
             _listView.makeItem = MakeListViewElement;
             _listView.bindItem = BindListViewElement;
             _listView.RegisterCallback<PointerDownEvent>(OnClickListItem);
+
+#if UNITY_2022_3_OR_NEWER
+            _listView.selectionChanged += OnSelectionChanged;
+#elif UNITY_2020_1_OR_NEWER
+            _listView.onSelectionChange += OnSelectionChanged;
+#else
+            _listView.onSelectionChanged += OnSelectionChanged;
+#endif
+
             this.Add(_listView);
         }
 
@@ -121,37 +142,28 @@ namespace YooAsset.Editor
             _listView.Rebuild();
         }
 
-        private bool CheckItemsSource(List<ITableData> itemsSource)
+        /// <summary>
+        /// 清空所有数据
+        /// </summary>
+        public void ClearAll(bool clearColumns, bool clearSource)
         {
-            if (itemsSource == null || itemsSource.Count == 0)
+            if (clearColumns)
             {
-                Debug.LogWarning("Items source is null or empty !");
-                return false;
+                _columns.Clear();
+                _toolbar.Clear();
             }
 
-            int cellCount = itemsSource[0].Cells.Count;
-            for (int i = 0; i < itemsSource.Count; i++)
+            if (clearSource)
             {
-                var tableData = itemsSource[i];
-                if (tableData == null)
-                {
-                    Debug.LogWarning($"Items source has null instance !");
-                    return false;
-                }
-                if (tableData.Cells == null || tableData.Cells.Count == 0)
-                {
-                    Debug.LogWarning($"Items source data has empty cells !");
-                    return false;
-                }
-                if (tableData.Cells.Count != cellCount)
-                {
-                    Debug.LogWarning($"Items source data has inconsisten cells count ! Item index {i}");
-                    return false;
-                }
+                if (_itemsSource != null)
+                    _itemsSource.Clear();
+                if (_sortingDatas != null)
+                    _sortingDatas.Clear();
+                _listView.Clear();
+                _listView.ClearSelection();
             }
-
-            return true;
         }
+
         private void OnClickListItem(PointerDownEvent evt)
         {
             var selectData = _listView.selectedItem as ITableData;
@@ -203,6 +215,47 @@ namespace YooAsset.Editor
 
             // 刷新数据表
             RebuildView();
+        }
+        private void OnSelectionChanged(IEnumerable<object> items)
+        {
+            foreach (var item in items)
+            {
+                var tableData = item as ITableData;
+                SelectionChangedEvent?.Invoke(tableData);
+                break;
+            }
+        }
+
+        private bool CheckItemsSource(List<ITableData> itemsSource)
+        {
+            if (itemsSource == null)
+                return false;
+
+            if (itemsSource.Count > 0)
+            {
+                int cellCount = itemsSource[0].Cells.Count;
+                for (int i = 0; i < itemsSource.Count; i++)
+                {
+                    var tableData = itemsSource[i];
+                    if (tableData == null)
+                    {
+                        Debug.LogWarning($"Items source has null instance !");
+                        return false;
+                    }
+                    if (tableData.Cells == null || tableData.Cells.Count == 0)
+                    {
+                        Debug.LogWarning($"Items source data has empty cells !");
+                        return false;
+                    }
+                    if (tableData.Cells.Count != cellCount)
+                    {
+                        Debug.LogWarning($"Items source data has inconsisten cells count ! Item index {i}");
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
         private VisualElement MakeListViewElement()
         {
