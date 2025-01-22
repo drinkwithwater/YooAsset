@@ -32,7 +32,7 @@ namespace YooAsset.Editor
             }
             else
             {
-                return 1;
+                return 0;
             }
         }
     }

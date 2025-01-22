@@ -53,6 +53,23 @@ namespace YooAsset.Editor
         }
 
         /// <summary>
+        /// 选中的数据列表
+        /// </summary>
+        public List<ITableData> selectedItems
+        {
+            get
+            {
+#if UNITY_2020_3_OR_NEWER
+                return _listView.selectedItems.Cast<ITableData>().ToList();
+#else
+                List<ITableData> result = new List<ITableData>();
+                result.Add(_listView.selectedItem as ITableData);
+                return result;
+#endif
+            }
+        }
+
+        /// <summary>
         /// 单元视图交互事件
         /// </summary>
         public Action<PointerDownEvent, ITableData> ClickTableDataEvent;
@@ -76,6 +93,7 @@ namespace YooAsset.Editor
             _listView = new ListView();
             _listView.makeItem = MakeListViewElement;
             _listView.bindItem = BindListViewElement;
+            _listView.selectionType = SelectionType.Multiple;
             _listView.RegisterCallback<PointerDownEvent>(OnClickListItem);
 
 #if UNITY_2022_3_OR_NEWER

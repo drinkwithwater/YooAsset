@@ -1,8 +1,6 @@
 ﻿#if UNITY_2019_4_OR_NEWER
 using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 
 namespace YooAsset.Editor
 {
@@ -18,10 +16,19 @@ namespace YooAsset.Editor
         /// </summary>
         public IList<ITableCell> Cells { set; get; } = new List<ITableCell>();
 
-        #region 添加默认的单元格数据
-        public void AddButtonCell()
+
+        /// <summary>
+        /// 添加单元格数据
+        /// </summary>
+        public void AddCell(ITableCell cell)
         {
-            var cell = new ButtonCell();
+            Cells.Add(cell);
+        }
+
+        #region 添加默认的单元格数据
+        public void AddButtonCell(string searchTag)
+        {
+            var cell = new ButtonCell(searchTag);
             Cells.Add(cell);
         }
         public void AddAssetPathCell(string searchTag, string path)
