@@ -14,7 +14,7 @@ namespace YooAsset.Editor
         [MenuItem("YooAsset/AssetArt Scanner", false, 301)]
         public static void OpenWindow()
         {
-            AssetArtScannerWindow window = GetWindow<AssetArtScannerWindow>("资源扫描工具", true, WindowsDefine.DockedWindowTypes);
+            AssetArtScannerWindow window = GetWindow<AssetArtScannerWindow>("AssetArt Scanner", true, WindowsDefine.DockedWindowTypes);
             window.minSize = new Vector2(800, 600);
         }
 
@@ -241,9 +241,16 @@ namespace YooAsset.Editor
         }
         private void ScanAllBtn_clicked()
         {
-            string searchKeyWord = _scannerSearchField.value;
-            AssetArtScannerSettingData.ScanAll(searchKeyWord);
-            AssetDatabase.Refresh();
+            if (EditorUtility.DisplayDialog("提示", $"开始全面扫描！", "Yes", "No"))
+            {
+                string searchKeyWord = _scannerSearchField.value;
+                AssetArtScannerSettingData.ScanAll(searchKeyWord);
+                AssetDatabase.Refresh();
+            }
+            else
+            {
+                Debug.LogWarning("全面扫描已经取消");
+            }
         }
         private void ScanBtn_clicked()
         {

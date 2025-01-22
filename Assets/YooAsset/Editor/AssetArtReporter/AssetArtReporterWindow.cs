@@ -15,7 +15,7 @@ namespace YooAsset.Editor
         [MenuItem("YooAsset/AssetArt Reporter", false, 302)]
         public static AssetArtReporterWindow OpenWindow()
         {
-            AssetArtReporterWindow window = GetWindow<AssetArtReporterWindow>("资源扫描报告", true, WindowsDefine.DockedWindowTypes);
+            AssetArtReporterWindow window = GetWindow<AssetArtReporterWindow>("AssetArt Reporter", true, WindowsDefine.DockedWindowTypes);
             window.minSize = new Vector2(800, 600);
             return window;
         }
@@ -247,7 +247,7 @@ namespace YooAsset.Editor
         }
         private void FixSelectBtn_clicked()
         {
-            if (EditorUtility.DisplayDialog("提示", "修复所有选中资源（白名单除外）", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("提示", "修复所有选中资源（包含白名单）", "Yes", "No"))
             {
                 if (_reportCombiner != null)
                     _reportCombiner.FixSelect();

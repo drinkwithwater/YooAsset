@@ -1,13 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <uie:Toolbar name="Toolbar" style="display: flex; flex-direction: row;">
         <uie:ToolbarSearchField focusable="true" name="SearchField" style="flex-grow: 1;" />
-        <ui:Button text="显示通过元素" display-tooltip-when-elided="true" name="StateVisibleButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="显示白名单元素" display-tooltip-when-elided="true" name="WhiteVisibleButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="导出选中文件" display-tooltip-when-elided="true" name="ExportFilesButton" style="width: 80px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="修复选中" display-tooltip-when-elided="true" name="FixSelectButton" style="width: 60px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="修复所有" display-tooltip-when-elided="true" name="FixAllButton" style="width: 60px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="单个导入" display-tooltip-when-elided="true" name="SingleImportButton" style="width: 60px; background-color: rgb(56, 147, 58);" />
-        <ui:Button text="合并导入" display-tooltip-when-elided="true" name="MultiImportButton" style="width: 60px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Show Passes" display-tooltip-when-elided="true" name="StateVisibleButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Show WhiteList" display-tooltip-when-elided="true" name="WhiteVisibleButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Export Select" display-tooltip-when-elided="true" name="ExportFilesButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Fix Select" display-tooltip-when-elided="true" name="FixSelectButton" style="width: 80px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Fix All" display-tooltip-when-elided="true" name="FixAllButton" style="width: 80px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Import Single" display-tooltip-when-elided="true" name="SingleImportButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
+        <ui:Button text="Import Multiple " display-tooltip-when-elided="true" name="MultiImportButton" style="width: 100px; background-color: rgb(56, 147, 58);" />
     </uie:Toolbar>
     <ui:VisualElement name="PublicContainer" style="background-color: rgb(79, 79, 79); flex-direction: column; border-left-width: 5px; border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px;">
         <ui:Label text="标题" display-tooltip-when-elided="true" name="ReportTitle" style="height: 16px; -unity-font-style: bold; -unity-text-align: middle-center;" />
