@@ -119,10 +119,10 @@ namespace YooAsset.Editor
                 visualAsset.CloneTree(root);
 
                 // 导入按钮
-                var singleImportBtn = root.Q<Button>("SingleImportButton");
-                singleImportBtn.clicked += SingleImportBtn_clicked;
-                var multiImportBtn = root.Q<Button>("MultiImportButton");
-                multiImportBtn.clicked += MultiImportBtn_clicked;
+                var importSingleBtn = root.Q<Button>("SingleImportButton");
+                importSingleBtn.clicked += ImportSingleBtn_clicked;
+                var importMultiBtn = root.Q<Button>("MultiImportButton");
+                importMultiBtn.clicked += ImportMultiBtn_clicked;
 
                 // 修复按钮
                 var fixAllBtn = root.Q<Button>("FixAllButton");
@@ -193,7 +193,7 @@ namespace YooAsset.Editor
             }
         }
 
-        private void SingleImportBtn_clicked()
+        private void ImportSingleBtn_clicked()
         {
             string selectFilePath = EditorUtility.OpenFilePanel("导入报告", _lastestOpenFolder, "json");
             if (string.IsNullOrEmpty(selectFilePath))
@@ -201,7 +201,7 @@ namespace YooAsset.Editor
 
             ImportSingleReprotFile(selectFilePath);
         }
-        private void MultiImportBtn_clicked()
+        private void ImportMultiBtn_clicked()
         {
             string selectFolderPath = EditorUtility.OpenFolderPanel("导入报告", _lastestOpenFolder, null);
             if (string.IsNullOrEmpty(selectFolderPath))
