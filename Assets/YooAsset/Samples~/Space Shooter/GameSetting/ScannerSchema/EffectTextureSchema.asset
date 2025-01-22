@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b3d3fde6899514396008e1e4f6693b, type: 3}
   m_Name: EffectTextureSchema
   m_EditorClassIdentifier: 
+  MaxWidth: 1024
+  MaxHeight: 1024
