@@ -142,15 +142,23 @@ namespace YooAsset.Editor
                     var selectScanner = _scannerListView.selectedItem as AssetArtScanner;
                     if (selectScanner != null)
                     {
-                        string assetPath = AssetDatabase.GetAssetPath(evt.newValue);
-                        if (AssetDatabase.IsValidFolder(assetPath))
+                        if (evt.newValue == null)
                         {
-                            selectScanner.SaveDirectory = assetPath;
+                            selectScanner.SaveDirectory = string.Empty;
                             AssetArtScannerSettingData.ModifyScanner(selectScanner);
                         }
                         else
                         {
-                            Debug.LogWarning($"Select asset object not folder ! {assetPath}");
+                            string assetPath = AssetDatabase.GetAssetPath(evt.newValue);
+                            if (AssetDatabase.IsValidFolder(assetPath))
+                            {
+                                selectScanner.SaveDirectory = assetPath;
+                                AssetArtScannerSettingData.ModifyScanner(selectScanner);
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Select asset object not folder ! {assetPath}");
+                            }
                         }
                     }
                 });
