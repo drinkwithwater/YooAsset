@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEditor;
 using YooAsset.Editor;
 
+#if UNITY_2019_4_OR_NEWER
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+#endif
+
 [CreateAssetMenu(fileName = "TextureSchema", menuName = "YooAssetArt/Create TextureSchema")]
 public class TextureSchema : ScannerSchema
 {
@@ -90,7 +95,7 @@ public class TextureSchema : ScannerSchema
             }
 
             // 超大纹理
-            if(texture.width > MaxWidth || texture.height > MaxHeight)
+            if (texture.width > MaxWidth || texture.height > MaxHeight)
             {
                 errorInfo += " | ";
                 errorInfo += "超大纹理";
@@ -145,5 +150,41 @@ public class TextureSchema : ScannerSchema
         importer.SetPlatformTextureSettings(androidPlatformSetting);
         importer.SaveAndReimport();
         Debug.Log($"修复了 : {assetPath}");
+    }
+
+    /// <summary>
+    /// 创建检视面板对
+    /// </summary>
+    public override SchemaInspector CreateInspector()
+    {
+#if UNITY_2019_4_OR_NEWER
+        var container = new VisualElement();
+
+        // 图片最大宽度
+        var maxWidthField = new IntegerField();
+        maxWidthField.label = "图片最大宽度";
+        maxWidthField.SetValueWithoutNotify(MaxWidth);
+        maxWidthField.RegisterValueChangedCallback((evt) =>
+        {
+            MaxWidth = evt.newValue;
+        });
+        container.Add(maxWidthField);
+
+        // 图片最大高度
+        var maxHeightField = new IntegerField();
+        maxHeightField.label = "图片最大高度";
+        maxHeightField.SetValueWithoutNotify(MaxHeight);
+        maxHeightField.RegisterValueChangedCallback((evt) =>
+        {
+            MaxHeight = evt.newValue;
+        });
+        container.Add(maxHeightField);
+
+        SchemaInspector inspector = new SchemaInspector();
+        inspector.Containner = container;
+        return inspector;
+#else
+        return null;
+#endif
     }
 }
