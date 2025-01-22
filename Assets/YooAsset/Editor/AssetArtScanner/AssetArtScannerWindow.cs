@@ -25,8 +25,8 @@ namespace YooAsset.Editor
         private Label _schemaGuideTxt;
         private TextField _scannerNameTxt;
         private TextField _scannerDescTxt;
-        private ObjectField _scanSchemaField;
-        private ObjectField _saveFolderField;
+        private ObjectField _scannerSchemaField;
+        private ObjectField _outputFolderField;
         private ScrollView _collectorScrollView;
 
         private int _lastModifyScannerIndex = 0;
@@ -68,7 +68,10 @@ namespace YooAsset.Editor
                 _scannerListView = root.Q<ListView>("ScannerListView");
                 _scannerListView.makeItem = MakeScannerListViewItem;
                 _scannerListView.bindItem = BindScannerListViewItem;
-#if UNITY_2020_1_OR_NEWER
+
+#if UNITY_2022_3_OR_NEWER
+                _scannerListView.selectionChanged += ScannerListView_onSelectionChange;
+#elif  UNITY_2020_1_OR_NEWER
                 _scannerListView.onSelectionChange += ScannerListView_onSelectionChange;
 #else
                 _scannerListView.onSelectionChanged += ScannerListView_onSelectionChange;
@@ -120,22 +123,21 @@ namespace YooAsset.Editor
                 });
 
                 // 扫描模式
-                _scanSchemaField = root.Q<ObjectField>("ScanSchema");
-                _scanSchemaField.RegisterValueChangedCallback(evt =>
+                _scannerSchemaField = root.Q<ObjectField>("ScanSchema");
+                _scannerSchemaField.RegisterValueChangedCallback(evt =>
                 {
                     var selectScanner = _scannerListView.selectedItem as AssetArtScanner;
                     if (selectScanner != null)
                     {
                         string assetPath = AssetDatabase.GetAssetPath(evt.newValue);
-                        _scanSchemaField.value.name = assetPath;
                         selectScanner.ScannerSchema = AssetDatabase.AssetPathToGUID(assetPath);
                         AssetArtScannerSettingData.ModifyScanner(selectScanner);
                     }
                 });
 
                 // 存储目录
-                _saveFolderField = root.Q<ObjectField>("SaveFolder");
-                _saveFolderField.RegisterValueChangedCallback(evt =>
+                _outputFolderField = root.Q<ObjectField>("OutputFolder");
+                _outputFolderField.RegisterValueChangedCallback(evt =>
                 {
                     var selectScanner = _scannerListView.selectedItem as AssetArtScanner;
                     if (selectScanner != null)
@@ -143,7 +145,6 @@ namespace YooAsset.Editor
                         string assetPath = AssetDatabase.GetAssetPath(evt.newValue);
                         if (AssetDatabase.IsValidFolder(assetPath))
                         {
-                            _saveFolderField.value.name = assetPath;
                             selectScanner.SaveDirectory = assetPath;
                             AssetArtScannerSettingData.ModifyScanner(selectScanner);
                         }
@@ -326,13 +327,13 @@ namespace YooAsset.Editor
             var scanSchema = selectScanner.LoadSchema();
             if (scanSchema == null)
             {
-                _scanSchemaField.SetValueWithoutNotify(null);
+                _scannerSchemaField.SetValueWithoutNotify(null);
                 _schemaGuideTxt.text = string.Empty;
                 Selection.activeObject = null;
             }
             else
             {
-                _scanSchemaField.SetValueWithoutNotify(scanSchema);
+                _scannerSchemaField.SetValueWithoutNotify(scanSchema);
                 _schemaGuideTxt.text = scanSchema.GetUserGuide();
                 Selection.activeObject = scanSchema;
             }
@@ -341,11 +342,11 @@ namespace YooAsset.Editor
             DefaultAsset saveFolder = AssetDatabase.LoadAssetAtPath<DefaultAsset>(selectScanner.SaveDirectory);
             if (saveFolder == null)
             {
-                _saveFolderField.SetValueWithoutNotify(null);
+                _outputFolderField.SetValueWithoutNotify(null);
             }
             else
             {
-                _saveFolderField.SetValueWithoutNotify(saveFolder);
+                _outputFolderField.SetValueWithoutNotify(saveFolder);
             }
 
             FillCollectorViewData();
