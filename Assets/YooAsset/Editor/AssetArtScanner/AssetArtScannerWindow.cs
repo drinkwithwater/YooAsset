@@ -22,6 +22,7 @@ namespace YooAsset.Editor
         private ListView _scannerListView;
         private ToolbarSearchField _scannerSearchField;
         private VisualElement _scannerContentContainer;
+        private VisualElement _inspectorContainer;
         private Label _schemaGuideTxt;
         private TextField _scannerNameTxt;
         private TextField _scannerDescTxt;
@@ -92,6 +93,9 @@ namespace YooAsset.Editor
 
                 // 扫描器容器
                 _scannerContentContainer = root.Q("ScannerContentContainer");
+
+                // 检视界面容器
+                _inspectorContainer = root.Q("InspectorContainer");
 
                 // 扫描器指南
                 _schemaGuideTxt = root.Q<Label>("SchemaUserGuide");
@@ -331,19 +335,44 @@ namespace YooAsset.Editor
             _scannerNameTxt.SetValueWithoutNotify(selectScanner.ScannerName);
             _scannerDescTxt.SetValueWithoutNotify(selectScanner.ScannerDesc);
 
-            // 显示Schema对象
+            // 显示检视面板
             var scanSchema = selectScanner.LoadSchema();
+            if (scanSchema != null)
+            {
+                var inspector = scanSchema.CreateInspector();
+                if (inspector == null)
+                {
+                    UIElementsTools.SetElementVisible(_inspectorContainer, false);
+                }
+                else
+                {
+                    if (inspector.Containner is VisualElement container)
+                    {
+                        UIElementsTools.SetElementVisible(_inspectorContainer, true);
+                        _inspectorContainer.Clear();
+                        _inspectorContainer.Add(container);
+                        _inspectorContainer.style.width = inspector.Width;
+                        _inspectorContainer.style.minWidth = inspector.MinWidth;
+                        _inspectorContainer.style.maxWidth = inspector.MaxWidth;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"{nameof(ScannerSchema)} inspector container is invalid !");
+                        UIElementsTools.SetElementVisible(_inspectorContainer, false);
+                    }
+                }
+            }
+
+            // 设置Schema对象
             if (scanSchema == null)
             {
                 _scannerSchemaField.SetValueWithoutNotify(null);
                 _schemaGuideTxt.text = string.Empty;
-                Selection.activeObject = null;
             }
             else
             {
                 _scannerSchemaField.SetValueWithoutNotify(scanSchema);
                 _schemaGuideTxt.text = scanSchema.GetUserGuide();
-                Selection.activeObject = scanSchema;
             }
 
             // 显示存储目录

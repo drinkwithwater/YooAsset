@@ -17,7 +17,7 @@
                 <ui:Button text=" + " display-tooltip-when-elided="true" name="AddBtn" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="ScannerContentContainer" style="flex-grow: 1; border-left-width: 5px; border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px;">
+        <ui:VisualElement name="ScannerContentContainer" style="flex-grow: 1; border-left-width: 5px; border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px; min-width: 400px;">
             <ui:Label text="扫描器" display-tooltip-when-elided="true" name="ScannerContentTitle" style="-unity-text-align: upper-center; -unity-font-style: bold; font-size: 12px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; background-color: rgb(89, 89, 89);" />
             <ui:Label display-tooltip-when-elided="true" name="SchemaUserGuide" style="-unity-text-align: upper-center; -unity-font-style: bold; border-left-width: 5px; border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px; font-size: 12px; height: 40px;" />
             <ui:TextField picking-mode="Ignore" label="Scanner Name" name="ScannerName" />
@@ -30,5 +30,6 @@
             </ui:VisualElement>
             <ui:ScrollView name="CollectorScrollView" style="flex-grow: 1;" />
         </ui:VisualElement>
+        <ui:VisualElement name="InspectorContainer" style="flex-grow: 1; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; background-color: rgb(67, 67, 67);" />
     </ui:VisualElement>
 </ui:UXML>
