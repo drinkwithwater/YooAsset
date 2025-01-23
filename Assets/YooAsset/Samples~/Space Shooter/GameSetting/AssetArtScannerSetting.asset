@@ -20,4 +20,5 @@ MonoBehaviour:
     SaveDirectory: 
     Collectors:
     - CollectPath: Assets/Samples/Space Shooter/GameRes/EffectArt
-    WhiteList: []
+    WhiteList:
+    - 1c89236d45255234ebd1d39657ff7e02
