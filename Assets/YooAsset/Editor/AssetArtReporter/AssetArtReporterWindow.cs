@@ -80,7 +80,7 @@ namespace YooAsset.Editor
             }
             public int CompareTo(object other)
             {
-                if (other is PassesBtnCell cell)
+                if (other is WhiteListBtnCell cell)
                 {
                     return this.Element.IsWhiteList.CompareTo(cell.Element.IsWhiteList);
                 }
@@ -92,8 +92,9 @@ namespace YooAsset.Editor
         }
 
         private ToolbarSearchField _searchField;
-        private Button _whiteVisibleBtn;
-        private Button _stateVisibleBtn;
+        private Button _showHiddenBtn;
+        private Button _whiteListVisibleBtn;
+        private Button _passesVisibleBtn;
         private Label _titleLabel;
         private Label _descLabel;
         private TableView _elementTableView;
@@ -101,9 +102,9 @@ namespace YooAsset.Editor
         private ScanReportCombiner _reportCombiner;
         private string _lastestOpenFolder;
         private List<ITableData> _sourceDatas;
-        private bool _showWhiteElements = true;
-        private bool _showPassesElements = true;
-
+        private bool _elementVisibleState = true;
+        private bool _whiteListVisibleState = true;
+        private bool _passesVisibleState = true;
 
         public void CreateGUI()
         {
@@ -130,11 +131,13 @@ namespace YooAsset.Editor
                 var fixSelectBtn = root.Q<Button>("FixSelectButton");
                 fixSelectBtn.clicked += FixSelectBtn_clicked;
 
-                // 白名单按钮
-                _whiteVisibleBtn = root.Q<Button>("WhiteVisibleButton");
-                _whiteVisibleBtn.clicked += WhiteVisibleBtn_clicked;
-                _stateVisibleBtn = root.Q<Button>("StateVisibleButton");
-                _stateVisibleBtn.clicked += StateVsibleBtn_clicked;
+                // 可见性按钮
+                _showHiddenBtn = root.Q<Button>("ShowHiddenButton");
+                _showHiddenBtn.clicked += ShowHiddenBtn_clicked;
+                _whiteListVisibleBtn = root.Q<Button>("WhiteListVisibleButton");
+                _whiteListVisibleBtn.clicked += WhiteListVisibleBtn_clicked;
+                _passesVisibleBtn = root.Q<Button>("PassesVisibleButton");
+                _passesVisibleBtn.clicked += PassesVsibleBtn_clicked;
 
                 // 文件导出按钮
                 var exportFilesBtn = root.Q<Button>("ExportFilesButton");
@@ -150,7 +153,7 @@ namespace YooAsset.Editor
 
                 // 列表相关
                 _elementTableView = root.Q<TableView>("TopTableView");
-                _elementTableView.ClickTableDataEvent = OnClickListItem;
+                _elementTableView.ClickTableDataEvent = OnClickTableViewItem;
 
                 _lastestOpenFolder = EditorTools.GetProjectPath();
             }
@@ -253,15 +256,21 @@ namespace YooAsset.Editor
                     _reportCombiner.FixSelect();
             }
         }
-        private void WhiteVisibleBtn_clicked()
+        private void ShowHiddenBtn_clicked()
         {
-            _showWhiteElements = !_showWhiteElements;
+            _elementVisibleState = !_elementVisibleState;
             RefreshToolbar();
             RebuildView();
         }
-        private void StateVsibleBtn_clicked()
+        private void WhiteListVisibleBtn_clicked()
         {
-            _showPassesElements = !_showPassesElements;
+            _whiteListVisibleState = !_whiteListVisibleState;
+            RefreshToolbar();
+            RebuildView();
+        }
+        private void PassesVsibleBtn_clicked()
+        {
+            _passesVisibleState = !_passesVisibleState;
             RefreshToolbar();
             RebuildView();
         }
@@ -283,15 +292,23 @@ namespace YooAsset.Editor
             _titleLabel.text = _reportCombiner.ReportTitle;
             _descLabel.text = _reportCombiner.ReportDesc;
 
-            if (_showWhiteElements)
-                _whiteVisibleBtn.style.backgroundColor = new StyleColor(new Color32(56, 147, 58, 255));
-            else
-                _whiteVisibleBtn.style.backgroundColor = new StyleColor(new Color32(100, 100, 100, 255));
+            var enableColor = new Color32(18, 100, 18, 255);
+            var disableColor = new Color32(100, 100, 100, 255);
 
-            if (_showPassesElements)
-                _stateVisibleBtn.style.backgroundColor = new StyleColor(new Color32(56, 147, 58, 255));
+            if (_elementVisibleState)
+                _showHiddenBtn.style.backgroundColor = new StyleColor(enableColor);
             else
-                _stateVisibleBtn.style.backgroundColor = new StyleColor(new Color32(100, 100, 100, 255));
+                _showHiddenBtn.style.backgroundColor = new StyleColor(disableColor);
+
+            if (_whiteListVisibleState)
+                _whiteListVisibleBtn.style.backgroundColor = new StyleColor(enableColor);
+            else
+                _whiteListVisibleBtn.style.backgroundColor = new StyleColor(disableColor);
+
+            if (_passesVisibleState)
+                _passesVisibleBtn.style.backgroundColor = new StyleColor(enableColor);
+            else
+                _passesVisibleBtn.style.backgroundColor = new StyleColor(disableColor);
         }
         private void FillTableView()
         {
@@ -300,27 +317,63 @@ namespace YooAsset.Editor
 
             _elementTableView.ClearAll(true, true);
 
-            // 状态标题
+            // 眼睛标题
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 80;
-                columnStyle.MinWidth = 80;
-                columnStyle.MaxWidth = 80;
+                columnStyle.Width = 20;
+                columnStyle.MinWidth = 20;
+                columnStyle.MaxWidth = 20;
+                columnStyle.Stretchable = false;
+                columnStyle.Searchable = false;
+                columnStyle.Sortable = false;
+                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
+                var column = new TableColumn("眼睛框", string.Empty, columnStyle);
+                column.MakeCell = () =>
+                {
+                    var toggle = new DisplayToggle();
+                    toggle.text = string.Empty;
+                    toggle.style.marginLeft = 3f;
+                    toggle.style.unityTextAlign = columnStyle.TxtAnchor;
+                    toggle.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
+                    toggle.style.width = columnStyle.Width;
+                    toggle.style.maxWidth = columnStyle.MaxWidth;
+                    toggle.style.minWidth = columnStyle.MinWidth;
+                    toggle.RegisterValueChangedCallback((evt) => { OnDisplayToggleValueChange(toggle, evt); });
+                    return toggle;
+                };
+                column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
+                {
+                    var toggle = element as DisplayToggle;
+                    toggle.userData = data;
+                    var tableData = data as ElementTableData;
+                    toggle.SetValueWithoutNotify(tableData.Element.Hidden);
+                    toggle.RefreshIcon();
+                };
+                _elementTableView.AddColumn(column);
+            }
+
+            // 通过标题
+            {
+                var columnStyle = new ColumnStyle();
+                columnStyle.Width = 70;
+                columnStyle.MinWidth = 70;
+                columnStyle.MaxWidth = 70;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
-                var column = new TableColumn("状态", "状态", columnStyle);
-
+                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
+                var column = new TableColumn("通过", "通过", columnStyle);
                 column.MakeCell = () =>
                 {
                     var button = new Button();
-                    button.text = "状态";
-                    button.style.unityTextAlign = TextAnchor.MiddleCenter;
+                    button.text = "通过";
                     button.style.marginLeft = 3f;
+                    button.style.unityTextAlign = columnStyle.TxtAnchor;
                     button.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
                     button.style.width = columnStyle.Width;
                     button.style.maxWidth = columnStyle.MaxWidth;
                     button.style.minWidth = columnStyle.MinWidth;
+                    button.SetEnabled(false);
                     return button;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -344,19 +397,20 @@ namespace YooAsset.Editor
             // 白名单标题
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 80;
-                columnStyle.MinWidth = 80;
-                columnStyle.MaxWidth = 80;
+                columnStyle.Width = 70;
+                columnStyle.MinWidth = 70;
+                columnStyle.MaxWidth = 70;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
+                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("白名单", "白名单", columnStyle);
                 column.MakeCell = () =>
                 {
                     Button button = new Button();
                     button.text = "白名单";
-                    button.style.unityTextAlign = TextAnchor.MiddleCenter;
                     button.style.marginLeft = 3f;
+                    button.style.unityTextAlign = columnStyle.TxtAnchor;
                     button.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
                     button.style.width = columnStyle.Width;
                     button.style.maxWidth = columnStyle.MaxWidth;
@@ -386,18 +440,19 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = false;
+                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("选中框", string.Empty, columnStyle);
                 column.MakeCell = () =>
                 {
                     var toggle = new Toggle();
                     toggle.text = string.Empty;
-                    toggle.style.unityTextAlign = TextAnchor.MiddleCenter;
                     toggle.style.marginLeft = 3f;
+                    toggle.style.unityTextAlign = columnStyle.TxtAnchor;
                     toggle.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
                     toggle.style.width = columnStyle.Width;
                     toggle.style.maxWidth = columnStyle.MaxWidth;
                     toggle.style.minWidth = columnStyle.MinWidth;
-                    toggle.RegisterValueChangedCallback((evt) => { OnToggleValueChange(toggle, evt); });
+                    toggle.RegisterValueChangedCallback((evt) => { OnSelectToggleValueChange(toggle, evt); });
                     return toggle;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -424,8 +479,8 @@ namespace YooAsset.Editor
                 column.MakeCell = () =>
                 {
                     var label = new Label();
-                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
                     label.style.marginLeft = 3f;
+                    label.style.unityTextAlign = columnStyle.TxtAnchor;
                     label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
                     label.style.width = columnStyle.Width;
                     label.style.maxWidth = columnStyle.MaxWidth;
@@ -448,7 +503,8 @@ namespace YooAsset.Editor
                 tableData.Element = element;
 
                 // 固定标题
-                tableData.AddCell(new PassesBtnCell("状态", element));
+                tableData.AddButtonCell("眼睛框");
+                tableData.AddCell(new PassesBtnCell("通过", element));
                 tableData.AddCell(new WhiteListBtnCell("白名单", element));
                 tableData.AddButtonCell("选中框");
 
@@ -498,12 +554,17 @@ namespace YooAsset.Editor
             foreach (var tableData in _sourceDatas)
             {
                 var elementTableData = tableData as ElementTableData;
-                if (_showPassesElements == false && elementTableData.Element.Passes)
+                if (_elementVisibleState == false && elementTableData.Element.Hidden)
                 {
                     tableData.Visible = false;
                     continue;
                 }
-                if (_showWhiteElements == false && elementTableData.Element.IsWhiteList)
+                if (_passesVisibleState == false && elementTableData.Element.Passes)
+                {
+                    tableData.Visible = false;
+                    continue;
+                }
+                if (_whiteListVisibleState == false && elementTableData.Element.IsWhiteList)
                 {
                     tableData.Visible = false;
                     continue;
@@ -514,7 +575,7 @@ namespace YooAsset.Editor
             _elementTableView.RebuildView();
         }
 
-        private void OnClickListItem(PointerDownEvent evt, ITableData tableData)
+        private void OnClickTableViewItem(PointerDownEvent evt, ITableData tableData)
         {
             // 双击后检视对应的资源
             if (evt.clickCount == 2)
@@ -533,10 +594,12 @@ namespace YooAsset.Editor
         {
             RebuildView();
         }
-        private void OnToggleValueChange(Toggle toggle, ChangeEvent<bool> e)
+        private void OnSelectToggleValueChange(Toggle toggle, ChangeEvent<bool> e)
         {
             // 处理自身
             toggle.SetValueWithoutNotify(e.newValue);
+
+            // 记录数据
             var elementTableData = toggle.userData as ElementTableData;
             elementTableData.Element.IsSelected = e.newValue;
 
@@ -546,6 +609,28 @@ namespace YooAsset.Editor
             {
                 var selectElement = selectedItem as ElementTableData;
                 selectElement.Element.IsSelected = e.newValue;
+            }
+
+            // 重绘视图
+            RebuildView();
+        }
+        private void OnDisplayToggleValueChange(DisplayToggle toggle, ChangeEvent<bool> e)
+        {
+            toggle.RefreshIcon();
+
+            // 处理自身
+            toggle.SetValueWithoutNotify(e.newValue);
+
+            // 记录数据
+            var elementTableData = toggle.userData as ElementTableData;
+            elementTableData.Element.Hidden = e.newValue;
+
+            // 处理多选目标
+            var selectedItems = _elementTableView.selectedItems;
+            foreach (var selectedItem in selectedItems)
+            {
+                var selectElement = selectedItem as ElementTableData;
+                selectElement.Element.Hidden = e.newValue;
             }
 
             // 重绘视图

@@ -126,7 +126,7 @@ namespace YooAsset.Editor
             toolbarBtn.userData = column;
             toolbarBtn.name = column.ElementName;
             toolbarBtn.text = column.HeaderTitle;
-            toolbarBtn.style.unityTextAlign = TextAnchor.MiddleLeft;
+            toolbarBtn.style.unityTextAlign = column.ColumnStyle.TxtAnchor;
             toolbarBtn.style.flexGrow = column.ColumnStyle.Stretchable ? 1f : 0f;
             toolbarBtn.style.width = column.ColumnStyle.Width;
             toolbarBtn.style.minWidth = column.ColumnStyle.MinWidth;

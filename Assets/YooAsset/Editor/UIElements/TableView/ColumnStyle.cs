@@ -25,7 +25,12 @@ namespace YooAsset.Editor
         /// 单元列最大宽度
         /// </summary>
         public Length MaxWidth = MaxValue;
-        
+
+        /// <summary>
+        /// 文本的锚点类型
+        /// </summary>
+        public TextAnchor TxtAnchor = TextAnchor.MiddleLeft;
+
         /// <summary>
         /// 可伸缩
         /// </summary>
