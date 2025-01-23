@@ -37,7 +37,7 @@ public class TextureSchema : ScannerSchema
     public override ScanReport RunScanner(AssetArtScanner scanner)
     {
         // 创建扫描报告
-        string title = "扫描所有位图字体";
+        string title = "扫描所有纹理资产";
         string desc = GetUserGuide();
         var report = new ScanReport(title, desc);
         report.AddHeader("资源路径", 300).SetStretchable().SetSearchable().SetSortable().SetHeaderType(EHeaderType.AssetPath);
