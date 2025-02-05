@@ -108,13 +108,11 @@ namespace YooAsset.Editor
         }
 
         /// <summary>
-        /// 设置标题
+        /// 获取标题UI元素
         /// </summary>
-        public void SetHeaderTitle(string elementName, string headerTitle)
+        public VisualElement GetHeaderElement(string elementName)
         {
-            var toolbarBtn = _toolbar.Q<ToolbarButton>(elementName);
-            if (toolbarBtn != null)
-                toolbarBtn.text = headerTitle;
+            return _toolbar.Q<ToolbarButton>(elementName);
         }
 
         /// <summary>
@@ -126,7 +124,6 @@ namespace YooAsset.Editor
             toolbarBtn.userData = column;
             toolbarBtn.name = column.ElementName;
             toolbarBtn.text = column.HeaderTitle;
-            toolbarBtn.style.unityTextAlign = column.ColumnStyle.TxtAnchor;
             toolbarBtn.style.flexGrow = 0;
             toolbarBtn.style.width = column.ColumnStyle.Width;
             toolbarBtn.style.minWidth = column.ColumnStyle.Width;
@@ -311,14 +308,17 @@ namespace YooAsset.Editor
         {
             VisualElement listViewElement = new VisualElement();
             listViewElement.style.flexDirection = FlexDirection.Row;
-            foreach (var colum in _columns)
+            foreach (var column in _columns)
             {
-                var cellElement = colum.MakeCell.Invoke();
-                cellElement.name = colum.ElementName;
+                var cellElement = column.MakeCell.Invoke();
+                cellElement.name = column.ElementName;
                 cellElement.style.flexGrow = 0f;
+                cellElement.style.width = column.ColumnStyle.Width;
+                cellElement.style.minWidth = column.ColumnStyle.Width;
+                cellElement.style.maxWidth = column.ColumnStyle.Width;
                 SetCellElementStyle(cellElement);
                 listViewElement.Add(cellElement);
-                colum.CellElements.Add(cellElement);
+                column.CellElements.Add(cellElement);
             }
             return listViewElement;
         }

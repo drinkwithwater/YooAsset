@@ -6,7 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System.Text;
 
 namespace YooAsset.Editor
 {
@@ -65,8 +64,7 @@ namespace YooAsset.Editor
         {
             // PackageName
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                var columnStyle = new ColumnStyle(200);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -75,11 +73,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -92,8 +85,7 @@ namespace YooAsset.Editor
 
             // BundleName
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 300;
+                var columnStyle = new ColumnStyle(600, 500, 1000);
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
@@ -102,11 +94,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -119,8 +106,7 @@ namespace YooAsset.Editor
 
             // RefCount
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 100;
+                var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -129,11 +115,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -146,8 +127,7 @@ namespace YooAsset.Editor
 
             // Status
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 100;
+                var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -156,11 +136,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -183,8 +158,7 @@ namespace YooAsset.Editor
         {
             // UsingAssets
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 300;
+                var columnStyle = new ColumnStyle(600, 500, 1000);
                 columnStyle.Stretchable = true;
                 columnStyle.Searchable = true;
                 columnStyle.Sortable = true;
@@ -193,11 +167,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -210,8 +179,7 @@ namespace YooAsset.Editor
 
             // SpawnScene
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                var columnStyle = new ColumnStyle(150);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -220,11 +188,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -237,8 +200,7 @@ namespace YooAsset.Editor
 
             // SpawnTime
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 100;
+                var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -247,11 +209,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -264,8 +221,7 @@ namespace YooAsset.Editor
 
             // RefCount
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 100;
+                var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -274,11 +230,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
@@ -291,8 +242,7 @@ namespace YooAsset.Editor
 
             // Status
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 100;
+                var columnStyle = new ColumnStyle(100);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -301,11 +251,6 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    label.style.marginLeft = 3f;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>

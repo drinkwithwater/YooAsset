@@ -319,25 +319,16 @@ namespace YooAsset.Editor
 
             // 眼睛标题
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 20;
-                columnStyle.MinWidth = 20;
-                columnStyle.MaxWidth = 20;
+                var columnStyle = new ColumnStyle(20);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = false;
-                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("眼睛框", string.Empty, columnStyle);
                 column.MakeCell = () =>
                 {
                     var toggle = new DisplayToggle();
                     toggle.text = string.Empty;
-                    toggle.style.marginLeft = 3f;
-                    toggle.style.unityTextAlign = columnStyle.TxtAnchor;
-                    toggle.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    toggle.style.width = columnStyle.Width;
-                    toggle.style.maxWidth = columnStyle.MaxWidth;
-                    toggle.style.minWidth = columnStyle.MinWidth;
+                    toggle.style.unityTextAlign = TextAnchor.MiddleCenter;
                     toggle.RegisterValueChangedCallback((evt) => { OnDisplayToggleValueChange(toggle, evt); });
                     return toggle;
                 };
@@ -350,29 +341,22 @@ namespace YooAsset.Editor
                     toggle.RefreshIcon();
                 };
                 _elementTableView.AddColumn(column);
+                var headerElement = _elementTableView.GetHeaderElement("眼睛框");
+                headerElement.style.unityTextAlign = TextAnchor.MiddleCenter;
             }
 
             // 通过标题
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 70;
-                columnStyle.MinWidth = 70;
-                columnStyle.MaxWidth = 70;
+                var columnStyle = new ColumnStyle(70);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
-                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("通过", "通过", columnStyle);
                 column.MakeCell = () =>
                 {
                     var button = new Button();
                     button.text = "通过";
-                    button.style.marginLeft = 3f;
-                    button.style.unityTextAlign = columnStyle.TxtAnchor;
-                    button.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    button.style.width = columnStyle.Width;
-                    button.style.maxWidth = columnStyle.MaxWidth;
-                    button.style.minWidth = columnStyle.MinWidth;
+                    button.style.unityTextAlign = TextAnchor.MiddleCenter;
                     button.SetEnabled(false);
                     return button;
                 };
@@ -392,29 +376,22 @@ namespace YooAsset.Editor
                     }
                 };
                 _elementTableView.AddColumn(column);
+                var headerElement = _elementTableView.GetHeaderElement("通过");
+                headerElement.style.unityTextAlign = TextAnchor.MiddleCenter;
             }
 
             // 白名单标题
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 70;
-                columnStyle.MinWidth = 70;
-                columnStyle.MaxWidth = 70;
+                var columnStyle = new ColumnStyle(70);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
-                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("白名单", "白名单", columnStyle);
                 column.MakeCell = () =>
                 {
                     Button button = new Button();
                     button.text = "白名单";
-                    button.style.marginLeft = 3f;
-                    button.style.unityTextAlign = columnStyle.TxtAnchor;
-                    button.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    button.style.width = columnStyle.Width;
-                    button.style.maxWidth = columnStyle.MaxWidth;
-                    button.style.minWidth = columnStyle.MinWidth;
+                    button.style.unityTextAlign = TextAnchor.MiddleCenter;
                     button.clickable.clickedWithEventInfo += OnClickWhitListButton;
                     return button;
                 };
@@ -429,29 +406,22 @@ namespace YooAsset.Editor
                         button.style.backgroundColor = new StyleColor(new Color32(100, 100, 100, 255));
                 };
                 _elementTableView.AddColumn(column);
+                var headerElement = _elementTableView.GetHeaderElement("白名单");
+                headerElement.style.unityTextAlign = TextAnchor.MiddleCenter;
             }
 
             // 选中标题
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = 20;
-                columnStyle.MinWidth = 20;
-                columnStyle.MaxWidth = 20;
+                var columnStyle = new ColumnStyle(20);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = false;
-                columnStyle.TxtAnchor = TextAnchor.MiddleCenter;
                 var column = new TableColumn("选中框", string.Empty, columnStyle);
                 column.MakeCell = () =>
                 {
                     var toggle = new Toggle();
                     toggle.text = string.Empty;
-                    toggle.style.marginLeft = 3f;
-                    toggle.style.unityTextAlign = columnStyle.TxtAnchor;
-                    toggle.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    toggle.style.width = columnStyle.Width;
-                    toggle.style.maxWidth = columnStyle.MaxWidth;
-                    toggle.style.minWidth = columnStyle.MinWidth;
+                    toggle.style.unityTextAlign = TextAnchor.MiddleCenter;
                     toggle.RegisterValueChangedCallback((evt) => { OnSelectToggleValueChange(toggle, evt); });
                     return toggle;
                 };
@@ -468,10 +438,7 @@ namespace YooAsset.Editor
             // 自定义标题栏
             foreach (var header in _reportCombiner.Headers)
             {
-                var columnStyle = new ColumnStyle();
-                columnStyle.Width = header.Width;
-                columnStyle.MinWidth = header.MinWidth;
-                columnStyle.MaxWidth = header.MaxWidth;
+                var columnStyle = new ColumnStyle(header.Width, header.MinWidth, header.MaxWidth);
                 columnStyle.Stretchable = header.Stretchable;
                 columnStyle.Searchable = header.Searchable;
                 columnStyle.Sortable = header.Sortable;
@@ -480,11 +447,7 @@ namespace YooAsset.Editor
                 {
                     var label = new Label();
                     label.style.marginLeft = 3f;
-                    label.style.unityTextAlign = columnStyle.TxtAnchor;
-                    label.style.flexGrow = columnStyle.Stretchable ? 1f : 0f;
-                    label.style.width = columnStyle.Width;
-                    label.style.maxWidth = columnStyle.MaxWidth;
-                    label.style.minWidth = columnStyle.MinWidth;
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
                     return label;
                 };
                 column.BindCell = (VisualElement element, ITableData data, ITableCell cell) =>
