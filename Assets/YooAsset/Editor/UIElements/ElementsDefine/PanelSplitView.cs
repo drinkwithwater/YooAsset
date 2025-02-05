@@ -17,7 +17,7 @@ namespace YooAsset.Editor
         {
         }
 #else
-        public new class UxmlFactory : UxmlFactory<PanelSplitView, TwoPaneSplitView.UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<PanelSplitView, UxmlTraits>
         {
         }
 #endif
