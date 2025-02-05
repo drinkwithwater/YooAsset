@@ -54,7 +54,11 @@ namespace YooAsset.Editor
             CreateUsingTableViewColumns();
 
 #if UNITY_2020_3_OR_NEWER
-            SplitView.Adjuster(_root);
+            var topGroup = _root.Q<VisualElement>("TopGroup");
+            var bottomGroup = _root.Q<VisualElement>("BottomGroup");
+            topGroup.style.minHeight = 100;
+            bottomGroup.style.minHeight = 100f;
+            PanelSplitView.SplitVerticalPanel(_root, topGroup, bottomGroup);
 #endif
         }
         private void CreateBundleTableViewColumns()
