@@ -184,7 +184,7 @@ namespace YooAsset.Editor
 
         /// <summary>
         /// 修复选定元素
-        /// 注意：排除白名单和隐藏元素
+        /// 注意：包含白名单和隐藏元素
         /// </summary>
         public void FixSelect()
         {
@@ -196,7 +196,7 @@ namespace YooAsset.Editor
                 List<ReportElement> fixList = new List<ReportElement>(elements.Count);
                 foreach (var element in elements)
                 {
-                    if (element.Passes || element.IsWhiteList || element.Hidden)
+                    if (element.Passes)
                         continue;
                     if (element.IsSelected)
                         fixList.Add(element);

@@ -242,7 +242,7 @@ namespace YooAsset.Editor
         }
         private void FixAllBtn_clicked()
         {
-            if (EditorUtility.DisplayDialog("提示", "修复全部资源（白名单除外）", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("提示", "修复全部资源（排除白名单和隐藏元素）", "Yes", "No"))
             {
                 if (_reportCombiner != null)
                     _reportCombiner.FixAll();
@@ -250,7 +250,7 @@ namespace YooAsset.Editor
         }
         private void FixSelectBtn_clicked()
         {
-            if (EditorUtility.DisplayDialog("提示", "修复所有选中资源（包含白名单）", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("提示", "修复勾选资源（包含白名单和隐藏元素）", "Yes", "No"))
             {
                 if (_reportCombiner != null)
                     _reportCombiner.FixSelect();
