@@ -40,13 +40,13 @@ public class TextureSchema : ScannerSchema
         string title = "扫描所有纹理资产";
         string desc = GetUserGuide();
         var report = new ScanReport(title, desc);
-        report.AddHeader("资源路径", 300).SetStretchable().SetSearchable().SetSortable().SetHeaderType(EHeaderType.AssetPath);
+        report.AddHeader("资源路径", 600, 500, 1000).SetStretchable().SetSearchable().SetSortable().SetHeaderType(EHeaderType.AssetPath);
         report.AddHeader("图片宽度", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
         report.AddHeader("图片高度", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
         report.AddHeader("内存大小", 100).SetSortable().SetHeaderType(EHeaderType.LongValue);
         report.AddHeader("苹果格式", 100);
         report.AddHeader("安卓格式", 100);
-        report.AddHeader("错误信息", 200).SetStretchable();
+        report.AddHeader("错误信息", 500).SetStretchable();
 
         // 获取扫描资源集合
         var searchDirectorys = scanner.Collectors.Select(c => { return c.CollectPath; });
