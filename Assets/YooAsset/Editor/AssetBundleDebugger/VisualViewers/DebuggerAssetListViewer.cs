@@ -146,7 +146,7 @@ namespace YooAsset.Editor
             // SpawnTime
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -173,7 +173,7 @@ namespace YooAsset.Editor
             // LoadingTime
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -200,7 +200,7 @@ namespace YooAsset.Editor
             // RefCount
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -227,7 +227,7 @@ namespace YooAsset.Editor
             // Status
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -291,7 +291,7 @@ namespace YooAsset.Editor
             // RefCount
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
@@ -318,7 +318,7 @@ namespace YooAsset.Editor
             // Status
             {
                 var columnStyle = new ColumnStyle();
-                columnStyle.Width = 150;
+                columnStyle.Width = 100;
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
