@@ -69,6 +69,17 @@ namespace YooAsset
         public bool DisableCatalogFile { private set; get; } = false;
 
         /// <summary>
+        /// 自定义参数：拷贝内置清单
+        /// </summary>
+        public bool CopyBuildinPackageManifest { private set; get; } = false;
+
+        /// <summary>
+        /// 自定义参数：拷贝内置清单的目标目录
+        /// 注意：该参数为空的时候，会获取默认的沙盒目录！
+        /// </summary>
+        public string CopyBuildinPackageManifestDestPath { private set; get; }
+
+        /// <summary>
         ///  自定义参数：解密方法类
         /// </summary>
         public IDecryptionServices DecryptionServices { private set; get; }
@@ -146,6 +157,11 @@ namespace YooAsset
             else if (name == FileSystemParametersDefine.DISABLE_CATALOG_FILE)
             {
                 DisableCatalogFile = (bool)value;
+            }
+            else if (name == FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST)
+            {
+                CopyBuildinPackageManifest = true;
+                CopyBuildinPackageManifestDestPath = (string)value;
             }
             else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
             {
@@ -291,7 +307,7 @@ namespace YooAsset
         #region 内部方法
         protected string GetDefaultBuildinPackageRoot(string packageName)
         {
-            string rootDirectory = YooAssetSettingsData.GetYooMobileBuildinRoot();
+            string rootDirectory = YooAssetSettingsData.GetYooDefaultBuildinRoot();
             return PathUtility.Combine(rootDirectory, packageName);
         }
         public string GetBuildinFileLoadPath(PackageBundle bundle)

@@ -22,7 +22,7 @@ namespace YooAsset
             if (saveDirectory.Exists)
                 saveDirectory.Delete(true);
 
-            string rootPath = YooAssetSettingsData.GetYooEditorBuildinRoot();
+            string rootPath = YooAssetSettingsData.GetYooDefaultBuildinRoot();
             DirectoryInfo rootDirectory = new DirectoryInfo(rootPath);
             if (rootDirectory.Exists == false)
             {
