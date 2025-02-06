@@ -77,7 +77,7 @@ namespace YooAsset
         /// 自定义参数：拷贝内置清单的目标目录
         /// 注意：该参数为空的时候，会获取默认的沙盒目录！
         /// </summary>
-        public string CopyBuildinPackageManifestDestPath { private set; get; }
+        public string CopyBuildinPackageManifestDestRoot { private set; get; }
 
         /// <summary>
         ///  自定义参数：解密方法类
@@ -160,8 +160,11 @@ namespace YooAsset
             }
             else if (name == FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST)
             {
-                CopyBuildinPackageManifest = true;
-                CopyBuildinPackageManifestDestPath = (string)value;
+                CopyBuildinPackageManifest = (bool)value;
+            }
+            else if (name == FileSystemParametersDefine.COPY_BUILDIN_PACKAGE_MANIFEST_DEST_ROOT)
+            {
+                CopyBuildinPackageManifestDestRoot = (string)value;
             }
             else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
             {

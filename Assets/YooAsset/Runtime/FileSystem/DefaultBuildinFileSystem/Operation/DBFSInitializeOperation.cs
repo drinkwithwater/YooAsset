@@ -8,12 +8,14 @@ namespace YooAsset
         private enum ESteps
         {
             None,
+            CopyBuildinManifest,
             InitUnpackFileSystem,
             LoadCatalogFile,
             Done,
         }
 
         private readonly DefaultBuildinFileSystem _fileSystem;
+        private CopyBuildinPackageManifestOperation _copyBuildinPackageManifestOp;
         private FSInitializeFileSystemOperation _initUnpackFIleSystemOp;
         private LoadBuildinCatalogFileOperation _loadCatalogFileOp;
         private ESteps _steps = ESteps.None;
@@ -29,13 +31,39 @@ namespace YooAsset
             Status = EOperationStatus.Failed;
             Error = $"{nameof(DefaultBuildinFileSystem)} is not support WEBGL platform !";
 #else
-            _steps = ESteps.InitUnpackFileSystem;
+            if (_fileSystem.CopyBuildinPackageManifest)
+                _steps = ESteps.CopyBuildinManifest;
+            else
+                _steps = ESteps.InitUnpackFileSystem;
 #endif
         }
         internal override void InternalOnUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
+
+            if (_steps == ESteps.CopyBuildinManifest)
+            {
+                if (_copyBuildinPackageManifestOp == null)
+                {
+                    _copyBuildinPackageManifestOp = new CopyBuildinPackageManifestOperation(_fileSystem);
+                    OperationSystem.StartOperation(_fileSystem.PackageName, _copyBuildinPackageManifestOp);
+                }
+
+                if (_copyBuildinPackageManifestOp.IsDone == false)
+                    return;
+
+                if (_copyBuildinPackageManifestOp.Status == EOperationStatus.Succeed)
+                {
+                    _steps = ESteps.InitUnpackFileSystem;
+                }
+                else
+                {
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Failed;
+                    Error = _copyBuildinPackageManifestOp.Error;
+                }
+            }
 
             if (_steps == ESteps.InitUnpackFileSystem)
             {
