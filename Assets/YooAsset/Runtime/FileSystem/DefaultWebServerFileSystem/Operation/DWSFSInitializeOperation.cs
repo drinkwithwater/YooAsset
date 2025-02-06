@@ -1,4 +1,6 @@
 ﻿
+using static UnityEngine.Networking.UnityWebRequest;
+
 namespace YooAsset
 {
     internal class DWSFSInitializeOperation : FSInitializeFileSystemOperation
@@ -37,7 +39,14 @@ namespace YooAsset
                     // 说明：内置文件系统在编辑器下运行时需要动态生成
                     string buildinRoot = YooAssetSettingsData.GetYooEditorBuildinRoot();
                     string packageRoot = PathUtility.Combine(buildinRoot, _fileSystem.PackageName);
-                    DefaultBuildinFileSystemBuild.CreateBuildinCatalogFile(_fileSystem.PackageName, packageRoot);
+                    bool result = DefaultBuildinFileSystemBuild.CreateBuildinCatalogFile(_fileSystem.PackageName, packageRoot);
+                    if (result == false)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = $"Create package catalog file failed ! See the detail error in console !";
+                        return;
+                    }
 #endif
 
                     _loadCatalogFileOp = new LoadWebServerCatalogFileOperation(_fileSystem);
