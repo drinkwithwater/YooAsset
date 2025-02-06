@@ -201,7 +201,14 @@ namespace YooAsset
                 return false;
 
 #if UNITY_ANDROID
-            return bundle.BundleType == (int)EBuildBundleType.RawBundle || bundle.Encrypted;
+            if (bundle.BundleType == (int)EBuildBundleType.RawBundle || bundle.Encrypted)
+            {
+                return _unpackFileSystem.Exists(bundle) == false;
+            }
+            else
+            {
+                return false;
+            }
 #else
             return false;
 #endif
