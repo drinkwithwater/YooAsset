@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using YooAsset;
-using StarkSDKSpace;
+using TTSDK;
 
 internal class BGFSLoadBundleOperation : FSLoadBundleOperation
 {

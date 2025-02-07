@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
-using StarkSDKSpace;
+using TTSDK;
+using System.Linq;
+using WeChatWASM;
+using System;
 
 public static class ByteGameFileSystemCreater
 {
-    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices)
+    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices, string packageRoot)
     {
         string fileSystemClass = $"{nameof(ByteGameFileSystem)},YooAsset.RuntimeExtension";
-        var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
+        var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
         fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
         return fileSystemParams;
     }
@@ -51,8 +54,10 @@ internal class ByteGameFileSystem : IFileSystem
         }
     }
 
+    private readonly HashSet<string> _recorders = new HashSet<string>();
     private readonly Dictionary<string, string> _cacheFilePaths = new Dictionary<string, string>(10000);
-    private StarkFileSystemManager _fileSystemManager;
+    private TTFileSystemManager _fileSystemMgr;
+    private string _ttCacheRoot = string.Empty;
 
     /// <summary>
     /// 包裹名称
@@ -66,7 +71,7 @@ internal class ByteGameFileSystem : IFileSystem
     {
         get
         {
-            return string.Empty;
+            return _ttCacheRoot;
         }
     }
 
@@ -77,7 +82,7 @@ internal class ByteGameFileSystem : IFileSystem
     {
         get
         {
-            return 0;
+            return _recorders.Count;
         }
     }
 
@@ -155,6 +160,12 @@ internal class ByteGameFileSystem : IFileSystem
     public virtual void OnCreate(string packageName, string rootDirectory)
     {
         PackageName = packageName;
+        _ttCacheRoot = rootDirectory;
+
+        if (string.IsNullOrEmpty(_ttCacheRoot))
+        {
+            throw new System.Exception("请配置抖音小游戏的缓存根目录！");
+        }
 
         // 注意：CDN服务未启用的情况下，使用抖音WEB服务器
         if (RemoteServices == null)
@@ -163,7 +174,7 @@ internal class ByteGameFileSystem : IFileSystem
             RemoteServices = new WebRemoteServices(webRoot);
         }
 
-        _fileSystemManager = StarkSDK.API.GetStarkFileSystemManager();
+        _fileSystemMgr = TT.GetFileSystemManager();
     }
     public virtual void OnUpdate()
     {
@@ -176,7 +187,7 @@ internal class ByteGameFileSystem : IFileSystem
     public virtual bool Exists(PackageBundle bundle)
     {
         string filePath = GetCacheFileLoadPath(bundle);
-        return _fileSystemManager.AccessSync(filePath);
+        return _recorders.Contains(filePath);
     }
     public virtual bool NeedDownload(PackageBundle bundle)
     {
@@ -196,26 +207,79 @@ internal class ByteGameFileSystem : IFileSystem
 
     public virtual string GetBundleFilePath(PackageBundle bundle)
     {
-        throw new System.NotImplementedException();
+        return GetCacheFileLoadPath(bundle);
     }
     public virtual byte[] ReadBundleFileData(PackageBundle bundle)
     {
-        throw new System.NotImplementedException();
+        string filePath = GetCacheFileLoadPath(bundle);
+        if (CheckCacheFileExist(filePath))
+            return _fileSystemMgr.ReadFileSync(filePath);
+        else
+            return Array.Empty<byte>();
     }
     public virtual string ReadBundleFileText(PackageBundle bundle)
     {
-        throw new System.NotImplementedException();
+        string filePath = GetCacheFileLoadPath(bundle);
+        if (CheckCacheFileExist(filePath))
+            return _fileSystemMgr.ReadFileSync(filePath, "utf8");
+        else
+            return string.Empty;
     }
 
     #region 内部方法
+    public TTFileSystemManager GetFileSystemMgr()
+    {
+        return _fileSystemMgr;
+    }
+    public bool CheckCacheFileExist(string filePath)
+    {
+        return _fileSystemMgr.AccessSync(filePath);
+    }
     private string GetCacheFileLoadPath(PackageBundle bundle)
     {
         if (_cacheFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
         {
-            filePath = _fileSystemManager.GetLocalCachedPathForUrl(bundle.FileName);
+            filePath = _fileSystemMgr.GetLocalCachedPathForUrl(bundle.FileName);
             _cacheFilePaths.Add(bundle.BundleGUID, filePath);
         }
         return filePath;
+    }
+    #endregion
+
+    #region 本地记录
+    public List<string> GetAllRecords()
+    {
+        return _recorders.ToList();
+    }
+    public bool RecordBundleFile(string filePath)
+    {
+        if (_recorders.Contains(filePath))
+        {
+            YooLogger.Error($"{nameof(WechatFileSystem)} has element : {filePath}");
+            return false;
+        }
+
+        _recorders.Add(filePath);
+        return true;
+    }
+    public void TryRecordBundle(PackageBundle bundle)
+    {
+        string filePath = GetCacheFileLoadPath(bundle);
+        if (_recorders.Contains(filePath) == false)
+        {
+            _recorders.Add(filePath);
+        }
+    }
+    public void ClearAllRecords()
+    {
+        _recorders.Clear();
+    }
+    public void ClearRecord(string filePath)
+    {
+        if (_recorders.Contains(filePath))
+        {
+            _recorders.Remove(filePath);
+        }
     }
     #endregion
 }
