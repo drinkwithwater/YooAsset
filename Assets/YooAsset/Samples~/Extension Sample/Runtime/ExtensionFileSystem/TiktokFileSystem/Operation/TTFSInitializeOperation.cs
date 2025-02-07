@@ -1,7 +1,7 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using YooAsset;
 
-internal partial class BGFSInitializeOperation : FSInitializeFileSystemOperation
+internal partial class TTFSInitializeOperation : FSInitializeFileSystemOperation
 {
     private enum ESteps
     {
@@ -10,11 +10,11 @@ internal partial class BGFSInitializeOperation : FSInitializeFileSystemOperation
         Done,
     }
 
-    private readonly ByteGameFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
     private RecordTiktokCacheFilesOperation _recordTiktokCacheFilesOp;
     private ESteps _steps = ESteps.None;
 
-    public BGFSInitializeOperation(ByteGameFileSystem fileSystem)
+    public TTFSInitializeOperation(TiktokFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
     }

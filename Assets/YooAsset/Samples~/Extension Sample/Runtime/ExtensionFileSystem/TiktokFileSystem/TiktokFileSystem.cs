@@ -1,17 +1,16 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 using TTSDK;
 using System.Linq;
-using WeChatWASM;
 using System;
 
-public static class ByteGameFileSystemCreater
+public static class TiktokFileSystemCreater
 {
     public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices, string packageRoot)
     {
-        string fileSystemClass = $"{nameof(ByteGameFileSystem)},YooAsset.RuntimeExtension";
+        string fileSystemClass = $"{nameof(TiktokFileSystem)},YooAsset.RuntimeExtension";
         var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
         fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
         return fileSystemParams;
@@ -22,7 +21,7 @@ public static class ByteGameFileSystemCreater
 /// 抖音小游戏文件系统
 /// 参考：https://developer.open-douyin.com/docs/resource/zh-CN/mini-game/develop/guide/know
 /// </summary>
-internal class ByteGameFileSystem : IFileSystem
+internal class TiktokFileSystem : IFileSystem
 {
     private class WebRemoteServices : IRemoteServices
     {
@@ -94,24 +93,24 @@ internal class ByteGameFileSystem : IFileSystem
     #endregion
 
 
-    public ByteGameFileSystem()
+    public TiktokFileSystem()
     {
     }
     public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
     {
-        var operation = new BGFSInitializeOperation(this);
+        var operation = new TTFSInitializeOperation(this);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
     public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
     {
-        var operation = new BGFSLoadPackageManifestOperation(this, packageVersion, timeout);
+        var operation = new TTFSLoadPackageManifestOperation(this, packageVersion, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
     public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
     {
-        var operation = new BGFSRequestPackageVersionOperation(this, timeout);
+        var operation = new TTFSRequestPackageVersionOperation(this, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
@@ -125,7 +124,7 @@ internal class ByteGameFileSystem : IFileSystem
     {
         param.MainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
         param.FallbackURL = RemoteServices.GetRemoteFallbackURL(bundle.FileName);
-        var operation = new BGFSDownloadFileOperation(this, bundle, param);
+        var operation = new TTFSDownloadFileOperation(this, bundle, param);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
@@ -133,13 +132,13 @@ internal class ByteGameFileSystem : IFileSystem
     {
         if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
         {
-            var operation = new BGFSLoadBundleOperation(this, bundle);
+            var operation = new TTFSLoadBundleOperation(this, bundle);
             OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
         else
         {
-            string error = $"{nameof(ByteGameFileSystem)} not support load bundle type : {bundle.BundleType}";
+            string error = $"{nameof(TiktokFileSystem)} not support load bundle type : {bundle.BundleType}";
             var operation = new FSLoadBundleCompleteOperation(error);
             OperationSystem.StartOperation(PackageName, operation);
             return operation;
@@ -255,7 +254,7 @@ internal class ByteGameFileSystem : IFileSystem
     {
         if (_recorders.Contains(filePath))
         {
-            YooLogger.Error($"{nameof(WechatFileSystem)} has element : {filePath}");
+            YooLogger.Error($"{nameof(TiktokFileSystem)} has element : {filePath}");
             return false;
         }
 

@@ -1,15 +1,14 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using UnityEngine;
 using UnityEngine.Networking;
 using YooAsset;
-using StarkSDKSpace;
 
-internal class BGFSDownloadFileOperation : DefaultDownloadFileOperation
+internal class TTFSDownloadFileOperation : DefaultDownloadFileOperation
 {
-    private ByteGameFileSystem _fileSystem;
+    private TiktokFileSystem _fileSystem;
     private ESteps _steps = ESteps.None;
     
-    internal BGFSDownloadFileOperation(ByteGameFileSystem fileSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
+    internal TTFSDownloadFileOperation(TiktokFileSystem fileSystem, PackageBundle bundle, DownloadParam param) : base(bundle, param)
     {
         _fileSystem = fileSystem;
     }

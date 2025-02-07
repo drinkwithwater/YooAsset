@@ -1,4 +1,4 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using YooAsset;
 using TTSDK;
 
@@ -12,10 +12,10 @@ internal class RecordTiktokCacheFilesOperation : AsyncOperationBase
         Done,
     }
 
-    private readonly ByteGameFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
     private ESteps _steps = ESteps.None;
 
-    public RecordTiktokCacheFilesOperation(ByteGameFileSystem fileSystem)
+    public RecordTiktokCacheFilesOperation(TiktokFileSystem fileSystem)
     {
         _fileSystem = fileSystem;
     }

@@ -1,10 +1,10 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using UnityEngine;
 using UnityEngine.Networking;
 using YooAsset;
 using TTSDK;
 
-internal class BGFSLoadBundleOperation : FSLoadBundleOperation
+internal class TTFSLoadBundleOperation : FSLoadBundleOperation
 {
     private enum ESteps
     {
@@ -13,12 +13,12 @@ internal class BGFSLoadBundleOperation : FSLoadBundleOperation
         Done,
     }
 
-    private readonly ByteGameFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
     private readonly PackageBundle _bundle;
     private UnityWebRequest _webRequest;
     private ESteps _steps = ESteps.None;
 
-    internal BGFSLoadBundleOperation(ByteGameFileSystem fileSystem, PackageBundle bundle)
+    internal TTFSLoadBundleOperation(TiktokFileSystem fileSystem, PackageBundle bundle)
     {
         _fileSystem = fileSystem;
         _bundle = bundle;

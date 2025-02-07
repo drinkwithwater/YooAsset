@@ -1,7 +1,7 @@
-﻿#if UNITY_WEBGL && WEIXINMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using YooAsset;
 
-internal class WXFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
+internal class TTFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
 {
     private enum ESteps
     {
@@ -11,15 +11,15 @@ internal class WXFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
         Done,
     }
 
-    private readonly WechatFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
     private readonly string _packageVersion;
     private readonly int _timeout;
-    private RequestWechatPackageHashOperation _requestPackageHashOp;
-    private LoadWechatPackageManifestOperation _loadPackageManifestOp;
+    private RequestTiktokPackageHashOperation _requestPackageHashOp;
+    private LoadTiktokPackageManifestOperation _loadPackageManifestOp;
     private ESteps _steps = ESteps.None;
 
     
-    public WXFSLoadPackageManifestOperation(WechatFileSystem fileSystem, string packageVersion, int timeout)
+    public TTFSLoadPackageManifestOperation(TiktokFileSystem fileSystem, string packageVersion, int timeout)
     {
         _fileSystem = fileSystem;
         _packageVersion = packageVersion;
@@ -38,7 +38,7 @@ internal class WXFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
         {
             if (_requestPackageHashOp == null)
             {
-                _requestPackageHashOp = new RequestWechatPackageHashOperation(_fileSystem, _packageVersion, _timeout);
+                _requestPackageHashOp = new RequestTiktokPackageHashOperation(_fileSystem, _packageVersion, _timeout);
                 OperationSystem.StartOperation(_fileSystem.PackageName, _requestPackageHashOp);
             }
 
@@ -62,7 +62,7 @@ internal class WXFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
             if (_loadPackageManifestOp == null)
             {
                 string packageHash = _requestPackageHashOp.PackageHash;
-                _loadPackageManifestOp = new LoadWechatPackageManifestOperation(_fileSystem, _packageVersion, packageHash, _timeout);
+                _loadPackageManifestOp = new LoadTiktokPackageManifestOperation(_fileSystem, _packageVersion, packageHash, _timeout);
                 OperationSystem.StartOperation(_fileSystem.PackageName, _loadPackageManifestOp);
             }
 

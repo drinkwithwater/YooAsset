@@ -1,47 +1,49 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using YooAsset;
 
-internal class RequestByteGamePackageVersionOperation : AsyncOperationBase
+internal class RequestTiktokPackageHashOperation : AsyncOperationBase
 {
     private enum ESteps
     {
         None,
-        RequestPackageVersion,
+        RequestPackageHash,
         Done,
     }
 
-    private readonly ByteGameFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
+    private readonly string _packageVersion;
     private readonly int _timeout;
     private UnityWebTextRequestOperation _webTextRequestOp;
     private int _requestCount = 0;
     private ESteps _steps = ESteps.None;
 
     /// <summary>
-    /// 包裹版本
+    /// 包裹哈希值
     /// </summary>
-    public string PackageVersion { private set; get; }
+    public string PackageHash { private set; get; }
 
-    
-    public RequestByteGamePackageVersionOperation(ByteGameFileSystem fileSystem, int timeout)
+
+    public RequestTiktokPackageHashOperation(TiktokFileSystem fileSystem, string packageVersion, int timeout)
     {
         _fileSystem = fileSystem;
+        _packageVersion = packageVersion;
         _timeout = timeout;
     }
     internal override void InternalOnStart()
     {
-        _requestCount = WebRequestCounter.GetRequestFailedCount(_fileSystem.PackageName, nameof(RequestByteGamePackageVersionOperation));
-        _steps = ESteps.RequestPackageVersion;
+        _requestCount = WebRequestCounter.GetRequestFailedCount(_fileSystem.PackageName, nameof(RequestTiktokPackageHashOperation));
+        _steps = ESteps.RequestPackageHash;
     }
     internal override void InternalOnUpdate()
     {
         if (_steps == ESteps.None || _steps == ESteps.Done)
             return;
 
-        if (_steps == ESteps.RequestPackageVersion)
+        if (_steps == ESteps.RequestPackageHash)
         {
             if (_webTextRequestOp == null)
             {
-                string fileName = YooAssetSettingsData.GetPackageVersionFileName(_fileSystem.PackageName);
+                string fileName = YooAssetSettingsData.GetPackageHashFileName(_fileSystem.PackageName, _packageVersion);
                 string url = GetRequestURL(fileName);
                 _webTextRequestOp = new UnityWebTextRequestOperation(url, _timeout);
                 OperationSystem.StartOperation(_fileSystem.PackageName, _webTextRequestOp);
@@ -53,12 +55,12 @@ internal class RequestByteGamePackageVersionOperation : AsyncOperationBase
 
             if (_webTextRequestOp.Status == EOperationStatus.Succeed)
             {
-                PackageVersion = _webTextRequestOp.Result;
-                if (string.IsNullOrEmpty(PackageVersion))
+                PackageHash = _webTextRequestOp.Result;
+                if (string.IsNullOrEmpty(PackageHash))
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = $"Wechat package version file content is empty !";
+                    Error = $"Wechat package hash file content is empty !";
                 }
                 else
                 {
@@ -71,7 +73,7 @@ internal class RequestByteGamePackageVersionOperation : AsyncOperationBase
                 _steps = ESteps.Done;
                 Status = EOperationStatus.Failed;
                 Error = _webTextRequestOp.Error;
-                WebRequestCounter.RecordRequestFailed(_fileSystem.PackageName, nameof(RequestByteGamePackageVersionOperation));
+                WebRequestCounter.RecordRequestFailed(_fileSystem.PackageName, nameof(RequestTiktokPackageHashOperation));
             }
         }
     }

@@ -1,7 +1,7 @@
-﻿#if UNITY_WEBGL && BYTEMINIGAME
+﻿#if UNITY_WEBGL && DOUYINMINIGAME
 using YooAsset;
 
-internal class LoadByteGamePackageManifestOperation : AsyncOperationBase
+internal class LoadTiktokPackageManifestOperation : AsyncOperationBase
 {
     private enum ESteps
     {
@@ -12,7 +12,7 @@ internal class LoadByteGamePackageManifestOperation : AsyncOperationBase
         Done,
     }
 
-    private readonly ByteGameFileSystem _fileSystem;
+    private readonly TiktokFileSystem _fileSystem;
     private readonly string _packageVersion;
     private readonly string _packageHash;
     private readonly int _timeout;
@@ -27,7 +27,7 @@ internal class LoadByteGamePackageManifestOperation : AsyncOperationBase
     public PackageManifest Manifest { private set; get; }
 
 
-    internal LoadByteGamePackageManifestOperation(ByteGameFileSystem fileSystem, string packageVersion, string packageHash, int timeout)
+    internal LoadTiktokPackageManifestOperation(TiktokFileSystem fileSystem, string packageVersion, string packageHash, int timeout)
     {
         _fileSystem = fileSystem;
         _packageVersion = packageVersion;
@@ -36,7 +36,7 @@ internal class LoadByteGamePackageManifestOperation : AsyncOperationBase
     }
     internal override void InternalOnStart()
     {
-        _requestCount = WebRequestCounter.GetRequestFailedCount(_fileSystem.PackageName, nameof(LoadByteGamePackageManifestOperation));
+        _requestCount = WebRequestCounter.GetRequestFailedCount(_fileSystem.PackageName, nameof(LoadTiktokPackageManifestOperation));
         _steps = ESteps.RequestFileData;
     }
     internal override void InternalOnUpdate()
@@ -67,7 +67,7 @@ internal class LoadByteGamePackageManifestOperation : AsyncOperationBase
                 _steps = ESteps.Done;
                 Status = EOperationStatus.Failed;
                 Error = _webDataRequestOp.Error;
-                WebRequestCounter.RecordRequestFailed(_fileSystem.PackageName, nameof(LoadByteGamePackageManifestOperation));
+                WebRequestCounter.RecordRequestFailed(_fileSystem.PackageName, nameof(LoadTiktokPackageManifestOperation));
             }
         }
 
