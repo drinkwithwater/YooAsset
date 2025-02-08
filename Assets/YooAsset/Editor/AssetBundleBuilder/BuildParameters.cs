@@ -71,7 +71,7 @@ namespace YooAsset.Editor
         /// 对单独引用的共享资源进行独立打包
         /// 说明：关闭该选项单独引用的共享资源将会构建到引用它的资源包内！
         /// </summary>
-        public bool SingleReferencedPackAlone = false;
+        public bool SingleReferencedPackAlone = true;
 
         /// <summary>
         /// 验证构建结果
