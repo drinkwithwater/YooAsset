@@ -86,6 +86,12 @@ namespace YooAsset.Editor
             return package.GetAllTags();
         }
 
+        [Obsolete("This method will be removed in a future ! Use BeginCollect instead.", true)]
+        public CollectResult GetPackageAssets(bool simulateBuild, bool useAssetDependencyDB, string packageName)
+        {
+            return BeginCollect(packageName, simulateBuild, useAssetDependencyDB);
+        }
+
         /// <summary>
         /// 收集指定包裹的资源文件
         /// </summary>
