@@ -113,12 +113,13 @@ namespace YooAsset
         }
         public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
         {
+            // 注意：业务层的解压下载器会依赖内置文件系统的下载方法
             param.ImportFilePath = GetBuildinFileLoadPath(bundle);
             return _unpackFileSystem.DownloadFileAsync(bundle, param);
         }
         public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
             {
                 return _unpackFileSystem.LoadBundleFile(bundle);
             }
@@ -216,11 +217,7 @@ namespace YooAsset
         }
         public virtual bool NeedUnpack(PackageBundle bundle)
         {
-            if (Belong(bundle) == false)
-                return false;
-
-#if UNITY_ANDROID
-            if (bundle.BundleType == (int)EBuildBundleType.RawBundle || bundle.Encrypted)
+            if (IsUnpackBundleFile(bundle))
             {
                 return _unpackFileSystem.Exists(bundle) == false;
             }
@@ -228,9 +225,6 @@ namespace YooAsset
             {
                 return false;
             }
-#else
-            return false;
-#endif
         }
         public virtual bool NeedImport(PackageBundle bundle)
         {
@@ -239,14 +233,14 @@ namespace YooAsset
 
         public virtual string GetBundleFilePath(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.GetBundleFilePath(bundle);
 
             return GetBuildinFileLoadPath(bundle);
         }
         public virtual byte[] ReadBundleFileData(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.ReadBundleFileData(bundle);
 
             if (Exists(bundle) == false)
@@ -277,7 +271,7 @@ namespace YooAsset
         }
         public virtual string ReadBundleFileText(PackageBundle bundle)
         {
-            if (NeedUnpack(bundle))
+            if (IsUnpackBundleFile(bundle))
                 return _unpackFileSystem.ReadBundleFileText(bundle);
 
             if (Exists(bundle) == false)
@@ -341,6 +335,24 @@ namespace YooAsset
         {
             string fileName = Path.GetFileNameWithoutExtension(DefaultBuildinFileSystemDefine.BuildinCatalogFileName);
             return YooAssetSettingsData.GetYooResourcesLoadPath(PackageName, fileName);
+        }
+
+        /// <summary>
+        /// 是否属于解压资源包文件
+        /// </summary>
+        protected bool IsUnpackBundleFile(PackageBundle bundle)
+        {
+            if (Belong(bundle) == false)
+                return false;
+
+#if UNITY_ANDROID
+            if (bundle.BundleType == (int)EBuildBundleType.RawBundle || bundle.Encrypted)
+                return true;
+            else
+                return false;
+#else
+            return false;
+#endif
         }
 
         /// <summary>
