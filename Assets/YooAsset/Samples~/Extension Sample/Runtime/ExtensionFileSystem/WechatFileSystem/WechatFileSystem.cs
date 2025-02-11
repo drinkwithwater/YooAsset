@@ -53,8 +53,7 @@ internal class WechatFileSystem : IFileSystem
         }
     }
 
-    private readonly HashSet<string> _recorders = new HashSet<string>();
-    private readonly Dictionary<string, string> _cacheFilePaths = new Dictionary<string, string>(10000);
+    private readonly Dictionary<string, string> _cacheFilePathMapping = new Dictionary<string, string>(10000);
     private WXFileSystemManager _fileSystemMgr;
     private string _wxCacheRoot = string.Empty;
 
@@ -83,7 +82,7 @@ internal class WechatFileSystem : IFileSystem
     {
         get
         {
-            return _recorders.Count;
+            return 0;
         }
     }
 
@@ -174,10 +173,10 @@ internal class WechatFileSystem : IFileSystem
             YooLogger.Warning($"Invalid parameter : {name}");
         }
     }
-    public virtual void OnCreate(string packageName, string rootDirectory)
+    public virtual void OnCreate(string packageName, string packageRoot)
     {
         PackageName = packageName;
-        _wxCacheRoot = rootDirectory;
+        _wxCacheRoot = packageRoot;
 
         if (string.IsNullOrEmpty(_wxCacheRoot))
         {
@@ -204,7 +203,7 @@ internal class WechatFileSystem : IFileSystem
     public virtual bool Exists(PackageBundle bundle)
     {
         string filePath = GetCacheFileLoadPath(bundle);
-        return _recorders.Contains(filePath);
+        return CheckCacheFileExist(filePath);
     }
     public virtual bool NeedDownload(PackageBundle bundle)
     {
@@ -250,54 +249,20 @@ internal class WechatFileSystem : IFileSystem
     }
     public bool CheckCacheFileExist(string filePath)
     {
-        string result = _fileSystemMgr.AccessSync(filePath);
-        return result.Equals("access:ok");
+        string result = WX.GetCachePath(filePath);
+        if (string.IsNullOrEmpty(result))
+            return false;
+        else
+            return true;
     }
     public string GetCacheFileLoadPath(PackageBundle bundle)
     {
-        if (_cacheFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
+        if (_cacheFilePathMapping.TryGetValue(bundle.BundleGUID, out string filePath) == false)
         {
-            filePath = PathUtility.Combine(_wxCacheRoot, "__GAME_FILE_CACHE", _packageRoot, bundle.FileName);
-            _cacheFilePaths.Add(bundle.BundleGUID, filePath);
+            filePath = PathUtility.Combine(_wxCacheRoot, bundle.FileName);
+            _cacheFilePathMapping.Add(bundle.BundleGUID, filePath);
         }
         return filePath;
-    }
-    #endregion
-
-    #region 本地记录
-    public List<string> GetAllRecords()
-    {
-        return _recorders.ToList();
-    }
-    public bool RecordBundleFile(string filePath)
-    {
-        if (_recorders.Contains(filePath))
-        {
-            YooLogger.Error($"{nameof(WechatFileSystem)} has element : {filePath}");
-            return false;
-        }
-
-        _recorders.Add(filePath);
-        return true;
-    }
-    public void TryRecordBundle(PackageBundle bundle)
-    {
-        string filePath = GetCacheFileLoadPath(bundle);
-        if (_recorders.Contains(filePath) == false)
-        {
-            _recorders.Add(filePath);
-        }
-    }
-    public void ClearAllRecords()
-    {
-        _recorders.Clear();
-    }
-    public void ClearRecord(string filePath)
-    {
-        if (_recorders.Contains(filePath))
-        {
-            _recorders.Remove(filePath);
-        }
     }
     #endregion
 }
