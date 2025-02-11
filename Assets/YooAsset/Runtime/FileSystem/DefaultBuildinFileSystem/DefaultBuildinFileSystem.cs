@@ -21,7 +21,7 @@ namespace YooAsset
         }
 
         protected readonly Dictionary<string, FileWrapper> _wrappers = new Dictionary<string, FileWrapper>(10000);
-        protected readonly Dictionary<string, string> _buildinFilePaths = new Dictionary<string, string>(10000);
+        protected readonly Dictionary<string, string> _buildinFilePathMapping = new Dictionary<string, string>(10000);
         protected IFileSystem _unpackFileSystem;
         protected string _packageRoot;
 
@@ -309,10 +309,10 @@ namespace YooAsset
         }
         public string GetBuildinFileLoadPath(PackageBundle bundle)
         {
-            if (_buildinFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
+            if (_buildinFilePathMapping.TryGetValue(bundle.BundleGUID, out string filePath) == false)
             {
                 filePath = PathUtility.Combine(_packageRoot, bundle.FileName);
-                _buildinFilePaths.Add(bundle.BundleGUID, filePath);
+                _buildinFilePathMapping.Add(bundle.BundleGUID, filePath);
             }
             return filePath;
         }
