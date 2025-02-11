@@ -53,8 +53,7 @@ internal class TiktokFileSystem : IFileSystem
         }
     }
 
-    private readonly HashSet<string> _recorders = new HashSet<string>();
-    private readonly Dictionary<string, string> _cacheFilePaths = new Dictionary<string, string>(10000);
+    private readonly Dictionary<string, string> _cacheFilePathMapping = new Dictionary<string, string>(10000);
     private TTFileSystemManager _fileSystemMgr;
     private string _ttCacheRoot = string.Empty;
 
@@ -81,7 +80,7 @@ internal class TiktokFileSystem : IFileSystem
     {
         get
         {
-            return _recorders.Count;
+            return 0;
         }
     }
 
@@ -185,8 +184,7 @@ internal class TiktokFileSystem : IFileSystem
     }
     public virtual bool Exists(PackageBundle bundle)
     {
-        string filePath = GetCacheFileLoadPath(bundle);
-        return _recorders.Contains(filePath);
+        return CheckCacheFileExist(bundle);
     }
     public virtual bool NeedDownload(PackageBundle bundle)
     {
@@ -210,19 +208,27 @@ internal class TiktokFileSystem : IFileSystem
     }
     public virtual byte[] ReadBundleFileData(PackageBundle bundle)
     {
-        string filePath = GetCacheFileLoadPath(bundle);
-        if (CheckCacheFileExist(filePath))
+        if (CheckCacheFileExist(bundle))
+        {
+            string filePath = GetCacheFileLoadPath(bundle);
             return _fileSystemMgr.ReadFileSync(filePath);
+        }
         else
+        {
             return Array.Empty<byte>();
+        }
     }
     public virtual string ReadBundleFileText(PackageBundle bundle)
     {
-        string filePath = GetCacheFileLoadPath(bundle);
-        if (CheckCacheFileExist(filePath))
+        if (CheckCacheFileExist(bundle))
+        {
+            string filePath = GetCacheFileLoadPath(bundle);
             return _fileSystemMgr.ReadFileSync(filePath, "utf8");
+        }
         else
+        {
             return string.Empty;
+        }
     }
 
     #region 内部方法
@@ -230,55 +236,19 @@ internal class TiktokFileSystem : IFileSystem
     {
         return _fileSystemMgr;
     }
-    public bool CheckCacheFileExist(string filePath)
+    public bool CheckCacheFileExist(PackageBundle bundle)
     {
-        return _fileSystemMgr.AccessSync(filePath);
+        string url = RemoteServices.GetRemoteMainURL(bundle.FileName);
+        return _fileSystemMgr.IsUrlCached(url);
     }
     private string GetCacheFileLoadPath(PackageBundle bundle)
     {
-        if (_cacheFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
+        if (_cacheFilePathMapping.TryGetValue(bundle.BundleGUID, out string filePath) == false)
         {
             filePath = _fileSystemMgr.GetLocalCachedPathForUrl(bundle.FileName);
-            _cacheFilePaths.Add(bundle.BundleGUID, filePath);
+            _cacheFilePathMapping.Add(bundle.BundleGUID, filePath);
         }
         return filePath;
-    }
-    #endregion
-
-    #region 本地记录
-    public List<string> GetAllRecords()
-    {
-        return _recorders.ToList();
-    }
-    public bool RecordBundleFile(string filePath)
-    {
-        if (_recorders.Contains(filePath))
-        {
-            YooLogger.Error($"{nameof(TiktokFileSystem)} has element : {filePath}");
-            return false;
-        }
-
-        _recorders.Add(filePath);
-        return true;
-    }
-    public void TryRecordBundle(PackageBundle bundle)
-    {
-        string filePath = GetCacheFileLoadPath(bundle);
-        if (_recorders.Contains(filePath) == false)
-        {
-            _recorders.Add(filePath);
-        }
-    }
-    public void ClearAllRecords()
-    {
-        _recorders.Clear();
-    }
-    public void ClearRecord(string filePath)
-    {
-        if (_recorders.Contains(filePath))
-        {
-            _recorders.Remove(filePath);
-        }
     }
     #endregion
 }
