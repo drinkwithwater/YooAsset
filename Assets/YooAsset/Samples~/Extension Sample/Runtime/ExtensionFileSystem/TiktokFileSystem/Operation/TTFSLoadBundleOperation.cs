@@ -54,7 +54,7 @@ internal class TTFSLoadBundleOperation : FSLoadBundleOperation
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
-                    Error = $"The {nameof(IDecryptionServices)} is null !";
+                    Error = $"The {nameof(IWebDecryptionServices)} is null !";
                     YooLogger.Error(Error);
                     return;
                 }
