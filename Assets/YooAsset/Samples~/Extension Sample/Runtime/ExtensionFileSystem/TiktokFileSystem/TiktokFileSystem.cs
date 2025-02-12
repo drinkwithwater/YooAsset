@@ -8,11 +8,20 @@ using System;
 
 public static class TiktokFileSystemCreater
 {
-    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices, string packageRoot)
+    public static FileSystemParameters CreateByteGameFileSystemParameters(string packageRoot, IRemoteServices remoteServices)
     {
         string fileSystemClass = $"{nameof(TiktokFileSystem)},YooAsset.RuntimeExtension";
         var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
+        return fileSystemParams;
+    }
+
+    public static FileSystemParameters CreateByteGameFileSystemParameters(string packageRoot, IRemoteServices remoteServices, IWebDecryptionServices decryptionServices)
+    {
+        string fileSystemClass = $"{nameof(TiktokFileSystem)},YooAsset.RuntimeExtension";
+        var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, decryptionServices);
         return fileSystemParams;
     }
 }
@@ -89,6 +98,11 @@ internal class TiktokFileSystem : IFileSystem
     /// 自定义参数：远程服务接口
     /// </summary>
     public IRemoteServices RemoteServices { private set; get; } = null;
+
+    /// <summary>
+    ///  自定义参数：解密方法类
+    /// </summary>
+    public IWebDecryptionServices DecryptionServices { private set; get; }
     #endregion
 
 
@@ -149,6 +163,10 @@ internal class TiktokFileSystem : IFileSystem
         if (name == FileSystemParametersDefine.REMOTE_SERVICES)
         {
             RemoteServices = (IRemoteServices)value;
+        }
+        else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
+        {
+            DecryptionServices = (IWebDecryptionServices)value;
         }
         else
         {
@@ -249,6 +267,14 @@ internal class TiktokFileSystem : IFileSystem
             _cacheFilePathMapping.Add(bundle.BundleGUID, filePath);
         }
         return filePath;
+    }
+
+    /// <summary>
+    /// 加载加密资源文件
+    /// </summary>
+    public AssetBundle LoadEncryptedAssetBundle(byte[] fileData)
+    {
+        return DecryptionServices.LoadAssetBundle(fileData);
     }
     #endregion
 }
