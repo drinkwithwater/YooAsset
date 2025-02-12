@@ -8,11 +8,19 @@ using WeChatWASM;
 
 public static class WechatFileSystemCreater
 {
-    public static FileSystemParameters CreateWechatFileSystemParameters(IRemoteServices remoteServices, string packageRoot)
+    public static FileSystemParameters CreateWechatFileSystemParameters(string packageRoot, IRemoteServices remoteServices)
     {
         string fileSystemClass = $"{nameof(WechatFileSystem)},YooAsset.RuntimeExtension";
         var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
+        return fileSystemParams;
+    }
+    public static FileSystemParameters CreateWechatFileSystemParameters(string packageRoot, IRemoteServices remoteServices, IWebDecryptionServices decryptionServices)
+    {
+        string fileSystemClass = $"{nameof(WechatFileSystem)},YooAsset.RuntimeExtension";
+        var fileSystemParams = new FileSystemParameters(fileSystemClass, packageRoot);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.DECRYPTION_SERVICES, decryptionServices);
         return fileSystemParams;
     }
 }
@@ -61,7 +69,7 @@ internal class WechatFileSystem : IFileSystem
     /// 包裹名称
     /// </summary>
     public string PackageName { private set; get; }
-    
+
     private readonly string _packageRoot = YooAssetSettingsData.Setting.DefaultYooFolderName;
 
     /// <summary>
@@ -91,6 +99,11 @@ internal class WechatFileSystem : IFileSystem
     /// 自定义参数：远程服务接口
     /// </summary>
     public IRemoteServices RemoteServices { private set; get; } = null;
+
+    /// <summary>
+    ///  自定义参数：解密方法类
+    /// </summary>
+    public IWebDecryptionServices DecryptionServices { private set; get; }
     #endregion
 
 
@@ -164,9 +177,13 @@ internal class WechatFileSystem : IFileSystem
 
     public virtual void SetParameter(string name, object value)
     {
-        if (name == "REMOTE_SERVICES")
+        if (name == FileSystemParametersDefine.REMOTE_SERVICES)
         {
             RemoteServices = (IRemoteServices)value;
+        }
+        else if (name == FileSystemParametersDefine.DECRYPTION_SERVICES)
+        {
+            DecryptionServices = (IWebDecryptionServices)value;
         }
         else
         {
@@ -183,7 +200,7 @@ internal class WechatFileSystem : IFileSystem
             throw new System.Exception("请配置微信小游戏缓存根目录！");
         }
 
-        if (!_wxCacheRoot.StartsWith(WX.PluginCachePath))
+        if (_wxCacheRoot.StartsWith(WX.PluginCachePath) == false)
         {
             _wxCacheRoot = PathUtility.Combine(WX.PluginCachePath, _wxCacheRoot);
         }
@@ -268,6 +285,14 @@ internal class WechatFileSystem : IFileSystem
             _cacheFilePathMapping.Add(bundle.BundleGUID, filePath);
         }
         return filePath;
+    }
+
+    /// <summary>
+    /// 加载加密资源文件
+    /// </summary>
+    public AssetBundle LoadEncryptedAssetBundle(byte[] fileData)
+    {
+        return DecryptionServices.LoadAssetBundle(fileData);
     }
     #endregion
 }

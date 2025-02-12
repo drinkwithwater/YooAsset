@@ -54,7 +54,8 @@ internal class WXFSClearUnusedBundleFilesAsync : FSClearCacheFilesOperation
                     if (_manifest.TryGetPackageBundleByBundleGUID(bundleGUID, out PackageBundle value) == false)
                     {
                         string fullPath = WX.GetCachePath(fileStat.path);
-                        if (!_unusedCacheFiles.Contains(fullPath)) _unusedCacheFiles.Add(fullPath);
+                        if (_unusedCacheFiles.Contains(fullPath) == false)
+                            _unusedCacheFiles.Add(fullPath);
                     }
                 }
 

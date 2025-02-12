@@ -146,7 +146,7 @@ internal class TiktokFileSystem : IFileSystem
 
     public virtual void SetParameter(string name, object value)
     {
-        if (name == "REMOTE_SERVICES")
+        if (name == FileSystemParametersDefine.REMOTE_SERVICES)
         {
             RemoteServices = (IRemoteServices)value;
         }

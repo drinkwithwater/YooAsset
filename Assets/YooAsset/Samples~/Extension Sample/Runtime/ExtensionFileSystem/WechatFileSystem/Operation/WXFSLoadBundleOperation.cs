@@ -49,7 +49,13 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
 
             if (CheckRequestResult())
             {
-                var assetBundle = (_webRequest.downloadHandler as DownloadHandlerWXAssetBundle).assetBundle;
+                AssetBundle assetBundle;
+                var downloadHanlder = _webRequest.downloadHandler as DownloadHandlerWXAssetBundle;
+                if (_bundle.Encrypted)
+                    assetBundle = _fileSystem.LoadEncryptedAssetBundle(downloadHanlder.data);
+                else
+                    assetBundle = downloadHanlder.assetBundle;
+
                 if (assetBundle == null)
                 {
                     _steps = ESteps.Done;
