@@ -290,9 +290,14 @@ internal class WechatFileSystem : IFileSystem
     /// <summary>
     /// 加载加密资源文件
     /// </summary>
-    public AssetBundle LoadEncryptedAssetBundle(byte[] fileData)
+    public AssetBundle LoadEncryptedAssetBundle(PackageBundle bundle, byte[] fileData)
     {
-        return DecryptionServices.LoadAssetBundle(fileData);
+        WebDecryptFileInfo fileInfo = new WebDecryptFileInfo();
+        fileInfo.BundleName = bundle.BundleName;
+        fileInfo.FileLoadCRC = bundle.UnityCRC;
+        fileInfo.FileData = fileData;
+        var decryptResult = DecryptionServices.LoadAssetBundle(fileInfo);
+        return decryptResult.Result;
     }
     #endregion
 }

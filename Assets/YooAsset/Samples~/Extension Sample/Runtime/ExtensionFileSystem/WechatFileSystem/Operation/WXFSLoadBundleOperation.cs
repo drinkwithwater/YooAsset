@@ -61,7 +61,7 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
                 AssetBundle assetBundle;
                 var downloadHanlder = _webRequest.downloadHandler as DownloadHandlerWXAssetBundle;
                 if (_bundle.Encrypted)
-                    assetBundle = _fileSystem.LoadEncryptedAssetBundle(downloadHanlder.data);
+                    assetBundle = _fileSystem.LoadEncryptedAssetBundle(_bundle, downloadHanlder.data);
                 else
                     assetBundle = downloadHanlder.assetBundle;
 
