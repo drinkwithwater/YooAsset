@@ -49,6 +49,15 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
 
             if (CheckRequestResult())
             {
+                if (_bundle.Encrypted && _fileSystem.DecryptionServices == null)
+                {
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Failed;
+                    Error = $"The {nameof(IDecryptionServices)} is null !";
+                    YooLogger.Error(Error);
+                    return;
+                }
+
                 AssetBundle assetBundle;
                 var downloadHanlder = _webRequest.downloadHandler as DownloadHandlerWXAssetBundle;
                 if (_bundle.Encrypted)
