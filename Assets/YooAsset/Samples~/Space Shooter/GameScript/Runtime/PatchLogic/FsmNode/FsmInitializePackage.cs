@@ -74,8 +74,9 @@ internal class FsmInitializePackage : IStateNode
 #if UNITY_WEBGL && WEIXINMINIGAME && !UNITY_EDITOR
 			string defaultHostServer = GetHostServerURL();
             string fallbackHostServer = GetHostServerURL();
+            string packageRoot = $"{WeChatWASM.WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE"; //注意：如果有子目录，请修改此处！
             IRemoteServices remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
-            createParameters.WebServerFileSystemParameters = WechatFileSystemCreater.CreateWechatFileSystemParameters(remoteServices);
+            createParameters.WebServerFileSystemParameters = WechatFileSystemCreater.CreateWechatFileSystemParameters(packageRoot, remoteServices);
 #else
             createParameters.WebServerFileSystemParameters = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
 #endif
