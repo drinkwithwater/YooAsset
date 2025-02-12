@@ -37,7 +37,7 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
             if (_webRequest == null)
             {
                 string mainURL = _fileSystem.RemoteServices.GetRemoteMainURL(_bundle.FileName);
-                _webRequest = WXAssetBundle.GetAssetBundle(mainURL);
+                _webRequest = _bundle.Encrypted ? UnityWebRequest.Get(mainURL) : WXAssetBundle.GetAssetBundle(mainURL);
                 _webRequest.SendWebRequest();
             }
 
@@ -59,11 +59,17 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
                 }
 
                 AssetBundle assetBundle;
-                var downloadHanlder = _webRequest.downloadHandler as DownloadHandlerWXAssetBundle;
+                
                 if (_bundle.Encrypted)
+                {
+                    var downloadHanlder = (DownloadHandlerBuffer)_webRequest.downloadHandler;
                     assetBundle = _fileSystem.LoadEncryptedAssetBundle(_bundle, downloadHanlder.data);
+                }
                 else
+                {
+                    var downloadHanlder = (DownloadHandlerWXAssetBundle)_webRequest.downloadHandler;
                     assetBundle = downloadHanlder.assetBundle;
+                }
 
                 if (assetBundle == null)
                 {
