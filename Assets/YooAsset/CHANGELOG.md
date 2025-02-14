@@ -2,6 +2,36 @@
 
 All notable changes to this package will be documented in this file.
 
+## [2.2.12] - 2025-02-14
+
+### Improvements
+
+- WebGL网页平台支持文件加密。
+
+### Fixed
+
+- (#466) 修复了微信小游戏文件系统查询机制不生效！
+- (#341) 修复了微信小游戏的下载进度异常问题。
+
+### Added
+
+- 新增了ResourcePackage.UnloadAllAssetsAsync(UnloadAllAssetsOptions options)方法
+
+  ```csharp
+  public sealed class UnloadAllAssetsOptions
+  {
+      /// <summary>
+      /// 释放所有资源句柄，防止卸载过程中触发完成回调！
+      /// </summary>
+      public bool ReleaseAllHandles = true;
+       
+      /// <summary>
+      /// 卸载过程中锁定加载操作，防止新的任务请求！
+      /// </summary>
+      public bool LockLoadOperation = true;
+  }
+  ```
+
 ## [2.2.11] - 2025-02-10
 
 ### Improvements
