@@ -7,11 +7,14 @@ All notable changes to this package will be documented in this file.
 ### Improvements
 
 - WebGL网页平台支持文件加密。
+- 微信小游戏平台支持文件加密。
+- 抖音小游戏平台支持文件加密。
 
 ### Fixed
 
 - (#466) 修复了微信小游戏文件系统查询机制不生效！
 - (#341) 修复了微信小游戏的下载进度异常问题。
+- (#471) 修复了Unity2019,Unity2020平台上，TableView视图无法显示的问题。
 
 ### Added
 
