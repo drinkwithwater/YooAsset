@@ -280,13 +280,17 @@ namespace YooAsset.Editor
             var filterItems = FilterScanners();
             if (AssetArtScannerSettingData.Setting.Scanners.Count == filterItems.Count)
             {
+#if UNITY_2020_3_OR_NEWER
                 _scannerListView.reorderable = true;
+#endif
                 _scannerListView.itemsSource = AssetArtScannerSettingData.Setting.Scanners;
                 _scannerListView.Rebuild();
             }
             else
             {
+#if UNITY_2020_3_OR_NEWER
                 _scannerListView.reorderable = false;
+#endif
                 _scannerListView.itemsSource = filterItems;
                 _scannerListView.Rebuild();
             }
