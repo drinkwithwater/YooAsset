@@ -22,6 +22,12 @@ public class TextureSchema : ScannerSchema
     public int MaxHeight = 1024;
 
     /// <summary>
+    /// 测试列表
+    /// </summary>
+    public List<string> TestStringValues = new List<string>();
+    
+
+    /// <summary>
     /// 获取用户指南信息
     /// </summary>
     public override string GetUserGuide()
@@ -176,6 +182,12 @@ public class TextureSchema : ScannerSchema
             MaxHeight = evt.newValue;
         });
         container.Add(maxHeightField);
+
+        // 创建测试列表
+        ReorderableListView reorderableListView = new ReorderableListView();
+        reorderableListView.SourceData = TestStringValues;
+        reorderableListView.HeaderName = "测试列表";
+        container.Add(reorderableListView);
 
         SchemaInspector inspector = new SchemaInspector(container);
         return inspector;
