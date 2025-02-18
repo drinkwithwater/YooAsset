@@ -60,16 +60,16 @@ namespace YooAsset.Editor
         /// <summary>
         /// 元素固定高度
         /// </summary>
-        public int ElementHeight
+        public float ElementHeight
         {
             set
             {
-                _listView.itemHeight = value;
+                _listView.fixedItemHeight = value;
                 _listView.Rebuild();
             }
             get
             {
-                return _listView.itemHeight;
+                return _listView.fixedItemHeight;
             }
         }
 
