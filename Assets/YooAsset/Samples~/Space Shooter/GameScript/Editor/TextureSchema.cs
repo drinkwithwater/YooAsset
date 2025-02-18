@@ -184,10 +184,12 @@ public class TextureSchema : ScannerSchema
         container.Add(maxHeightField);
 
         // 创建测试列表
+#if UNITY_2021_3_OR_NEWER
         ReorderableListView reorderableListView = new ReorderableListView();
         reorderableListView.SourceData = TestStringValues;
         reorderableListView.HeaderName = "测试列表";
         container.Add(reorderableListView);
+#endif
 
         SchemaInspector inspector = new SchemaInspector(container);
         return inspector;
