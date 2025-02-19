@@ -53,6 +53,7 @@ namespace YooAsset.Editor
 
         /// <summary>
         /// 旧版依赖模式
+        /// 说明：兼容YooAssets1.5.x版本
         /// </summary>
         public bool LegacyDependency = false;
 
