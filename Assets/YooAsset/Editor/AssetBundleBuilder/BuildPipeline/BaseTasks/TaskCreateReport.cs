@@ -18,11 +18,7 @@ namespace YooAsset.Editor
 
             // 概述信息
             {
-#if UNITY_2019_4_OR_NEWER
-                UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(BuildReport).Assembly);
-                if (packageInfo != null)
-                    buildReport.Summary.YooVersion = packageInfo.version;
-#endif
+                buildReport.Summary.YooVersion = EditorTools.GetPackageManagerYooVersion();
                 buildReport.Summary.UnityVersion = UnityEngine.Application.unityVersion;
                 buildReport.Summary.BuildDate = DateTime.Now.ToString();
                 buildReport.Summary.BuildSeconds = BuildRunner.TotalSeconds;
