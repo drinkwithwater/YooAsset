@@ -44,14 +44,14 @@ namespace YooAsset.Editor
             manifest.AssetList = CreatePackageAssetList(buildMapContext);
             manifest.BundleList = CreatePackageBundleList(buildMapContext);
 
-            // 处理资源清单的资源对象
+            // 1. 处理资源清单的资源对象
             ProcessPacakgeAsset(manifest);
 
-            // 处理资源包的依赖列表
+            // 2. 处理资源包的依赖列表
             if (processBundleDepends)
                 ProcessBundleDepends(context, manifest);
 
-            // 处理资源包的标签集合
+            // 3. 处理资源包的标签集合
             if (processBundleTags)
                 ProcessBundleTags(manifest);
 
@@ -191,6 +191,19 @@ namespace YooAsset.Editor
                 var assetInfo = packageAsset.TempDataInEditor as BuildAssetInfo;
                 packageAsset.BundleID = GetCachedBundleIndexID(assetInfo.BundleName);
             }
+
+            #region YOOASSET_LEGACY_DEPENDENCY
+            if (manifest.LegacyDependency)
+            {
+                // 记录资源对象依赖的资源包ID集合
+                // 注意：依赖关系非引擎构建结果里查询！
+                foreach (var packageAsset in manifest.AssetList)
+                {
+                    var mainAssetInfo = packageAsset.TempDataInEditor as BuildAssetInfo;
+                    packageAsset.DependBundleIDs = GetAssetDependBundleIDs(mainAssetInfo);
+                }
+            }
+            #endregion
         }
 
         /// <summary>
@@ -212,6 +225,23 @@ namespace YooAsset.Editor
                 }
                 packageBundle.DependIDs = dependIDs.ToArray();
             }
+
+            #region YOOASSET_LEGACY_DEPENDENCY
+            if (manifest.LegacyDependency)
+            {
+                foreach (var packageBundle in manifest.BundleList)
+                {
+                    var dependIDs = packageBundle.DependIDs;
+                    packageBundle.TempDataInEditor = new DependencyQuery(dependIDs);
+                }
+
+                // 记录引用该资源包的资源包ID集合
+                foreach (var packageBundle in manifest.BundleList)
+                {
+                    packageBundle.ReferenceBundleIDs = GetBundleReferenceBundleIDs(manifest, packageBundle);
+                }
+            }
+            #endregion
         }
 
         /// <summary>
@@ -219,37 +249,78 @@ namespace YooAsset.Editor
         /// </summary>
         private void ProcessBundleTags(PackageManifest manifest)
         {
-            // 将主资源的标签信息传染给其依赖的资源包集合
-            foreach (var packageAsset in manifest.AssetList)
+            foreach (var packageBundle in manifest.BundleList)
             {
-                var assetTags = packageAsset.AssetTags;
-                int bundleID = packageAsset.BundleID;
-                CacheBundleTags(bundleID, assetTags);
+                packageBundle.Tags = Array.Empty<string>();
+            }
 
-                var packageBundle = manifest.BundleList[bundleID];
-                if (packageBundle.DependIDs != null)
+            if (manifest.LegacyDependency == false)
+            {
+                // 将主资源的标签信息传染给其依赖的资源包集合
+                foreach (var packageAsset in manifest.AssetList)
                 {
-                    foreach (var dependBundleID in packageBundle.DependIDs)
+                    var assetTags = packageAsset.AssetTags;
+                    int bundleID = packageAsset.BundleID;
+                    CacheBundleTags(bundleID, assetTags);
+
+                    var packageBundle = manifest.BundleList[bundleID];
+                    if (packageBundle.DependIDs != null)
                     {
-                        CacheBundleTags(dependBundleID, assetTags);
+                        foreach (var dependBundleID in packageBundle.DependIDs)
+                        {
+                            CacheBundleTags(dependBundleID, assetTags);
+                        }
+                    }
+                }
+
+                for (int index = 0; index < manifest.BundleList.Count; index++)
+                {
+                    var packageBundle = manifest.BundleList[index];
+                    if (_cacheBundleTags.TryGetValue(index, out var value))
+                    {
+                        packageBundle.Tags = value.ToArray();
+                    }
+                    else
+                    {
+                        // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
+                        string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
+                        BuildLogger.Warning(warning);
                     }
                 }
             }
 
-            for (int index = 0; index < manifest.BundleList.Count; index++)
+            #region YOOASSET_LEGACY_DEPENDENCY
+            if (manifest.LegacyDependency)
             {
-                var packageBundle = manifest.BundleList[index];
-                if (_cacheBundleTags.TryGetValue(index, out var value))
+                // 将主资源的标签信息传染给其依赖的资源包集合
+                foreach (var packageAsset in manifest.AssetList)
                 {
-                    packageBundle.Tags = value.ToArray();
+                    var assetTags = packageAsset.AssetTags;
+                    int bundleID = packageAsset.BundleID;
+                    CacheBundleTags(bundleID, assetTags);
+
+                    foreach (var dependBundleID in packageAsset.DependBundleIDs)
+                    {
+                        CacheBundleTags(dependBundleID, assetTags);
+                    }
                 }
-                else
+
+                for (int index = 0; index < manifest.BundleList.Count; index++)
                 {
-                    // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
-                    string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
-                    BuildLogger.Warning(warning);
+                    var packageBundle = manifest.BundleList[index];
+                    if (_cacheBundleTags.TryGetValue(index, out var value))
+                    {
+                        packageBundle.Tags = value.ToArray();
+                    }
+                    else
+                    {
+                        // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
+                        string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
+                        BuildLogger.Warning(warning);
+                    }
                 }
             }
+            #endregion
         }
         private void CacheBundleTags(int bundleID, string[] assetTags)
         {
@@ -299,26 +370,6 @@ namespace YooAsset.Editor
         }
         private void ProcessLegacyDependency(BuildContext context, PackageManifest manifest)
         {
-            foreach (var packageBundle in manifest.BundleList)
-            {
-                var dependIDs = packageBundle.DependIDs;
-                packageBundle.TempDataInEditor = new DependencyQuery(dependIDs);
-            }
-
-            // 记录资源对象依赖的资源包ID集合
-            // 注意：依赖关系非引擎构建结果里查询！
-            foreach (var packageAsset in manifest.AssetList)
-            {
-                var mainAssetInfo = packageAsset.TempDataInEditor as BuildAssetInfo;
-                packageAsset.DependBundleIDs = GetAssetDependBundleIDs(mainAssetInfo);
-            }
-
-            // 记录引用该资源包的资源包ID集合
-            foreach (var packageBundle in manifest.BundleList)
-            {
-                packageBundle.ReferenceBundleIDs = GetBundleReferenceBundleIDs(manifest, packageBundle);
-            }
-
             // 注意：如果是可编程构建管线，需要补充内置资源包
             // 注意：该步骤依赖前面的操作！
             var buildResultContext = context.TryGetContextObject<TaskBuilding_SBP.BuildResultContext>();
