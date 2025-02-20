@@ -254,7 +254,26 @@ namespace YooAsset.Editor
                 packageBundle.Tags = Array.Empty<string>();
             }
 
-            if (manifest.LegacyDependency == false)
+            // YOOASSET_LEGACY_DEPENDENCY
+            if (manifest.LegacyDependency)
+            {
+                // 将主资源的标签信息传染给其依赖的资源包集合
+                foreach (var packageAsset in manifest.AssetList)
+                {
+                    var assetTags = packageAsset.AssetTags;
+                    int bundleID = packageAsset.BundleID;
+                    CacheBundleTags(bundleID, assetTags);
+
+                    if (packageAsset.DependBundleIDs != null)
+                    {
+                        foreach (var dependBundleID in packageAsset.DependBundleIDs)
+                        {
+                            CacheBundleTags(dependBundleID, assetTags);
+                        }
+                    }
+                }
+            }
+            else
             {
                 // 将主资源的标签信息传染给其依赖的资源包集合
                 foreach (var packageAsset in manifest.AssetList)
@@ -272,55 +291,23 @@ namespace YooAsset.Editor
                         }
                     }
                 }
-
-                for (int index = 0; index < manifest.BundleList.Count; index++)
-                {
-                    var packageBundle = manifest.BundleList[index];
-                    if (_cacheBundleTags.TryGetValue(index, out var value))
-                    {
-                        packageBundle.Tags = value.ToArray();
-                    }
-                    else
-                    {
-                        // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
-                        string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
-                        BuildLogger.Warning(warning);
-                    }
-                }
             }
 
-            #region YOOASSET_LEGACY_DEPENDENCY
-            if (manifest.LegacyDependency)
+            // 将缓存的资源标签赋值给资源包
+            for (int index = 0; index < manifest.BundleList.Count; index++)
             {
-                // 将主资源的标签信息传染给其依赖的资源包集合
-                foreach (var packageAsset in manifest.AssetList)
+                var packageBundle = manifest.BundleList[index];
+                if (_cacheBundleTags.TryGetValue(index, out var value))
                 {
-                    var assetTags = packageAsset.AssetTags;
-                    int bundleID = packageAsset.BundleID;
-                    CacheBundleTags(bundleID, assetTags);
-
-                    foreach (var dependBundleID in packageAsset.DependBundleIDs)
-                    {
-                        CacheBundleTags(dependBundleID, assetTags);
-                    }
+                    packageBundle.Tags = value.ToArray();
                 }
-
-                for (int index = 0; index < manifest.BundleList.Count; index++)
+                else
                 {
-                    var packageBundle = manifest.BundleList[index];
-                    if (_cacheBundleTags.TryGetValue(index, out var value))
-                    {
-                        packageBundle.Tags = value.ToArray();
-                    }
-                    else
-                    {
-                        // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
-                        string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
-                        BuildLogger.Warning(warning);
-                    }
+                    // 注意：SBP构建管线会自动剔除一些冗余资源的引用关系，导致游离资源包没有被任何主资源包引用。
+                    string warning = BuildLogger.GetErrorMessage(ErrorCode.FoundStrayBundle, $"Found stray bundle ! Bundle ID : {index} Bundle name : {packageBundle.BundleName}");
+                    BuildLogger.Warning(warning);
                 }
             }
-            #endregion
         }
         private void CacheBundleTags(int bundleID, string[] assetTags)
         {
