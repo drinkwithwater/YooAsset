@@ -35,11 +35,11 @@ namespace YooAsset
             _clearMode = clearMode;
             _clearParam = clearParam;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _steps = ESteps.ClearFileSystemA;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;

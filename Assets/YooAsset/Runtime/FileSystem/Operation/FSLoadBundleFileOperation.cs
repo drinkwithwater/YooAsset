@@ -33,12 +33,12 @@ namespace YooAsset
         {
             _error = error;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             Status = EOperationStatus.Failed;
             Error = _error;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
         }
         public override void AbortDownloadOperation()

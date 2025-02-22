@@ -20,13 +20,13 @@ namespace YooAsset
         {
             _fileSystem = fileSystem;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             _isReuqestLocalFile = DownloadSystemHelper.IsRequestLocalFile(Param.MainURL);
             _tempFilePath = _fileSystem.GetTempFilePath(Bundle);
             _steps = ESteps.CheckExists;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -177,7 +177,7 @@ namespace YooAsset
                 }
             }
         }
-        internal override void InternalOnAbort()
+        internal override void InternalAbort()
         {
             _steps = ESteps.Done;
             DisposeWebRequest();
@@ -187,7 +187,7 @@ namespace YooAsset
             //TODO 防止下载器挂起陷入无限死循环！
             if (_steps == ESteps.None)
             {
-                InternalOnStart();
+                InternalStart();
             }
 
             while (true)
@@ -195,7 +195,7 @@ namespace YooAsset
                 //TODO 如果是导入或解压本地文件，执行等待完毕
                 if (_isReuqestLocalFile)
                 {
-                    InternalOnUpdate();
+                    InternalUpdate();
                     if (IsDone)
                         break;
                 }

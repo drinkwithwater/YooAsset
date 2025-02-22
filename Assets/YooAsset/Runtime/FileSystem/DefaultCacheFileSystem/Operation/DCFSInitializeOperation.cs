@@ -22,7 +22,7 @@ namespace YooAsset
         {
             _fileSystem = fileSystem;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
 #if UNITY_WEBGL
             _steps = ESteps.Done;
@@ -32,7 +32,7 @@ namespace YooAsset
             _steps = ESteps.CheckAppFootPrint;
 #endif
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;

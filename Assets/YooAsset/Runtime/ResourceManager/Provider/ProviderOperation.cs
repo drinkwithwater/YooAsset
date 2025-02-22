@@ -96,12 +96,12 @@ namespace YooAsset
                 }
             }
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             DebugBeginRecording();
             _steps = ESteps.LoadBundleFile;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -320,7 +320,7 @@ namespace YooAsset
         }
 
         [Conditional("DEBUG")]
-        protected void DebugBeginRecording()
+        private void DebugBeginRecording()
         {
             if (_watch == null)
             {

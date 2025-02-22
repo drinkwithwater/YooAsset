@@ -8,6 +8,7 @@ namespace YooAsset
 {
     public abstract class AsyncOperationBase : IEnumerator, IComparable<AsyncOperationBase>
     {
+        private readonly List<AsyncOperationBase> _childs = new List<AsyncOperationBase>(10);
         private Action<AsyncOperationBase> _callback;
         private string _packageName = null;
         private int _whileFrame = 1000;
@@ -15,7 +16,7 @@ namespace YooAsset
         /// <summary>
         /// 等待异步执行完成
         /// </summary>
-        internal bool IsWaitForAsyncComplete = false;
+        internal bool IsWaitForAsyncComplete { private set; get; } = false;
 
         /// <summary>
         /// 是否已经完成
@@ -99,9 +100,9 @@ namespace YooAsset
             }
         }
 
-        internal abstract void InternalOnStart();
-        internal abstract void InternalOnUpdate();
-        internal virtual void InternalOnAbort()
+        internal abstract void InternalStart();
+        internal abstract void InternalUpdate();
+        internal virtual void InternalAbort()
         {
         }
         internal virtual void InternalWaitForAsyncComplete()
@@ -115,8 +116,11 @@ namespace YooAsset
         }
         internal void SetStart()
         {
-            Status = EOperationStatus.Processing;
-            InternalOnStart();
+            if (Status == EOperationStatus.None)
+            {
+                Status = EOperationStatus.Processing;
+                InternalStart();
+            }
         }
         internal void SetFinish()
         {
@@ -138,7 +142,7 @@ namespace YooAsset
                 Status = EOperationStatus.Failed;
                 Error = "user abort";
                 YooLogger.Warning($"Async operaiton {this.GetType().Name} has been abort !");
-                InternalOnAbort();
+                InternalAbort();
             }
         }
 
@@ -150,7 +154,7 @@ namespace YooAsset
             if (IsDone == false)
             {
                 // 执行更新逻辑
-                InternalOnUpdate();
+                InternalUpdate();
 
                 // 当执行次数用完时
                 _whileFrame--;
@@ -183,6 +187,23 @@ namespace YooAsset
             IsWaitForAsyncComplete = true;
             InternalWaitForAsyncComplete();
         }
+
+        /// <summary>
+        /// 开启子任务
+        /// </summary>
+        internal void StartChildOperation(AsyncOperationBase child)
+        {
+#if UNITY_EDITOR
+            if (_childs.Contains(child))
+                throw new Exception($"The child node {child.GetType().Name} already exists !");
+#endif
+
+            child.SetStart();
+            _childs.Add(child);
+        }
+
+        #region 调试信息
+        #endregion
 
         #region 排序接口实现
         public int CompareTo(AsyncOperationBase other)

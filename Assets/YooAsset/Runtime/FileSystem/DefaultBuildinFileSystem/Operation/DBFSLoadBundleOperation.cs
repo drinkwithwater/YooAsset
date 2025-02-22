@@ -29,13 +29,13 @@ namespace YooAsset
             _fileSystem = fileSystem;
             _bundle = bundle;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             DownloadProgress = 1f;
             DownloadedBytes = _bundle.FileSize;
             _steps = ESteps.LoadAssetBundle;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
@@ -166,13 +166,13 @@ namespace YooAsset
             _fileSystem = fileSystem;
             _bundle = bundle;
         }
-        internal override void InternalOnStart()
+        internal override void InternalStart()
         {
             DownloadProgress = 1f;
             DownloadedBytes = _bundle.FileSize;
             _steps = ESteps.LoadBuildinRawBundle;
         }
-        internal override void InternalOnUpdate()
+        internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
