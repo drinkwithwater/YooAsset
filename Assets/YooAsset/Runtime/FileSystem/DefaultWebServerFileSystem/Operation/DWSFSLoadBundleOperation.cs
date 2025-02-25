@@ -42,15 +42,18 @@ namespace YooAsset
                     if (_bundle.Encrypted)
                     {
                         _downloadAssetBundleOp = new DownloadWebEncryptAssetBundleOperation(true, _fileSystem.DecryptionServices, _bundle, downloadParam);
-                        OperationSystem.StartOperation(_fileSystem.PackageName, _downloadAssetBundleOp);
+                        _downloadAssetBundleOp.StartOperation();
+                        AddChildOperation(_downloadAssetBundleOp);
                     }
                     else
                     {
                         _downloadAssetBundleOp = new DownloadWebNormalAssetBundleOperation(_fileSystem.DisableUnityWebCache, _bundle, downloadParam);
-                        OperationSystem.StartOperation(_fileSystem.PackageName, _downloadAssetBundleOp);
+                        _downloadAssetBundleOp.StartOperation();
+                        AddChildOperation(_downloadAssetBundleOp);
                     }
                 }
 
+                _downloadAssetBundleOp.UpdateOperation();
                 DownloadProgress = _downloadAssetBundleOp.DownloadProgress;
                 DownloadedBytes = _downloadAssetBundleOp.DownloadedBytes;
                 Progress = _downloadAssetBundleOp.Progress;
@@ -89,14 +92,6 @@ namespace YooAsset
                 Status = EOperationStatus.Failed;
                 Error = "WebGL platform not support sync load method !";
                 UnityEngine.Debug.LogError(Error);
-            }
-        }
-        public override void AbortDownloadOperation()
-        {
-            if (_steps == ESteps.DownloadAssetBundle)
-            {
-                if (_downloadAssetBundleOp != null)
-                    _downloadAssetBundleOp.SetAbort();
             }
         }
     }

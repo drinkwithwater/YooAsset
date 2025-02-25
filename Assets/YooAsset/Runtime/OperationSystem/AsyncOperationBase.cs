@@ -21,7 +21,7 @@ namespace YooAsset
         /// <summary>
         /// 是否已经完成
         /// </summary>
-        internal bool IsFinish = false;
+        internal bool IsFinish { private set; get; } = false;
 
         /// <summary>
         /// 优先级
@@ -110,11 +110,32 @@ namespace YooAsset
             throw new System.NotImplementedException(this.GetType().Name);
         }
 
+        /// <summary>
+        /// 设置包裹名称
+        /// </summary>
+        /// <param name="packageName"></param>
         internal void SetPackageName(string packageName)
         {
             _packageName = packageName;
         }
-        internal void SetStart()
+
+        /// <summary>
+        /// 添加子任务
+        /// </summary>
+        internal void AddChildOperation(AsyncOperationBase child)
+        {
+#if UNITY_EDITOR
+            if (_childs.Contains(child))
+                throw new Exception($"The child node {child.GetType().Name} already exists !");
+#endif
+
+            _childs.Add(child);
+        }
+
+        /// <summary>
+        /// 开始异步操作
+        /// </summary>
+        internal void StartOperation()
         {
             if (Status == EOperationStatus.None)
             {
@@ -122,21 +143,40 @@ namespace YooAsset
                 InternalStart();
             }
         }
-        internal void SetFinish()
+
+        /// <summary>
+        /// 更新异步操作
+        /// </summary>
+        internal void UpdateOperation()
         {
-            IsFinish = true;
+            if (IsDone == false)
+                InternalUpdate();
 
-            // 进度百分百完成
-            Progress = 1f;
+            if (IsDone && IsFinish == false)
+            {
+                IsFinish = true;
 
-            //注意：如果完成回调内发生异常，会导致Task无限期等待
-            _callback?.Invoke(this);
+                // 进度百分百完成
+                Progress = 1f;
 
-            if (_taskCompletionSource != null)
-                _taskCompletionSource.TrySetResult(null);
+                //注意：如果完成回调内发生异常，会导致Task无限期等待
+                _callback?.Invoke(this);
+
+                if (_taskCompletionSource != null)
+                    _taskCompletionSource.TrySetResult(null);
+            }
         }
-        internal void SetAbort()
+
+        /// <summary>
+        /// 终止异步任务
+        /// </summary>
+        internal void AbortOperation()
         {
+            foreach (var child in _childs)
+            {
+                child.AbortOperation();
+            }
+
             if (IsDone == false)
             {
                 Status = EOperationStatus.Failed;
@@ -186,20 +226,6 @@ namespace YooAsset
 
             IsWaitForAsyncComplete = true;
             InternalWaitForAsyncComplete();
-        }
-
-        /// <summary>
-        /// 开启子任务
-        /// </summary>
-        internal void StartChildOperation(AsyncOperationBase child)
-        {
-#if UNITY_EDITOR
-            if (_childs.Contains(child))
-                throw new Exception($"The child node {child.GetType().Name} already exists !");
-#endif
-
-            child.SetStart();
-            _childs.Add(child);
         }
 
         #region 调试信息

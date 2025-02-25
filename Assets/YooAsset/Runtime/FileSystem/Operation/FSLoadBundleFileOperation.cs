@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 namespace YooAsset
 {
     internal abstract class FSLoadBundleOperation : AsyncOperationBase
@@ -18,11 +17,6 @@ namespace YooAsset
         /// 下载大小
         /// </summary>
         public long DownloadedBytes { protected set; get; } = 0;
-
-        /// <summary>
-        /// 终止下载任务
-        /// </summary>
-        public abstract void AbortDownloadOperation();
     }
 
     internal sealed class FSLoadBundleCompleteOperation : FSLoadBundleOperation
@@ -39,9 +33,6 @@ namespace YooAsset
             Error = _error;
         }
         internal override void InternalUpdate()
-        {
-        }
-        public override void AbortDownloadOperation()
         {
         }
     }

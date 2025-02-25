@@ -58,9 +58,11 @@ namespace YooAsset
                     string fileName = YooAssetSettingsData.GetManifestBinaryFileName(_fileSystem.PackageName, _packageVersion);
                     string webURL = GetDownloadRequestURL(fileName);
                     _webFileRequestOp = new UnityWebFileRequestOperation(webURL, savePath, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _webFileRequestOp);
+                    _webFileRequestOp.StartOperation();
+                    AddChildOperation(_webFileRequestOp);
                 }
 
+                _webFileRequestOp.UpdateOperation();
                 if (_webFileRequestOp.IsDone == false)
                     return;
 

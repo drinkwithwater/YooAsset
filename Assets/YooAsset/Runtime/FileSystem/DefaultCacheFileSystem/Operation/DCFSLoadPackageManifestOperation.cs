@@ -44,9 +44,11 @@ namespace YooAsset
                 if (_downloadPackageHashOp == null)
                 {
                     _downloadPackageHashOp = new DownloadPackageHashOperation(_fileSystem, _packageVersion, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _downloadPackageHashOp);
+                    _downloadPackageHashOp.StartOperation();
+                    AddChildOperation(_downloadPackageHashOp);
                 }
 
+                _downloadPackageHashOp.UpdateOperation();
                 if (_downloadPackageHashOp.IsDone == false)
                     return;
 
@@ -67,9 +69,11 @@ namespace YooAsset
                 if (_downloadPackageManifestOp == null)
                 {
                     _downloadPackageManifestOp = new DownloadPackageManifestOperation(_fileSystem, _packageVersion, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _downloadPackageManifestOp);
+                    _downloadPackageManifestOp.StartOperation();
+                    AddChildOperation(_downloadPackageManifestOp);
                 }
 
+                _downloadPackageManifestOp.UpdateOperation();
                 if (_downloadPackageManifestOp.IsDone == false)
                     return;
 
@@ -90,9 +94,11 @@ namespace YooAsset
                 if (_loadCachePackageHashOp == null)
                 {
                     _loadCachePackageHashOp = new LoadCachePackageHashOperation(_fileSystem, _packageVersion);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadCachePackageHashOp);
+                    _loadCachePackageHashOp.StartOperation();
+                    AddChildOperation(_loadCachePackageHashOp);
                 }
 
+                _loadCachePackageHashOp.UpdateOperation();
                 if (_loadCachePackageHashOp.IsDone == false)
                     return;
 
@@ -115,9 +121,11 @@ namespace YooAsset
                 {
                     string packageHash = _loadCachePackageHashOp.PackageHash;
                     _loadCachePackageManifestOp = new LoadCachePackageManifestOperation(_fileSystem, _packageVersion, packageHash);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadCachePackageManifestOp);
+                    _loadCachePackageManifestOp.StartOperation();
+                    AddChildOperation(_loadCachePackageManifestOp);
                 }
 
+                _loadCachePackageManifestOp.UpdateOperation();
                 Progress = _loadCachePackageManifestOp.Progress;
                 if (_loadCachePackageManifestOp.IsDone == false)
                     return;

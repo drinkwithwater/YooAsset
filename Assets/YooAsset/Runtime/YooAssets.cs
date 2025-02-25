@@ -60,11 +60,6 @@ namespace YooAsset
             if (_isInitialize)
             {
                 OperationSystem.Update();
-
-                for (int i = 0; i < _packages.Count; i++)
-                {
-                    _packages[i].UpdatePackage();
-                }
             }
         }
 

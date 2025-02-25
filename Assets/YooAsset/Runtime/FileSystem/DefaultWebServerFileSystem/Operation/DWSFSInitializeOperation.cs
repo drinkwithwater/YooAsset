@@ -1,6 +1,4 @@
 ﻿
-using static UnityEngine.Networking.UnityWebRequest;
-
 namespace YooAsset
 {
     internal class DWSFSInitializeOperation : FSInitializeFileSystemOperation
@@ -49,9 +47,11 @@ namespace YooAsset
 #endif
 
                     _loadCatalogFileOp = new LoadWebServerCatalogFileOperation(_fileSystem);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadCatalogFileOp);
+                    _loadCatalogFileOp.StartOperation();
+                    AddChildOperation(_loadCatalogFileOp);
                 }
 
+                _loadCatalogFileOp.UpdateOperation();
                 if (_loadCatalogFileOp.IsDone == false)
                     return;
 

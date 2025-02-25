@@ -37,9 +37,11 @@ namespace YooAsset
                 if (_loadEditorPackageHashOpe == null)
                 {
                     _loadEditorPackageHashOpe = new LoadEditorPackageHashOperation(_fileSystem, _packageVersion);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadEditorPackageHashOpe);
+                    _loadEditorPackageHashOpe.StartOperation();
+                    AddChildOperation(_loadEditorPackageHashOpe);
                 }
 
+                _loadEditorPackageHashOpe.UpdateOperation();
                 if (_loadEditorPackageHashOpe.IsDone == false)
                     return;
 
@@ -61,9 +63,11 @@ namespace YooAsset
                 {
                     string packageHash = _loadEditorPackageHashOpe.PackageHash;
                     _loadEditorPackageManifestOp = new LoadEditorPackageManifestOperation(_fileSystem, _packageVersion, packageHash);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadEditorPackageManifestOp);
+                    _loadEditorPackageManifestOp.StartOperation();
+                    AddChildOperation(_loadEditorPackageManifestOp);
                 }
 
+                _loadEditorPackageManifestOp.UpdateOperation();
                 Progress = _loadEditorPackageManifestOp.Progress;
                 if (_loadEditorPackageManifestOp.IsDone == false)
                     return;

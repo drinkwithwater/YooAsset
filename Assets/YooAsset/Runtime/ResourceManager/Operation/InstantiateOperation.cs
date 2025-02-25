@@ -162,7 +162,7 @@ namespace YooAsset
                 _instantiateAsync.Cancel();
 #endif
 
-            SetAbort();
+            AbortOperation();
         }
 
         /// <summary>

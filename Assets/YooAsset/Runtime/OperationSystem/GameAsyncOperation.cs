@@ -53,7 +53,7 @@ namespace YooAsset
         /// </summary>
         protected void Abort()
         {
-            SetAbort();
+            AbortOperation();
         }
     }
 }

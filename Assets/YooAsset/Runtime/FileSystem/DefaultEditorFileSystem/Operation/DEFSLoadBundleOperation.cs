@@ -72,8 +72,5 @@ namespace YooAsset
                 }
             }
         }
-        public override void AbortDownloadOperation()
-        {
-        }
     }
 }

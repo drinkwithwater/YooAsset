@@ -35,9 +35,11 @@ namespace YooAsset
                 if (_requestWebPackageVersionOp == null)
                 {
                     _requestWebPackageVersionOp = new RequestWebServerPackageVersionOperation(_fileSystem, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _requestWebPackageVersionOp);
+                    _requestWebPackageVersionOp.StartOperation();
+                    AddChildOperation(_requestWebPackageVersionOp);
                 }
 
+                _requestWebPackageVersionOp.UpdateOperation();
                 Progress = _requestWebPackageVersionOp.Progress;
                 if (_requestWebPackageVersionOp.IsDone == false)
                     return;

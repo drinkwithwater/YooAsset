@@ -197,8 +197,11 @@ namespace YooAsset
                 if (_loadPackageManifestOp == null)
                 {
                     _loadPackageManifestOp = _impl.CacheFileSystem.LoadPackageManifestAsync(_packageVersion, _timeout);
+                    _loadPackageManifestOp.StartOperation();
+                    AddChildOperation(_loadPackageManifestOp);
                 }
 
+                _loadPackageManifestOp.UpdateOperation();
                 if (_loadPackageManifestOp.IsDone == false)
                     return;
 

@@ -44,8 +44,13 @@ namespace YooAsset
             if (_steps == ESteps.RequestPackageVersion)
             {
                 if (_requestPackageVersionOp == null)
+                {
                     _requestPackageVersionOp = _fileSystem.RequestPackageVersionAsync(_appendTimeTicks, _timeout);
+                    _requestPackageVersionOp.StartOperation();
+                    AddChildOperation(_requestPackageVersionOp);
+                }
 
+                _requestPackageVersionOp.UpdateOperation();
                 if (_requestPackageVersionOp.IsDone == false)
                     return;
 

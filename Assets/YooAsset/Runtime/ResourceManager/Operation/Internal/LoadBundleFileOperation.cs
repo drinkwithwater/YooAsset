@@ -67,11 +67,16 @@ namespace YooAsset
             if (_steps == ESteps.LoadFile)
             {
                 if (_loadBundleOp == null)
+                {
                     _loadBundleOp = LoadBundleInfo.LoadBundleFile();
+                    _loadBundleOp.StartOperation();
+                    AddChildOperation(_loadBundleOp);
+                }
 
                 if (IsWaitForAsyncComplete)
                     _loadBundleOp.WaitForAsyncComplete();
 
+                _loadBundleOp.UpdateOperation();
                 DownloadProgress = _loadBundleOp.DownloadProgress;
                 DownloadedBytes = _loadBundleOp.DownloadedBytes;
                 if (_loadBundleOp.IsDone == false)
@@ -208,15 +213,6 @@ namespace YooAsset
                 _resourceManager.RemoveBundleProviders(_removeList);
                 _removeList.Clear();
             }
-        }
-
-        /// <summary>
-        /// 终止下载任务
-        /// </summary>
-        public void AbortDownloadOperation()
-        {
-            if (_loadBundleOp != null)
-                _loadBundleOp.AbortDownloadOperation();
         }
     }
 }

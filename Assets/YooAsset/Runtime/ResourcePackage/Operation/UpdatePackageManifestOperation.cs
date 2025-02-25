@@ -73,8 +73,13 @@ namespace YooAsset
             if (_steps == ESteps.LoadPackageManifest)
             {
                 if (_loadPackageManifestOp == null)
+                {
                     _loadPackageManifestOp = _fileSystem.LoadPackageManifestAsync(_packageVersion, _timeout);
+                    _loadPackageManifestOp.StartOperation();
+                    AddChildOperation(_loadPackageManifestOp);
+                }
 
+                _loadPackageManifestOp.UpdateOperation();
                 if (_loadPackageManifestOp.IsDone == false)
                     return;
 

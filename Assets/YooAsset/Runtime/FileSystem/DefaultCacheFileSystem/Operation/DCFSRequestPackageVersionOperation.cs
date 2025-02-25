@@ -37,9 +37,11 @@ namespace YooAsset
                 if (_requestRemotePackageVersionOp == null)
                 {
                     _requestRemotePackageVersionOp = new RequestRemotePackageVersionOperation(_fileSystem, _appendTimeTicks, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _requestRemotePackageVersionOp);
+                    _requestRemotePackageVersionOp.StartOperation();
+                    AddChildOperation(_requestRemotePackageVersionOp);
                 }
 
+                _requestRemotePackageVersionOp.UpdateOperation();
                 Progress = _requestRemotePackageVersionOp.Progress;
                 if (_requestRemotePackageVersionOp.IsDone == false)
                     return;

@@ -10,7 +10,8 @@ namespace YooAsset
         protected enum ESteps
         {
             None = 0,
-            LoadBundleFile,
+            StartBundleLoader,
+            WaitBundleLoader,
             ProcessBundleResult,
             Done,
         }
@@ -99,14 +100,24 @@ namespace YooAsset
         internal override void InternalStart()
         {
             DebugBeginRecording();
-            _steps = ESteps.LoadBundleFile;
+            _steps = ESteps.StartBundleLoader;
         }
         internal override void InternalUpdate()
         {
             if (_steps == ESteps.None || _steps == ESteps.Done)
                 return;
 
-            if (_steps == ESteps.LoadBundleFile)
+            if (_steps == ESteps.StartBundleLoader)
+            {
+                foreach (var bundleLoader in _bundleLoaders)
+                {
+                    bundleLoader.StartOperation();
+                    AddChildOperation(bundleLoader);
+                }
+                _steps = ESteps.WaitBundleLoader;
+            }
+
+            if (_steps == ESteps.WaitBundleLoader)
             {
                 if (IsWaitForAsyncComplete)
                 {
@@ -116,6 +127,13 @@ namespace YooAsset
                     }
                 }
 
+                // 更新资源包加载器
+                foreach (var bundleLoader in _bundleLoaders)
+                {
+                    bundleLoader.UpdateOperation();
+                }
+
+                // 检测加载是否完成
                 foreach (var bundleLoader in _bundleLoaders)
                 {
                     if (bundleLoader.IsDone == false)
@@ -128,6 +146,7 @@ namespace YooAsset
                     }
                 }
 
+                // 检测加载结果
                 BundleResultObject = _mainBundleLoader.Result;
                 if (BundleResultObject == null)
                 {

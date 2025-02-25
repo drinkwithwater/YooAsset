@@ -63,8 +63,13 @@ namespace YooAsset
             if (_steps == ESteps.UnloadAllAssets)
             {
                 if (_unloadAllAssetsOp == null)
+                {
                     _unloadAllAssetsOp = _resourcePackage.UnloadAllAssetsAsync();
+                    _unloadAllAssetsOp.StartOperation();
+                    AddChildOperation(_unloadAllAssetsOp);
+                }
 
+                _unloadAllAssetsOp.UpdateOperation();
                 if (_unloadAllAssetsOp.IsDone == false)
                     return;
 

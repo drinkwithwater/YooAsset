@@ -33,9 +33,11 @@ namespace YooAsset
                 if (_loadEditorPackageVersionOp == null)
                 {
                     _loadEditorPackageVersionOp = new LoadEditorPackageVersionOperation(_fileSystem);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _loadEditorPackageVersionOp);
+                    _loadEditorPackageVersionOp.StartOperation();
+                    AddChildOperation(_loadEditorPackageVersionOp);
                 }
 
+                _loadEditorPackageVersionOp.UpdateOperation();
                 if (_loadEditorPackageVersionOp.IsDone == false)
                     return;
 

@@ -33,9 +33,11 @@ namespace YooAsset
                 if (_requestBuildinPackageVersionOp == null)
                 {
                     _requestBuildinPackageVersionOp = new RequestBuildinPackageVersionOperation(_fileSystem);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _requestBuildinPackageVersionOp);
+                    _requestBuildinPackageVersionOp.StartOperation();
+                    AddChildOperation(_requestBuildinPackageVersionOp);
                 }
 
+                _requestBuildinPackageVersionOp.UpdateOperation();
                 if (_requestBuildinPackageVersionOp.IsDone == false)
                     return;
 

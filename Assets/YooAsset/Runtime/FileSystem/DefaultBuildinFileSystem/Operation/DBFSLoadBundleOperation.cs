@@ -139,9 +139,6 @@ namespace YooAsset
                 }
             }
         }
-        public override void AbortDownloadOperation()
-        {
-        }
     }
 
     /// <summary>
@@ -205,9 +202,6 @@ namespace YooAsset
                     break;
                 }
             }
-        }
-        public override void AbortDownloadOperation()
-        {
         }
     }
 }

@@ -86,7 +86,7 @@ namespace YooAsset
                 // 注意：终止所有下载任务
                 foreach (var loader in _resManager.LoaderDic.Values)
                 {
-                    loader.AbortDownloadOperation();
+                    loader.AbortOperation();
                 }
                 _steps = ESteps.CheckLoading;
             }

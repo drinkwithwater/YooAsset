@@ -46,9 +46,11 @@ namespace YooAsset
                     string fileName = YooAssetSettingsData.GetPackageVersionFileName(_fileSystem.PackageName);
                     string url = GetWebRequestURL(fileName);
                     _webTextRequestOp = new UnityWebTextRequestOperation(url, _timeout);
-                    OperationSystem.StartOperation(_fileSystem.PackageName, _webTextRequestOp);
+                    _webTextRequestOp.StartOperation();
+                    AddChildOperation(_webTextRequestOp);
                 }
 
+                _webTextRequestOp.UpdateOperation();
                 Progress = _webTextRequestOp.Progress;
                 if (_webTextRequestOp.IsDone == false)
                     return;
