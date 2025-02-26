@@ -147,6 +147,7 @@ namespace YooAsset
                 long downloadBytes = _cachedDownloadBytes;
                 foreach (var downloader in _downloaders)
                 {
+                    downloader.UpdateOperation();
                     downloadBytes += downloader.DownloadedBytes;
                     if (downloader.IsDone == false)
                         continue;
