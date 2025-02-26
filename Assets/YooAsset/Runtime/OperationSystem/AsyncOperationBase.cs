@@ -113,7 +113,6 @@ namespace YooAsset
         /// <summary>
         /// 设置包裹名称
         /// </summary>
-        /// <param name="packageName"></param>
         internal void SetPackageName(string packageName)
         {
             _packageName = packageName;
@@ -223,6 +222,13 @@ namespace YooAsset
         {
             if (IsDone)
                 return;
+
+            //TODO 防止异步操作被挂起陷入无限死循环！
+            // 例如：文件解压任务或者文件导入任务！
+            if (Status == EOperationStatus.None)
+            {
+                StartOperation();
+            }
 
             IsWaitForAsyncComplete = true;
             InternalWaitForAsyncComplete();
