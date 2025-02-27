@@ -45,7 +45,6 @@ namespace YooAsset
         public InitializationOperation InitializeAsync(List<FileSystemParameters> fileSystemParameterList)
         {
             var operation = new InitializationOperation(this, fileSystemParameterList);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
 
@@ -73,7 +72,6 @@ namespace YooAsset
         RequestPackageVersionOperation IPlayMode.RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
         {
             var operation = new RequestPackageVersionImplOperation(this, appendTimeTicks, timeout);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
 
@@ -83,7 +81,6 @@ namespace YooAsset
         UpdatePackageManifestOperation IPlayMode.UpdatePackageManifestAsync(string packageVersion, int timeout)
         {
             var operation = new UpdatePackageManifestOperation(this, packageVersion, timeout);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
 
@@ -93,7 +90,6 @@ namespace YooAsset
         PreDownloadContentOperation IPlayMode.PreDownloadContentAsync(string packageVersion, int timeout)
         {
             var operation = new PreDownloadContentOperation(this, packageVersion, timeout);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
 
@@ -103,7 +99,6 @@ namespace YooAsset
         ClearCacheFilesOperation IPlayMode.ClearCacheFilesAsync(string clearMode, object clearParam)
         {
             var operation = new ClearCacheFilesOperation(this, clearMode, clearParam);
-            OperationSystem.StartOperation(PackageName, operation);
             return operation;
         }
 

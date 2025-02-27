@@ -136,6 +136,7 @@ namespace YooAsset
 
             // 监听初始化结果
             _isInitialize = true;
+            OperationSystem.StartOperation(PackageName, initializeOperation);
             initializeOperation.Completed += InitializeOperation_Completed;
             return initializeOperation;
         }
@@ -217,7 +218,9 @@ namespace YooAsset
         public RequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks = true, int timeout = 60)
         {
             DebugCheckInitialize(false);
-            return _playModeImpl.RequestPackageVersionAsync(appendTimeTicks, timeout);
+            var operation = _playModeImpl.RequestPackageVersionAsync(appendTimeTicks, timeout);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
         }
 
         /// <summary>
@@ -235,7 +238,9 @@ namespace YooAsset
                 YooLogger.Warning($"Found loaded bundle before update manifest ! Recommended to call the  {nameof(UnloadAllAssetsAsync)} method to release loaded bundle !");
             }
 
-            return _playModeImpl.UpdatePackageManifestAsync(packageVersion, timeout);
+            var operation = _playModeImpl.UpdatePackageManifestAsync(packageVersion, timeout);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
         }
 
         /// <summary>
@@ -246,7 +251,9 @@ namespace YooAsset
         public PreDownloadContentOperation PreDownloadContentAsync(string packageVersion, int timeout = 60)
         {
             DebugCheckInitialize(false);
-            return _playModeImpl.PreDownloadContentAsync(packageVersion, timeout);
+            var operation = _playModeImpl.PreDownloadContentAsync(packageVersion, timeout);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
         }
 
         /// <summary>
@@ -257,7 +264,9 @@ namespace YooAsset
         public ClearCacheFilesOperation ClearCacheFilesAsync(EFileClearMode clearMode, object clearParam = null)
         {
             DebugCheckInitialize();
-            return _playModeImpl.ClearCacheFilesAsync(clearMode.ToString(), clearParam);
+            var operation = _playModeImpl.ClearCacheFilesAsync(clearMode.ToString(), clearParam);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
         }
 
         /// <summary>
@@ -268,7 +277,9 @@ namespace YooAsset
         public ClearCacheFilesOperation ClearCacheFilesAsync(string clearMode, object clearParam = null)
         {
             DebugCheckInitialize();
-            return _playModeImpl.ClearCacheFilesAsync(clearMode, clearParam);
+            var operation = _playModeImpl.ClearCacheFilesAsync(clearMode, clearParam);
+            OperationSystem.StartOperation(PackageName, operation);
+            return operation;
         }
 
 
