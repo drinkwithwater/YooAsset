@@ -34,7 +34,7 @@ namespace YooAsset
         /// <summary>
         /// 初始化
         /// </summary>
-        public void Initialize(InitializeParameters initializeParameters, IBundleQuery bundleServices)
+        public void Initialize(IBundleQuery bundleServices)
         {
             _bundleQuery = bundleServices;
             SceneManager.sceneUnloaded += OnSceneUnloaded;

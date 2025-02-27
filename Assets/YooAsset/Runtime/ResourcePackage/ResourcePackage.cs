@@ -95,48 +95,39 @@ namespace YooAsset
                 _resourceManager = null;
             }
 
-            // 创建资源管理器
-            InitializationOperation initializeOperation;
+            // 创建资源管理器 
             _resourceManager = new ResourceManager(PackageName);
+            var playModeImpl = new PlayModeImpl(PackageName);
+            _bundleQuery = playModeImpl;
+            _playModeImpl = playModeImpl;
+            _resourceManager.Initialize(_bundleQuery);
+
+            // 初始化资源系统
+            InitializationOperation initializeOperation;
             if (_playMode == EPlayMode.EditorSimulateMode)
             {
-                var editorSimulateModeImpl = new EditorSimulateModeImpl(PackageName);
-                _bundleQuery = editorSimulateModeImpl;
-                _playModeImpl = editorSimulateModeImpl;
-                _resourceManager.Initialize(parameters, _bundleQuery);
-
                 var initializeParameters = parameters as EditorSimulateModeParameters;
-                initializeOperation = editorSimulateModeImpl.InitializeAsync(initializeParameters);
+                initializeOperation = playModeImpl.InitializeAsync(initializeParameters.EditorFileSystemParameters);
             }
             else if (_playMode == EPlayMode.OfflinePlayMode)
             {
-                var offlinePlayModeImpl = new OfflinePlayModeImpl(PackageName);
-                _bundleQuery = offlinePlayModeImpl;
-                _playModeImpl = offlinePlayModeImpl;
-                _resourceManager.Initialize(parameters, _bundleQuery);
-
                 var initializeParameters = parameters as OfflinePlayModeParameters;
-                initializeOperation = offlinePlayModeImpl.InitializeAsync(initializeParameters);
+                initializeOperation = playModeImpl.InitializeAsync(initializeParameters.BuildinFileSystemParameters);
             }
             else if (_playMode == EPlayMode.HostPlayMode)
             {
-                var hostPlayModeImpl = new HostPlayModeImpl(PackageName);
-                _bundleQuery = hostPlayModeImpl;
-                _playModeImpl = hostPlayModeImpl;
-                _resourceManager.Initialize(parameters, _bundleQuery);
-
                 var initializeParameters = parameters as HostPlayModeParameters;
-                initializeOperation = hostPlayModeImpl.InitializeAsync(initializeParameters);
+                initializeOperation = playModeImpl.InitializeAsync(initializeParameters.BuildinFileSystemParameters, initializeParameters.CacheFileSystemParameters);
             }
             else if (_playMode == EPlayMode.WebPlayMode)
             {
-                var webPlayModeImpl = new WebPlayModeImpl(PackageName);
-                _bundleQuery = webPlayModeImpl;
-                _playModeImpl = webPlayModeImpl;
-                _resourceManager.Initialize(parameters, _bundleQuery);
-
                 var initializeParameters = parameters as WebPlayModeParameters;
-                initializeOperation = webPlayModeImpl.InitializeAsync(initializeParameters);
+                initializeOperation = playModeImpl.InitializeAsync(initializeParameters.WebServerFileSystemParameters, initializeParameters.WebRemoteFileSystemParameters);
+            }
+            else if (_playMode == EPlayMode.CustomPlayMode)
+            {
+                var initializeParameters = parameters as CustomPlayModeParameters;
+                initializeOperation = playModeImpl.InitializeAsync(initializeParameters.FileSystemParameterList);
             }
             else
             {
@@ -179,6 +170,8 @@ namespace YooAsset
                 _playMode = EPlayMode.HostPlayMode;
             else if (parameters is WebPlayModeParameters)
                 _playMode = EPlayMode.WebPlayMode;
+            else if (parameters is CustomPlayModeParameters)
+                _playMode = EPlayMode.CustomPlayMode;
             else
                 throw new NotImplementedException();
 
