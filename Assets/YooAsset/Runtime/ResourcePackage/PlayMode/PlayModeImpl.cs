@@ -167,20 +167,20 @@ namespace YooAsset
         }
         BundleInfo IBundleQuery.GetMainBundleInfo(AssetInfo assetInfo)
         {
-            if (assetInfo.IsInvalid)
+            if (assetInfo == null || assetInfo.IsInvalid)
                 throw new Exception("Should never get here !");
 
             // 注意：如果清单里未找到资源包会抛出异常！
-            var packageBundle = ActiveManifest.GetMainPackageBundle(assetInfo.AssetPath);
+            var packageBundle = ActiveManifest.GetMainPackageBundle(assetInfo.Asset);
             return CreateBundleInfo(packageBundle);
         }
         BundleInfo[] IBundleQuery.GetDependBundleInfos(AssetInfo assetInfo)
         {
-            if (assetInfo.IsInvalid)
+            if (assetInfo == null || assetInfo.IsInvalid)
                 throw new Exception("Should never get here !");
 
             // 注意：如果清单里未找到资源包会抛出异常！
-            var depends = ActiveManifest.GetAllDependencies(assetInfo.AssetPath);
+            var depends = ActiveManifest.GetAllDependencies(assetInfo.Asset);
             List<BundleInfo> result = new List<BundleInfo>(depends.Length);
             foreach (var packageBundle in depends)
             {
@@ -197,20 +197,20 @@ namespace YooAsset
         }
         string IBundleQuery.GetMainBundleName(AssetInfo assetInfo)
         {
-            if (assetInfo.IsInvalid)
+            if (assetInfo == null || assetInfo.IsInvalid)
                 throw new Exception("Should never get here !");
 
             // 注意：如果清单里未找到资源包会抛出异常！
-            var packageBundle = ActiveManifest.GetMainPackageBundle(assetInfo.AssetPath);
+            var packageBundle = ActiveManifest.GetMainPackageBundle(assetInfo.Asset);
             return packageBundle.BundleName;
         }
         string[] IBundleQuery.GetDependBundleNames(AssetInfo assetInfo)
         {
-            if (assetInfo.IsInvalid)
+            if (assetInfo == null || assetInfo.IsInvalid)
                 throw new Exception("Should never get here !");
 
             // 注意：如果清单里未找到资源包会抛出异常！
-            var depends = ActiveManifest.GetAllDependencies(assetInfo.AssetPath);
+            var depends = ActiveManifest.GetAllDependencies(assetInfo.Asset);
             List<string> result = new List<string>(depends.Length);
             foreach (var packageBundle in depends)
             {
@@ -319,12 +319,12 @@ namespace YooAsset
                 }
 
                 // 注意：如果清单里未找到资源包会抛出异常！
-                PackageBundle mainBundle = manifest.GetMainPackageBundle(assetInfo.AssetPath);
+                PackageBundle mainBundle = manifest.GetMainPackageBundle(assetInfo.Asset);
                 if (checkList.Contains(mainBundle) == false)
                     checkList.Add(mainBundle);
 
                 // 注意：如果清单里未找到资源包会抛出异常！
-                PackageBundle[] mainDependBundles = manifest.GetAllDependencies(assetInfo.AssetPath);
+                PackageBundle[] mainDependBundles = manifest.GetAllDependencies(assetInfo.Asset);
                 foreach (var dependBundle in mainDependBundles)
                 {
                     if (checkList.Contains(dependBundle) == false)

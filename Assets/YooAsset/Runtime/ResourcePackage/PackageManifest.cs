@@ -149,22 +149,6 @@ namespace YooAsset
 
         /// <summary>
         /// 获取主资源包
-        /// 注意：传入的资源路径一定合法有效！
-        /// </summary>
-        public PackageBundle GetMainPackageBundle(string assetPath)
-        {
-            if (AssetDic.TryGetValue(assetPath, out PackageAsset packageAsset))
-            {
-                return GetMainPackageBundle(packageAsset.BundleID);
-            }
-            else
-            {
-                throw new Exception("Should never get here !");
-            }
-        }
-
-        /// <summary>
-        /// 获取主资源包
         /// 注意：传入的资源包ID一定合法有效！
         /// </summary>
         public PackageBundle GetMainPackageBundle(int bundleID)
@@ -181,23 +165,17 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 获取资源依赖列表
-        /// 注意：传入的资源路径一定合法有效！
+        /// 获取主资源包
+        /// 注意：传入的资源对象一定合法有效！
         /// </summary>
-        public PackageBundle[] GetAllDependencies(string assetPath)
+        public PackageBundle GetMainPackageBundle(PackageAsset packageAsset)
         {
-            if (TryGetPackageAsset(assetPath, out PackageAsset packageAsset))
-            {
-                return GetAllDependencies(packageAsset);
-            }
-            else
-            {
-                throw new Exception("Should never get here !");
-            }
+            return GetMainPackageBundle(packageAsset.BundleID);
         }
 
         /// <summary>
         /// 获取资源依赖列表
+        /// 注意：传入的资源对象一定合法有效！
         /// </summary>
         public PackageBundle[] GetAllDependencies(PackageAsset packageAsset)
         {
