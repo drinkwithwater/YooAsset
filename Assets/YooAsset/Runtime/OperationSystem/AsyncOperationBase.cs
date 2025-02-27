@@ -24,12 +24,12 @@ namespace YooAsset
         internal bool IsFinish { private set; get; } = false;
 
         /// <summary>
-        /// 优先级
+        /// 任务优先级
         /// </summary>
         public uint Priority { set; get; } = 0;
 
         /// <summary>
-        /// 状态
+        /// 任务状态
         /// </summary>
         public EOperationStatus Status { get; protected set; } = EOperationStatus.None;
 
@@ -139,6 +139,11 @@ namespace YooAsset
             if (Status == EOperationStatus.None)
             {
                 Status = EOperationStatus.Processing;
+
+                // 开始记录
+                DebugBeginRecording();
+
+                // 开始任务
                 InternalStart();
             }
         }
@@ -149,7 +154,13 @@ namespace YooAsset
         internal void UpdateOperation()
         {
             if (IsDone == false)
+            {
+                // 更新记录
+                DebugUpdateRecording();
+
+                // 更新任务
                 InternalUpdate();
+            }
 
             if (IsDone && IsFinish == false)
             {
@@ -157,6 +168,9 @@ namespace YooAsset
 
                 // 进度百分百完成
                 Progress = 1f;
+
+                // 结束记录
+                DebugEndRecording();
 
                 //注意：如果完成回调内发生异常，会导致Task无限期等待
                 _callback?.Invoke(this);
@@ -235,6 +249,55 @@ namespace YooAsset
         }
 
         #region 调试信息
+        /// <summary>
+        /// 开始的时间
+        /// </summary>
+        public string BeginTime = string.Empty;
+
+        /// <summary>
+        /// 处理耗时（单位：毫秒）
+        /// </summary>
+        public long ProcessTime { protected set; get; }
+
+        // 加载耗时统计
+        private Stopwatch _watch = null;
+
+        [Conditional("DEBUG")]
+        private void DebugBeginRecording()
+        {
+            if (_watch == null)
+            {
+                BeginTime = SpawnTimeToString(UnityEngine.Time.realtimeSinceStartup);
+                _watch = Stopwatch.StartNew();
+            }
+        }
+
+        [Conditional("DEBUG")]
+        private void DebugUpdateRecording()
+        {
+            if (_watch != null)
+            {
+                ProcessTime = _watch.ElapsedMilliseconds;
+            }
+        }
+
+        [Conditional("DEBUG")]
+        private void DebugEndRecording()
+        {
+            if (_watch != null)
+            {
+                ProcessTime = _watch.ElapsedMilliseconds;
+                _watch = null;
+            }
+        }
+
+        private string SpawnTimeToString(float spawnTime)
+        {
+            float h = UnityEngine.Mathf.FloorToInt(spawnTime / 3600f);
+            float m = UnityEngine.Mathf.FloorToInt(spawnTime / 60f - h * 60f);
+            float s = UnityEngine.Mathf.FloorToInt(spawnTime - m * 60f - h * 3600f);
+            return h.ToString("00") + ":" + m.ToString("00") + ":" + s.ToString("00");
+        }
         #endregion
 
         #region 排序接口实现

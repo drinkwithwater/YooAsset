@@ -1166,7 +1166,12 @@ namespace YooAsset
         #region 调试信息
         internal DebugPackageData GetDebugPackageData()
         {
-            return _resourceManager.GetDebugPackageData();
+            DebugPackageData data = new DebugPackageData();
+            data.PackageName = PackageName;
+            data.ProviderInfos = _resourceManager.GetDebugProviderInfos();
+            data.BundleInfos = _resourceManager.GetDebugBundleInfos();
+            data.OperationInfos = OperationSystem.GetDebugOperationInfos(PackageName);
+            return data;
         }
         #endregion
     }
