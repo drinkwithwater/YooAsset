@@ -43,7 +43,7 @@ namespace YooAsset
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public abstract ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60);
+        public abstract ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60);
 
         /// <summary>
         /// 创建资源下载器，用于下载指定的资源列表依赖的资源包文件
@@ -52,7 +52,7 @@ namespace YooAsset
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public abstract ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60);
+        public abstract ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60);
     }
 
     internal class EditorSimulateModePreDownloadContentOperation : PreDownloadContentOperation
@@ -83,11 +83,11 @@ namespace YooAsset
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
@@ -120,11 +120,11 @@ namespace YooAsset
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
@@ -256,7 +256,7 @@ namespace YooAsset
             var operation = new ResourceDownloaderOperation(_impl.PackageName, downloadList, downloadingMaxNumber, failedTryAgain, timeout);
             return operation;
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             if (Status != EOperationStatus.Succeed)
             {
@@ -268,11 +268,11 @@ namespace YooAsset
             var assetInfo = _manifest.ConvertLocationToAssetInfo(location, null);
             assetInfos.Add(assetInfo);
 
-            List<BundleInfo> downloadList = PlayModeHelper.GetDownloadListByPaths(_manifest, assetInfos.ToArray(), _impl.BuildinFileSystem, _impl.CacheFileSystem);
+            List<BundleInfo> downloadList = PlayModeHelper.GetDownloadListByPaths(_manifest, assetInfos.ToArray(), recursiveDownload, _impl.BuildinFileSystem, _impl.CacheFileSystem);
             var operation = new ResourceDownloaderOperation(_impl.PackageName, downloadList, downloadingMaxNumber, failedTryAgain, timeout);
             return operation;
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             if (Status != EOperationStatus.Succeed)
             {
@@ -287,7 +287,7 @@ namespace YooAsset
                 assetInfos.Add(assetInfo);
             }
 
-            List<BundleInfo> downloadList = PlayModeHelper.GetDownloadListByPaths(_manifest, assetInfos.ToArray(), _impl.BuildinFileSystem, _impl.CacheFileSystem);
+            List<BundleInfo> downloadList = PlayModeHelper.GetDownloadListByPaths(_manifest, assetInfos.ToArray(), recursiveDownload, _impl.BuildinFileSystem, _impl.CacheFileSystem);
             var operation = new ResourceDownloaderOperation(_impl.PackageName, downloadList, downloadingMaxNumber, failedTryAgain, timeout);
             return operation;
         }
@@ -320,11 +320,11 @@ namespace YooAsset
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }
-        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public override ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             return ResourceDownloaderOperation.CreateEmptyDownloader(_impl.PackageName, downloadingMaxNumber, failedTryAgain, timeout);
         }

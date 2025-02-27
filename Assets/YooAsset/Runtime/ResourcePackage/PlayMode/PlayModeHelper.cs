@@ -84,7 +84,7 @@ namespace YooAsset
             }
             return result;
         }
-        public static List<BundleInfo> GetDownloadListByPaths(PackageManifest manifest, AssetInfo[] assetInfos, IFileSystem fileSystemA = null, IFileSystem fileSystemB = null, IFileSystem fileSystemC = null)
+        public static List<BundleInfo> GetDownloadListByPaths(PackageManifest manifest, AssetInfo[] assetInfos, bool recursiveDownload, IFileSystem fileSystemA = null, IFileSystem fileSystemB = null, IFileSystem fileSystemC = null)
         {
             // 获取资源对象的资源包和所有依赖资源包
             List<PackageBundle> checkList = new List<PackageBundle>();
@@ -102,11 +102,29 @@ namespace YooAsset
                     checkList.Add(mainBundle);
 
                 // 注意：如果清单里未找到资源包会抛出异常！
-                PackageBundle[] dependBundles = manifest.GetAllDependencies(assetInfo.AssetPath);
-                foreach (var dependBundle in dependBundles)
+                PackageBundle[] mainDependBundles = manifest.GetAllDependencies(assetInfo.AssetPath);
+                foreach (var dependBundle in mainDependBundles)
                 {
                     if (checkList.Contains(dependBundle) == false)
                         checkList.Add(dependBundle);
+                }
+
+                // 下载主资源包内所有资源对象依赖的资源包
+                if (recursiveDownload)
+                {
+                    foreach (var otherMainAsset in mainBundle.IncludeMainAssets)
+                    {
+                        var otherMainBundle = manifest.GetMainPackageBundle(otherMainAsset.BundleID);
+                        if (checkList.Contains(otherMainBundle) == false)
+                            checkList.Add(otherMainBundle);
+
+                        PackageBundle[] otherDependBundles = manifest.GetAllDependencies(otherMainAsset);
+                        foreach (var dependBundle in otherDependBundles)
+                        {
+                            if (checkList.Contains(dependBundle) == false)
+                                checkList.Add(dependBundle);
+                        }
+                    }
                 }
             }
 

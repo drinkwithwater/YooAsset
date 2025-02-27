@@ -188,18 +188,26 @@ namespace YooAsset
         {
             if (TryGetPackageAsset(assetPath, out PackageAsset packageAsset))
             {
-                List<PackageBundle> result = new List<PackageBundle>(packageAsset.DependBundleIDs.Length);
-                foreach (var dependID in packageAsset.DependBundleIDs)
-                {
-                    var dependBundle = GetMainPackageBundle(dependID);
-                    result.Add(dependBundle);
-                }
-                return result.ToArray();
+                return GetAllDependencies(packageAsset);
             }
             else
             {
                 throw new Exception("Should never get here !");
             }
+        }
+
+        /// <summary>
+        /// 获取资源依赖列表
+        /// </summary>
+        public PackageBundle[] GetAllDependencies(PackageAsset packageAsset)
+        {
+            List<PackageBundle> result = new List<PackageBundle>(packageAsset.DependBundleIDs.Length);
+            foreach (var dependID in packageAsset.DependBundleIDs)
+            {
+                var dependBundle = GetMainPackageBundle(dependID);
+                result.Add(dependBundle);
+            }
+            return result.ToArray();
         }
 
         /// <summary>

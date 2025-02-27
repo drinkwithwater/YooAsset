@@ -984,25 +984,31 @@ namespace YooAsset
         /// 创建资源下载器，用于下载指定的资源依赖的资源包文件
         /// </summary>
         /// <param name="location">资源的定位地址</param>
+        /// <param name="recursiveDownload">下载资源对象所属资源包内所有资源对象依赖的资源包</param>
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public ResourceDownloaderOperation CreateBundleDownloader(string location, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             DebugCheckInitialize();
             var assetInfo = ConvertLocationToAssetInfo(location, null);
             AssetInfo[] assetInfos = new AssetInfo[] { assetInfo };
-            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, downloadingMaxNumber, failedTryAgain, timeout);
+            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, recursiveDownload, downloadingMaxNumber, failedTryAgain, timeout);
+        }
+        public ResourceDownloaderOperation CreateBundleDownloader(string location, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        {
+            return CreateBundleDownloader(location, false, downloadingMaxNumber, failedTryAgain, timeout);
         }
 
         /// <summary>
         /// 创建资源下载器，用于下载指定的资源列表依赖的资源包文件
         /// </summary>
         /// <param name="locations">资源的定位地址列表</param>
+        /// <param name="recursiveDownload">下载资源对象所属资源包内所有资源对象依赖的资源包</param>
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public ResourceDownloaderOperation CreateBundleDownloader(string[] locations, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             DebugCheckInitialize();
             List<AssetInfo> assetInfos = new List<AssetInfo>(locations.Length);
@@ -1011,34 +1017,48 @@ namespace YooAsset
                 var assetInfo = ConvertLocationToAssetInfo(location, null);
                 assetInfos.Add(assetInfo);
             }
-            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos.ToArray(), downloadingMaxNumber, failedTryAgain, timeout);
+            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos.ToArray(), recursiveDownload, downloadingMaxNumber, failedTryAgain, timeout);
+        }
+        public ResourceDownloaderOperation CreateBundleDownloader(string[] locations, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        {
+            return CreateBundleDownloader(locations, false, downloadingMaxNumber, failedTryAgain, timeout);
         }
 
         /// <summary>
         /// 创建资源下载器，用于下载指定的资源依赖的资源包文件
         /// </summary>
         /// <param name="assetInfo">资源信息</param>
+        /// <param name="recursiveDownload">下载资源对象所属资源包内所有资源对象依赖的资源包</param>
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo assetInfo, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo assetInfo, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             DebugCheckInitialize();
             AssetInfo[] assetInfos = new AssetInfo[] { assetInfo };
-            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, downloadingMaxNumber, failedTryAgain, timeout);
+            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, recursiveDownload, downloadingMaxNumber, failedTryAgain, timeout);
+        }
+        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo assetInfo, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        {
+            return CreateBundleDownloader(assetInfo, false, downloadingMaxNumber, failedTryAgain, timeout);
         }
 
         /// <summary>
         /// 创建资源下载器，用于下载指定的资源列表依赖的资源包文件
         /// </summary>
         /// <param name="assetInfos">资源信息列表</param>
+        /// <param name="recursiveDownload">下载资源对象所属资源包内所有资源对象依赖的资源包</param>
         /// <param name="downloadingMaxNumber">同时下载的最大文件数</param>
         /// <param name="failedTryAgain">下载失败的重试次数</param>
         /// <param name="timeout">超时时间</param>
-        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo[] assetInfos, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo[] assetInfos, bool recursiveDownload, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
         {
             DebugCheckInitialize();
-            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, downloadingMaxNumber, failedTryAgain, timeout);
+            return _playModeImpl.CreateResourceDownloaderByPaths(assetInfos, recursiveDownload, downloadingMaxNumber, failedTryAgain, timeout);
+        }
+        public ResourceDownloaderOperation CreateBundleDownloader(AssetInfo[] assetInfos, int downloadingMaxNumber, int failedTryAgain, int timeout = 60)
+        {
+            return CreateBundleDownloader(assetInfos, false, downloadingMaxNumber, failedTryAgain, timeout);
         }
         #endregion
 
