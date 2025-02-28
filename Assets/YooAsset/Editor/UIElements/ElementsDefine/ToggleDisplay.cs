@@ -28,11 +28,14 @@ namespace YooAsset.Editor
             base.SetValueWithoutNotify(newValue);
             RefreshIcon();
         }
+
+#if UNITY_2021_3_OR_NEWER
         protected override void ToggleValue()
         {
             base.ToggleValue();
             RefreshIcon();
         }
+#endif
 
         private void RefreshIcon()
         {

@@ -22,7 +22,9 @@ namespace YooAsset.Editor
 
         private TableView _operationTableView;
         private Toolbar _bottomToolbar;
+#if UNITY_2022_3_OR_NEWER
         private TreeView _childTreeView;
+#endif
 
         private int _treeItemID = 0;
         private List<ITableData> _sourceDatas;
@@ -51,9 +53,11 @@ namespace YooAsset.Editor
             CreateBottomToolbarHeaders();
 
             // 子列表
+#if UNITY_2022_3_OR_NEWER
             _childTreeView = _root.Q<TreeView>("BottomTreeView");
             _childTreeView.makeItem = MakeTreeViewItem;
             _childTreeView.bindItem = BindTreeViewItem;
+#endif
 
             // 面板分屏
             var topGroup = _root.Q<VisualElement>("TopGroup");
@@ -303,8 +307,11 @@ namespace YooAsset.Editor
         {
             // 清空旧数据
             _operationTableView.ClearAll(false, true);
+
+#if UNITY_2022_3_OR_NEWER
             _childTreeView.SetRootItems(new List<TreeViewItemData<DebugOperationInfo>>());
             _childTreeView.Rebuild();
+#endif
 
             // 填充数据源
             _sourceDatas = new List<ITableData>(1000);
@@ -338,8 +345,10 @@ namespace YooAsset.Editor
         public void ClearView()
         {
             _operationTableView.ClearAll(false, true);
+#if UNITY_2022_3_OR_NEWER
             _childTreeView.SetRootItems(new List<TreeViewItemData<DebugOperationInfo>>());
             _childTreeView.Rebuild();
+#endif
             RebuildView(null);
         }
 
@@ -371,7 +380,7 @@ namespace YooAsset.Editor
             _root.RemoveFromHierarchy();
         }
 
-        #region 树状列表
+#if UNITY_2022_3_OR_NEWER
         private void OnOperationTableViewSelectionChanged(ITableData data)
         {
             var operationTableData = data as OperationTableData;
@@ -508,7 +517,11 @@ namespace YooAsset.Editor
             }
             return rootItemList;
         }
-        #endregion
+#else
+        private void OnOperationTableViewSelectionChanged(ITableData data)
+        {
+        }
+#endif
     }
 }
 #endif

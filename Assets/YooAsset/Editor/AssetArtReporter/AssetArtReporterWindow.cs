@@ -590,7 +590,8 @@ namespace YooAsset.Editor
             foreach (var selectedItem in selectedItems)
             {
                 var selectElement = selectedItem as ElementTableData;
-                selectElement.Element.Hidden = e.newValue;
+                if (selectElement != null)
+                    selectElement.Element.Hidden = e.newValue;
             }
 
             // 重绘视图
