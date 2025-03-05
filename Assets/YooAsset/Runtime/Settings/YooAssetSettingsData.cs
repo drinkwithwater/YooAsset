@@ -132,9 +132,9 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 获取YOO的PC端缓存文件根目录
+        /// 获取YOO的PC平台缓存文件根目录
         /// </summary>
-        public static string GetYooStandaloneCacheRoot()
+        public static string GetYooStandaloneWinCacheRoot()
         {
             if (string.IsNullOrEmpty(Setting.DefaultYooFolderName))
                 return Application.dataPath;
@@ -143,7 +143,29 @@ namespace YooAsset
         }
 
         /// <summary>
-        /// 获取YOO的移动端缓存文件根目录
+        /// 获取YOO的Linux平台缓存文件根目录
+        /// </summary>
+        public static string GetYooStandaloneLinuxCacheRoot()
+        {
+            if (string.IsNullOrEmpty(Setting.DefaultYooFolderName))
+                return Application.dataPath;
+            else
+                return PathUtility.Combine(Application.dataPath, Setting.DefaultYooFolderName);
+        }
+        
+        /// <summary>
+        /// 获取YOO的Mac平台缓存文件根目录
+        /// </summary>
+        public static string GetYooStandaloneMacCacheRoot()
+        {
+            if (string.IsNullOrEmpty(Setting.DefaultYooFolderName))
+                return Application.persistentDataPath;
+            else
+                return PathUtility.Combine(Application.persistentDataPath, Setting.DefaultYooFolderName);
+        }
+
+        /// <summary>
+        /// 获取YOO的移动平台缓存文件根目录
         /// </summary>
         public static string GetYooMobileCacheRoot()
         {
@@ -160,8 +182,12 @@ namespace YooAsset
         {
 #if UNITY_EDITOR
             return GetYooEditorCacheRoot();
-#elif UNITY_STANDALONE
-            return GetYooStandaloneCacheRoot();
+#elif UNITY_STANDALONE_WIN
+            return GetYooStandaloneWinCacheRoot();
+#elif UNITY_STANDALONE_LINUX
+            return GetYooStandaloneLinuxCacheRoot();
+#elif UNITY_STANDALONE_OSX
+            return GetYooStandaloneMacCacheRoot();
 #else
             return GetYooMobileCacheRoot();
 #endif
