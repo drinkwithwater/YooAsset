@@ -14,7 +14,7 @@ public class TestLoadScene
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.TestPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         Assert.IsNotNull(package);
 
         // 异步加载主场景

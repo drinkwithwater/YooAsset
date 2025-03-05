@@ -1,11 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.TestTools;
-using YooAsset;
-
+﻿
 public static class AssetBundleCollectorMaker
 {
     public static void MakeCollectorSettingData()
@@ -14,8 +7,20 @@ public static class AssetBundleCollectorMaker
         // 清空旧数据
         YooAsset.Editor.AssetBundleCollectorSettingData.ClearAll();
 
-        // 创建正常文件Package
-        var testPackage = YooAsset.Editor.AssetBundleCollectorSettingData.CreatePackage(AssetBundleCollectorDefine.TestPackageName);
+        // 创建包裹配置
+        CreateAssetBundlePackageCollector();
+        CreateRawBundlePackageCollector();
+
+        // 修正配置路径为空导致的错误
+        YooAsset.Editor.AssetBundleCollectorSettingData.FixFile();
+#endif
+    }
+
+#if UNITY_EDITOR
+    private static void CreateAssetBundlePackageCollector()
+    {
+        // 创建AssetBundlePackage
+        var testPackage = YooAsset.Editor.AssetBundleCollectorSettingData.CreatePackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         testPackage.EnableAddressable = true;
         testPackage.AutoCollectShaders = true;
         testPackage.IgnoreRuleName = "NormalIgnoreRule";
@@ -103,9 +108,11 @@ public static class AssetBundleCollectorMaker
             collector1.PackRuleName = nameof(YooAsset.Editor.PackSeparately);
             YooAsset.Editor.AssetBundleCollectorSettingData.CreateCollector(scriptableObjectGroup, collector1);
         }
-
-        // 创建原生文件Package
-        var rawPackage = YooAsset.Editor.AssetBundleCollectorSettingData.CreatePackage(AssetBundleCollectorDefine.RawPackageName);
+    }
+    private static void CreateRawBundlePackageCollector()
+    {
+        // 创建RawBundlePackage
+        var rawPackage = YooAsset.Editor.AssetBundleCollectorSettingData.CreatePackage(AssetBundleCollectorDefine.RawBundlePackageName);
         rawPackage.EnableAddressable = true;
         rawPackage.AutoCollectShaders = true;
         rawPackage.IgnoreRuleName = "RawFileIgnoreRule";
@@ -131,9 +138,6 @@ public static class AssetBundleCollectorMaker
             collector1.PackRuleName = nameof(YooAsset.Editor.PackVideoFile);
             YooAsset.Editor.AssetBundleCollectorSettingData.CreateCollector(videoFileGroup, collector1);
         }
-
-        // 修正配置路径为空导致的错误
-        YooAsset.Editor.AssetBundleCollectorSettingData.FixFile();
-#endif
     }
+#endif
 }

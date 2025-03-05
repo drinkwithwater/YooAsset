@@ -13,7 +13,7 @@ public class TestLoadRawFile
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.RawPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.RawBundlePackageName);
         Assert.IsNotNull(package);
 
         // 测试异步加载

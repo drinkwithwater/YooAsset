@@ -13,7 +13,7 @@ public class TestLoadScriptableObject
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.TestPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         Assert.IsNotNull(package);
 
         // 异步加载序列化对象

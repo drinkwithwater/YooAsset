@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using YooAsset;
 
-public class CacheFileSystemTester : IPrebuildSetup, IPostBuildCleanup
+public class T3_TestCacheFileSystem : IPrebuildSetup, IPostBuildCleanup
 {
     public void Setup()
     {

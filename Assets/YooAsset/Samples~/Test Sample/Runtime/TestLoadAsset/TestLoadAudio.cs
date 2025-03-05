@@ -13,7 +13,7 @@ public class TestLoadAudio
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.TestPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         Assert.IsNotNull(package);
 
         // 音乐异步加载

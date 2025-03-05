@@ -13,7 +13,7 @@ public class TestLoadPrefab
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.TestPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         Assert.IsNotNull(package);
 
         // 异步加载所有预制体

@@ -13,7 +13,7 @@ public class TestLoadSpriteAtlas
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.TestPackageName);
+        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
         Assert.IsNotNull(package);
 
         var assetHandle = package.LoadAssetAsync<SpriteAtlas>("atlas_icon");

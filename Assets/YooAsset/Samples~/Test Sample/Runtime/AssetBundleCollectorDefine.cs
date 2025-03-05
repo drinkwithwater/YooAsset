@@ -1,6 +1,6 @@
 ﻿
 public class AssetBundleCollectorDefine
 {
-    public const string TestPackageName = "TestPackage";
-    public const string RawPackageName = "RawPackage";
+    public const string AssetBundlePackageName = "AssetBundlePackage";
+    public const string RawBundlePackageName = "RawBundlePackage";
 }

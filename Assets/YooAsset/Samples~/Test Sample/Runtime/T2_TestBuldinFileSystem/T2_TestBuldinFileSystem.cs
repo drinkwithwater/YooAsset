@@ -9,54 +9,54 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using YooAsset;
 
-public class BuildinFileSystemTester : IPrebuildSetup, IPostBuildCleanup
+public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
 {
-    private const string BFS_TEST_PACKAGE_ROOT_KEY = "BFS_TEST_PACKAGE_ROOT_KEY";
-    private const string BFS_RAW_PACKAGE_ROOT_KEY = "BFS_RAW_PACKAGE_ROOT_KEY";
+    private const string ASSET_BUNDLE_PACKAGE_ROOT_KEY = "T2_ASSET_BUNDLE_PACKAGE_ROOT_KEY";
+    private const string RAW_BUNDLE_PACKAGE_ROOT_KEY = "T2_RAW_BUNDLE_PACKAGE_ROOT_KEY";
 
     void IPrebuildSetup.Setup()
     {
 #if UNITY_EDITOR
-        // 构建TestPackage
+        // 构建AssetBundlePackage
         {
-            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.TestPackageName);
+            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.AssetBundlePackageName);
             buildParams.BuildPipelineName = "ScriptableBuildPipeline";
             buildParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
             buildParams.InvokeClassFullName = "TestPackageBuilder";
             buildParams.InvokeMethodName = "BuildPackage";
             var simulateResult = PakcageInvokeBuilder.InvokeBuilder(buildParams);
-            UnityEditor.EditorPrefs.SetString(BFS_TEST_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
+            UnityEditor.EditorPrefs.SetString(ASSET_BUNDLE_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 
-        // 构建RawPackage
+        // 构建RawBundlePackage
         {
-            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.RawPackageName);
+            var buildParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.RawBundlePackageName);
             buildParams.BuildPipelineName = "RawFileBuildPipeline";
             buildParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
             buildParams.InvokeClassFullName = "TestPackageBuilder";
             buildParams.InvokeMethodName = "BuildPackage";
             var simulateResult = PakcageInvokeBuilder.InvokeBuilder(buildParams);
-            UnityEditor.EditorPrefs.SetString(BFS_RAW_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
+            UnityEditor.EditorPrefs.SetString(RAW_BUNDLE_PACKAGE_ROOT_KEY, simulateResult.PackageRootDirectory);
         }
 #endif
     }
     void IPostBuildCleanup.Cleanup()
     {
     }
-    
+
     [UnityTest]
-    public IEnumerator InitializePackage()
+    public IEnumerator A_InitializePackage()
     {
-        // 初始化TestPackage
+        // 初始化资源包
         {
             string packageRoot = string.Empty;
 #if UNITY_EDITOR
-            packageRoot = UnityEditor.EditorPrefs.GetString(BFS_TEST_PACKAGE_ROOT_KEY);
+            packageRoot = UnityEditor.EditorPrefs.GetString(ASSET_BUNDLE_PACKAGE_ROOT_KEY);
 #endif
             if (Directory.Exists(packageRoot) == false)
                 throw new Exception($"Not found package root : {packageRoot}");
 
-            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.TestPackageName);
+            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.AssetBundlePackageName);
 
             // 初始化资源包
             var initParams = new OfflinePlayModeParameters();
@@ -82,16 +82,16 @@ public class BuildinFileSystemTester : IPrebuildSetup, IPostBuildCleanup
             Assert.AreEqual(EOperationStatus.Succeed, updateManifestOp.Status);
         }
 
-        // 初始化RawPackage
+        // 初始化资源包
         {
             string packageRoot = string.Empty;
 #if UNITY_EDITOR
-            packageRoot = UnityEditor.EditorPrefs.GetString(BFS_RAW_PACKAGE_ROOT_KEY);
+            packageRoot = UnityEditor.EditorPrefs.GetString(RAW_BUNDLE_PACKAGE_ROOT_KEY);
 #endif
             if (Directory.Exists(packageRoot) == false)
                 throw new Exception($"Not found package root : {packageRoot}");
 
-            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.RawPackageName);
+            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.RawBundlePackageName);
 
             // 初始化资源包
             var initParams = new OfflinePlayModeParameters();
@@ -120,65 +120,95 @@ public class BuildinFileSystemTester : IPrebuildSetup, IPostBuildCleanup
     }
 
     [UnityTest]
-    public IEnumerator TestLoadAsyncTask()
+    public IEnumerator B_TestLoadAsyncTask()
     {
         var tester = new TestLoadPanel();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadAudio()
+    public IEnumerator B_TestLoadAudio()
     {
         var tester = new TestLoadAudio();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadImage()
+    public IEnumerator B_TestLoadImage()
     {
         var tester = new TestLoadImage();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadPrefab()
+    public IEnumerator B_TestLoadPrefab()
     {
         var tester = new TestLoadPrefab();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadScene()
+    public IEnumerator B_TestLoadScene()
     {
         var tester = new TestLoadScene();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadScriptableObject()
+    public IEnumerator B_TestLoadScriptableObject()
     {
         var tester = new TestLoadScriptableObject();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadSpriteAtlas()
+    public IEnumerator B_TestLoadSpriteAtlas()
     {
         var tester = new TestLoadSpriteAtlas();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadRawFile()
+    public IEnumerator B_TestLoadRawFile()
     {
         var tester = new TestLoadRawFile();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator TestLoadVideo()
+    public IEnumerator B_TestLoadVideo()
     {
         var tester = new TestLoadVideo();
         yield return tester.RuntimeTester();
+    }
+
+    [UnityTest]
+    public IEnumerator C_DestroyPackage()
+    {
+        // 销毁旧资源包
+        {
+            var package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
+            var destroyOp = package.DestroyAsync();
+            yield return destroyOp;
+            if (destroyOp.Status != EOperationStatus.Succeed)
+                Debug.LogError(destroyOp.Error);
+            Assert.AreEqual(EOperationStatus.Succeed, destroyOp.Status);
+
+            bool result = YooAssets.RemovePackage(AssetBundleCollectorDefine.AssetBundlePackageName);
+            Assert.IsTrue(result);
+        }
+
+        // 销毁旧资源包
+        {
+            var package = YooAssets.GetPackage(AssetBundleCollectorDefine.RawBundlePackageName);
+            var destroyOp = package.DestroyAsync();
+            yield return destroyOp;
+            if (destroyOp.Status != EOperationStatus.Succeed)
+                Debug.LogError(destroyOp.Error);
+            Assert.AreEqual(EOperationStatus.Succeed, destroyOp.Status);
+
+            bool result = YooAssets.RemovePackage(AssetBundleCollectorDefine.RawBundlePackageName);
+            Assert.IsTrue(result);
+        }
     }
 }
