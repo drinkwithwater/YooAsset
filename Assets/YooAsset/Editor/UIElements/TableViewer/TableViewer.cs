@@ -13,9 +13,9 @@ namespace YooAsset.Editor
     /// <summary>
     /// Unity2022版本以上推荐官方类：MultiColumnListView组件
     /// </summary>
-    public class TableView : VisualElement
+    public class TableViewer : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TableView, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TableViewer, UxmlTraits>
         {
         }
 
@@ -82,7 +82,7 @@ namespace YooAsset.Editor
         public Action<ITableData> SelectionChangedEvent;
 
 
-        public TableView()
+        public TableViewer()
         {
             this.style.flexShrink = 1f;
             this.style.flexGrow = 1f;

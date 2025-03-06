@@ -20,7 +20,7 @@ namespace YooAsset.Editor
         private VisualTreeAsset _visualAsset;
         private TemplateContainer _root;
 
-        private TableView _operationTableView;
+        private TableViewer _operationTableView;
         private Toolbar _bottomToolbar;
         private TreeViewer _childTreeView;
 
@@ -41,7 +41,7 @@ namespace YooAsset.Editor
             _root.style.flexGrow = 1f;
 
             // 任务列表
-            _operationTableView = _root.Q<TableView>("TopTableView");
+            _operationTableView = _root.Q<TableViewer>("TopTableView");
             _operationTableView.SelectionChangedEvent = OnOperationTableViewSelectionChanged;
             CreateOperationTableViewColumns();
 
