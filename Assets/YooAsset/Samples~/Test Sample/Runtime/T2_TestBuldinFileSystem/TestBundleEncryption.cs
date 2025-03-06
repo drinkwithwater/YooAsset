@@ -4,31 +4,6 @@ using System.Text;
 using UnityEngine;
 using YooAsset;
 
-#region 文件流
-/// <summary>
-/// 资源文件解密流
-/// </summary>
-public class BundleStream : FileStream
-{
-    public const byte KEY = 64;
-
-    public BundleStream(string path, FileMode mode, FileAccess access, FileShare share) : base(path, mode, access, share)
-    {
-    }
-    public BundleStream(string path, FileMode mode) : base(path, mode)
-    {
-    }
-
-    public override int Read(byte[] array, int offset, int count)
-    {
-        var index = base.Read(array, offset, count);
-        for (int i = 0; i < array.Length; i++)
-        {
-            array[i] ^= KEY;
-        }
-        return index;
-    }
-}
 
 /// <summary>
 /// 文件流加密方式
@@ -60,7 +35,62 @@ public class FileStreamEncryption : IEncryptionServices
 }
 
 /// <summary>
-/// 资源文件流加载解密类
+/// 文件偏移加密方式
+/// </summary>
+public class FileOffsetEncryption : IEncryptionServices
+{
+    public EncryptResult Encrypt(EncryptFileInfo fileInfo)
+    {
+        // 注意：只对音频资源包加密
+        if (fileInfo.BundleName.Contains("_gameres_audio"))
+        {
+            int offset = 32;
+            byte[] fileData = File.ReadAllBytes(fileInfo.FileLoadPath);
+            var encryptedData = new byte[fileData.Length + offset];
+            Buffer.BlockCopy(fileData, 0, encryptedData, offset, fileData.Length);
+
+            EncryptResult result = new EncryptResult();
+            result.Encrypted = true;
+            result.EncryptedData = encryptedData;
+            return result;
+        }
+        else
+        {
+            EncryptResult result = new EncryptResult();
+            result.Encrypted = false;
+            return result;
+        }
+    }
+}
+
+
+/// <summary>
+/// 资源文件解密流
+/// </summary>
+public class BundleStream : FileStream
+{
+    public const byte KEY = 64;
+
+    public BundleStream(string path, FileMode mode, FileAccess access, FileShare share) : base(path, mode, access, share)
+    {
+    }
+    public BundleStream(string path, FileMode mode) : base(path, mode)
+    {
+    }
+
+    public override int Read(byte[] array, int offset, int count)
+    {
+        var index = base.Read(array, offset, count);
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] ^= KEY;
+        }
+        return index;
+    }
+}
+
+/// <summary>
+/// 资源文件流解密类
 /// </summary>
 public class FileStreamDecryption : IDecryptionServices
 {
@@ -111,40 +141,9 @@ public class FileStreamDecryption : IDecryptionServices
         return 1024;
     }
 }
-#endregion
-
-#region 文件偏移
-/// <summary>
-/// 文件偏移加密方式
-/// </summary>
-public class FileOffsetEncryption : IEncryptionServices
-{
-    public EncryptResult Encrypt(EncryptFileInfo fileInfo)
-    {
-        // 注意：只对音频资源包加密
-        if (fileInfo.BundleName.Contains("_gameres_audio"))
-        {
-            int offset = 32;
-            byte[] fileData = File.ReadAllBytes(fileInfo.FileLoadPath);
-            var encryptedData = new byte[fileData.Length + offset];
-            Buffer.BlockCopy(fileData, 0, encryptedData, offset, fileData.Length);
-
-            EncryptResult result = new EncryptResult();
-            result.Encrypted = true;
-            result.EncryptedData = encryptedData;
-            return result;
-        }
-        else
-        {
-            EncryptResult result = new EncryptResult();
-            result.Encrypted = false;
-            return result;
-        }
-    }
-}
 
 /// <summary>
-/// 资源文件偏移加载解密类
+/// 资源文件偏移解密类
 /// </summary>
 public class FileOffsetDecryption : IDecryptionServices
 {
@@ -193,4 +192,25 @@ public class FileOffsetDecryption : IDecryptionServices
         return 32;
     }
 }
-#endregion
+
+/// <summary>
+/// WebGL平台解密类
+/// 注意：WebGL平台支持内存解密
+/// </summary>
+public class WebFileStreamDecryption : IWebDecryptionServices
+{
+    public WebDecryptResult LoadAssetBundle(WebDecryptFileInfo fileInfo)
+    {
+        byte[] copyData = new byte[fileInfo.FileData.Length];
+        Buffer.BlockCopy(fileInfo.FileData, 0, copyData, 0, fileInfo.FileData.Length);
+
+        for (int i = 0; i < copyData.Length; i++)
+        {
+            copyData[i] ^= BundleStream.KEY;
+        }
+
+        WebDecryptResult decryptResult = new WebDecryptResult();
+        decryptResult.Result = AssetBundle.LoadFromMemory(copyData);
+        return decryptResult;
+    }
+}
