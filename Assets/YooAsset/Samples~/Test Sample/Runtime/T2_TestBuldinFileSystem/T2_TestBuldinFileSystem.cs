@@ -60,7 +60,8 @@ public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
 
             // 初始化资源包
             var initParams = new OfflinePlayModeParameters();
-            initParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(null, packageRoot);
+            var decryption = new FileStreamDecryption();
+            initParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(decryption, packageRoot);
             var initializeOp = package.InitializeAsync(initParams);
             yield return initializeOp;
             if (initializeOp.Status != EOperationStatus.Succeed)
@@ -181,11 +182,18 @@ public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
         var tester = new TestLoadVideo();
         yield return tester.RuntimeTester();
     }
-
+    
     [UnityTest]
-    public IEnumerator C_TestBundleReference()
+    public IEnumerator C1_TestBundleReference()
     {
         var tester = new TestBundleReference();
+        yield return tester.RuntimeTester();
+    }
+
+    [UnityTest]
+    public IEnumerator C2_TestBundleEncryption()
+    {
+        var tester = new TestBundleEncryption();
         yield return tester.RuntimeTester();
     }
 

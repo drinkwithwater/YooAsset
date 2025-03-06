@@ -1,9 +1,38 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.U2D;
+using UnityEngine.TestTools;
+using NUnit.Framework;
 using YooAsset;
 
+public class TestBundleEncryption
+{
+    public IEnumerator RuntimeTester()
+    {
+        ResourcePackage package = YooAssets.GetPackage(TestDefine.AssetBundlePackageName);
+        Assert.IsNotNull(package);
+
+        // 加载音乐播放预制体
+        {
+            var assetHandle = package.LoadAssetAsync<GameObject>("prefab_audio");
+            yield return assetHandle;
+            Assert.AreEqual(EOperationStatus.Succeed, assetHandle.Status);
+
+            var go = assetHandle.InstantiateSync(Vector3.zero, Quaternion.identity);
+            Assert.IsNotNull(go);
+
+            var audioSource = go.GetComponent<AudioSource>();
+            Assert.IsNotNull(audioSource.clip);
+        }
+
+        // 试听三秒钟
+        yield return new WaitForSeconds(3f);
+    }
+}
 
 /// <summary>
 /// 文件流加密方式
@@ -12,7 +41,8 @@ public class FileStreamEncryption : IEncryptionServices
 {
     public EncryptResult Encrypt(EncryptFileInfo fileInfo)
     {
-        if (fileInfo.BundleName.Contains("_gameres_audio"))
+        // 说明：对TestRes3资源目录进行加密
+        if (fileInfo.BundleName.Contains("_testres3_"))
         {
             var fileData = File.ReadAllBytes(fileInfo.FileLoadPath);
             for (int i = 0; i < fileData.Length; i++)
@@ -41,8 +71,8 @@ public class FileOffsetEncryption : IEncryptionServices
 {
     public EncryptResult Encrypt(EncryptFileInfo fileInfo)
     {
-        // 注意：只对音频资源包加密
-        if (fileInfo.BundleName.Contains("_gameres_audio"))
+        // 说明：对TestRes3资源目录进行加密
+        if (fileInfo.BundleName.Contains("_testres3_"))
         {
             int offset = 32;
             byte[] fileData = File.ReadAllBytes(fileInfo.FileLoadPath);
