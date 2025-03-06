@@ -441,6 +441,8 @@ namespace YooAsset.Editor
                 columnStyle.Stretchable = header.Stretchable;
                 columnStyle.Searchable = header.Searchable;
                 columnStyle.Sortable = header.Sortable;
+                columnStyle.Counter = header.Counter;
+                columnStyle.Units = header.Units;
                 var column = new TableColumn(header.HeaderTitle, header.HeaderTitle, columnStyle);
                 column.MakeCell = () =>
                 {

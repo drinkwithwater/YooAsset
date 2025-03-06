@@ -148,10 +148,11 @@ namespace YooAsset.Editor
 
             // LoadingTime
             {
-                var columnStyle = new ColumnStyle(100);
+                var columnStyle = new ColumnStyle(130);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
+                columnStyle.Units = "ms";
                 var column = new TableColumn("LoadingTime", "Loading Time", columnStyle);
                 column.MakeCell = () =>
                 {

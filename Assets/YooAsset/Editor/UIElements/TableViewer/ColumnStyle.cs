@@ -46,6 +46,11 @@ namespace YooAsset.Editor
         /// </summary>
         public bool Counter = false;
 
+        /// <summary>
+        /// 展示单位
+        /// </summary>
+        public string Units = string.Empty;
+
         public ColumnStyle(Length width)
         {
             if (width.value > MaxValue)

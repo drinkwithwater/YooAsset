@@ -214,6 +214,16 @@ namespace YooAsset.Editor
                 }
             }
 
+            // 设置展示单位
+            foreach (var column in _columns)
+            {
+                if (string.IsNullOrEmpty(column.ColumnStyle.Units) == false)
+                {
+                    var toobarButton = GetHeaderElement(column.ElementName) as ToolbarButton;
+                    toobarButton.text = $"{toobarButton.text} ({column.ColumnStyle.Units})";
+                }
+            }
+
             // 设置升降符号
             if (string.IsNullOrEmpty(_sortingHeader) == false)
             {

@@ -170,10 +170,11 @@ namespace YooAsset.Editor
 
             // ProcessTime
             {
-                var columnStyle = new ColumnStyle(100);
+                var columnStyle = new ColumnStyle(130);
                 columnStyle.Stretchable = false;
                 columnStyle.Searchable = false;
                 columnStyle.Sortable = true;
+                columnStyle.Units = "ms";
                 var column = new TableColumn("ProcessTime", "Process Time", columnStyle);
                 column.MakeCell = () =>
                 {
@@ -270,9 +271,9 @@ namespace YooAsset.Editor
             // ProcessTime
             {
                 ToolbarButton button = new ToolbarButton();
-                button.text = "ProcessTime";
+                button.text = "ProcessTime (ms)";
                 button.style.flexGrow = 0;
-                button.style.width = 100;
+                button.style.width = 130;
                 _bottomToolbar.Add(button);
             }
 
@@ -422,7 +423,7 @@ namespace YooAsset.Editor
                 var label = new Label();
                 label.name = "ProcessTime";
                 label.style.flexGrow = 0f;
-                label.style.width = 100;
+                label.style.width = 130;
                 label.style.unityTextAlign = TextAnchor.MiddleLeft;
                 container.Add(label);
             }
