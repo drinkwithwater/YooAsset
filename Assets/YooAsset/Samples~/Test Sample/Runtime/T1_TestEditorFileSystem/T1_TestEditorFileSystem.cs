@@ -19,7 +19,7 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
 #if UNITY_EDITOR
         // 构建资源包
         {
-            var simulateParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.AssetBundlePackageName);
+            var simulateParams = new PackageInvokeBuildParam(TestDefine.AssetBundlePackageName);
             simulateParams.BuildPipelineName = "EditorSimulateBuildPipeline";
             simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
             simulateParams.InvokeClassFullName = "TestPackageBuilder";
@@ -30,7 +30,7 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
 
         // 构建资源包
         {
-            var simulateParams = new PackageInvokeBuildParam(AssetBundleCollectorDefine.RawBundlePackageName);
+            var simulateParams = new PackageInvokeBuildParam(TestDefine.RawBundlePackageName);
             simulateParams.BuildPipelineName = "EditorSimulateBuildPipeline";
             simulateParams.InvokeAssmeblyName = "YooAsset.Test.Editor";
             simulateParams.InvokeClassFullName = "TestPackageBuilder";
@@ -56,7 +56,7 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
             if (Directory.Exists(packageRoot) == false)
                 throw new Exception($"Not found package root : {packageRoot}");
 
-            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.AssetBundlePackageName);
+            var package = YooAssets.CreatePackage(TestDefine.AssetBundlePackageName);
 
             // 初始化资源包
             var initParams = new EditorSimulateModeParameters();
@@ -91,7 +91,7 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
             if (Directory.Exists(packageRoot) == false)
                 throw new Exception($"Not found package root : {packageRoot}");
 
-            var package = YooAssets.CreatePackage(AssetBundleCollectorDefine.RawBundlePackageName);
+            var package = YooAssets.CreatePackage(TestDefine.RawBundlePackageName);
 
             // 初始化资源包
             var initParams = new EditorSimulateModeParameters();
@@ -119,63 +119,63 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadAsyncTask()
+    public IEnumerator B1_TestLoadAsyncTask()
     {
         var tester = new TestLoadPanel();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadAudio()
+    public IEnumerator B2_TestLoadAudio()
     {
         var tester = new TestLoadAudio();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadImage()
+    public IEnumerator B3_TestLoadImage()
     {
         var tester = new TestLoadImage();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadPrefab()
+    public IEnumerator B4_TestLoadPrefab()
     {
         var tester = new TestLoadPrefab();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadScene()
-    {
-        var tester = new TestLoadScene();
-        yield return tester.RuntimeTester();
-    }
-
-    [UnityTest]
-    public IEnumerator B_TestLoadScriptableObject()
-    {
-        var tester = new TestLoadScriptableObject();
-        yield return tester.RuntimeTester();
-    }
-
-    [UnityTest]
-    public IEnumerator B_TestLoadSpriteAtlas()
+    public IEnumerator B5_TestLoadSpriteAtlas()
     {
         var tester = new TestLoadSpriteAtlas();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadRawFile()
+    public IEnumerator B6_TestLoadScriptableObject()
+    {
+        var tester = new TestLoadScriptableObject();
+        yield return tester.RuntimeTester();
+    }
+
+    [UnityTest]
+    public IEnumerator B7_TestLoadScene()
+    {
+        var tester = new TestLoadScene();
+        yield return tester.RuntimeTester();
+    }
+
+    [UnityTest]
+    public IEnumerator B8_TestLoadRawFile()
     {
         var tester = new TestLoadRawFile();
         yield return tester.RuntimeTester();
     }
 
     [UnityTest]
-    public IEnumerator B_TestLoadVideo()
+    public IEnumerator B9_TestLoadVideo()
     {
         var tester = new TestLoadVideo();
         yield return tester.RuntimeTester();
@@ -186,27 +186,27 @@ public class T1_TestEditorFileSystem : IPrebuildSetup, IPostBuildCleanup
     {
         // 销毁旧资源包
         {
-            var package = YooAssets.GetPackage(AssetBundleCollectorDefine.AssetBundlePackageName);
+            var package = YooAssets.GetPackage(TestDefine.AssetBundlePackageName);
             var destroyOp = package.DestroyAsync();
             yield return destroyOp;
             if (destroyOp.Status != EOperationStatus.Succeed)
                 Debug.LogError(destroyOp.Error);
             Assert.AreEqual(EOperationStatus.Succeed, destroyOp.Status);
 
-            bool result = YooAssets.RemovePackage(AssetBundleCollectorDefine.AssetBundlePackageName);
+            bool result = YooAssets.RemovePackage(TestDefine.AssetBundlePackageName);
             Assert.IsTrue(result);
         }
 
         // 销毁旧资源包
         {
-            var package = YooAssets.GetPackage(AssetBundleCollectorDefine.RawBundlePackageName);
+            var package = YooAssets.GetPackage(TestDefine.RawBundlePackageName);
             var destroyOp = package.DestroyAsync();
             yield return destroyOp;
             if (destroyOp.Status != EOperationStatus.Succeed)
                 Debug.LogError(destroyOp.Error);
             Assert.AreEqual(EOperationStatus.Succeed, destroyOp.Status);
 
-            bool result = YooAssets.RemovePackage(AssetBundleCollectorDefine.RawBundlePackageName);
+            bool result = YooAssets.RemovePackage(TestDefine.RawBundlePackageName);
             Assert.IsTrue(result);
         }
     }

@@ -14,7 +14,7 @@ public class TestLoadVideo
 {
     public IEnumerator RuntimeTester()
     {
-        ResourcePackage package = YooAssets.GetPackage(AssetBundleCollectorDefine.RawBundlePackageName);
+        ResourcePackage package = YooAssets.GetPackage(TestDefine.RawBundlePackageName);
         Assert.IsNotNull(package);
 
         var rawFileHandle = package.LoadRawFileAsync("video_logo");
