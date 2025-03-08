@@ -9,6 +9,16 @@ namespace YooAsset
 {
     public static partial class YooAssets
     {
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void OnRuntimeInitialize()
+        {
+            _isInitialize = false;
+            _packages.Clear();
+            _defaultPackage = null;
+        }
+#endif
+
         private static bool _isInitialize = false;
         private static GameObject _driver = null;
         private static readonly List<ResourcePackage> _packages = new List<ResourcePackage>();
