@@ -12,12 +12,18 @@
     "versionDefines": [
         {
             "name": "com.tuyoogame.yooasset",
-            "define": "YOO_VERSION_2_3_4"
+            "expression": "",
+            "define": "YOO_ASSET_2"
         },
         {
             "name": "com.tuyoogame.yooasset",
-            "expression": "2.3.4",
-            "define": "YOO_VERSION_2_3_4_OR_NEWER"
+            "expression": "2.3",
+            "define": "YOO_ASSET_2_3"
+        },
+        {
+            "name": "com.tuyoogame.yooasset",
+            "expression": "2.3",
+            "define": "YOO_ASSET_2_3_OR_NEWER"
         }
     ],
     "noEngineReferences": false

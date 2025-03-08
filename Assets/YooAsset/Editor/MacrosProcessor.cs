@@ -3,87 +3,75 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using UnityEditor;
-using UnityEngine;
 
 namespace YooAsset.Editor
 {
     [InitializeOnLoad]
-    class YooMacrosProcessor : AssetPostprocessor
+    public class MacrosProcessor : AssetPostprocessor
     {
-        static readonly List<string> YooAssertMacros = new List<string>()
+        static MacrosProcessor()
         {
-            "YOO_VERSION_2",
-            "YOO_VERSION_2_3_4",
-            "YOO_VERSION_2_3_4_OR_NEWER",
+        }
+
+        /// <summary>
+        /// YooAsset版本宏定义
+        /// </summary>
+        private static readonly List<string> YooAssetMacros = new List<string>()
+        {
+            "YOO_ASSET_2",
+            "YOO_ASSET_2_3",
+            "YOO_ASSET_2_3_OR_NEWER",
         };
+
         static string OnGeneratedCSProject(string path, string content)
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(content);
 
-            if (!IsCSProjectReferenced(xmlDoc.DocumentElement))
-            {
+            if (IsCSProjectReferenced(xmlDoc.DocumentElement) == false)
                 return content;
-            }
 
-            if (!ProcessDefineConstants(xmlDoc.DocumentElement, YooAssertMacros))
-            {
+            if (ProcessDefineConstants(xmlDoc.DocumentElement) == false)
                 return content;
-            }
 
-            StringWriter sw = new StringWriter();
-            XmlWriter writer = XmlWriter.Create(sw, new XmlWriterSettings()
-            {
-                Indent = true,
-            });
-            xmlDoc.WriteTo(writer);
-            writer.Flush();
-
-            return sw.ToString();
+            // 将修改后的XML结构重新输出为文本
+            var stringWriter = new StringWriter();
+            var writerSettings = new XmlWriterSettings();
+            writerSettings.Indent = true;
+            var xmlWriter = XmlWriter.Create(stringWriter, writerSettings);
+            xmlDoc.WriteTo(xmlWriter);
+            xmlWriter.Flush();
+            return stringWriter.ToString();
         }
 
-        static bool ProcessDefineConstants(XmlElement element, List<string> macros)
+        /// <summary>
+        /// 处理宏定义
+        /// </summary>
+        private static bool ProcessDefineConstants(XmlElement element)
         {
             if (element == null)
-            {
                 return false;
-            }
 
             bool processed = false;
-            if (macros == null || macros.Count == 0)
-            {
-                return processed;
-            }
-
             foreach (XmlNode node in element.ChildNodes)
             {
                 if (node.Name != "PropertyGroup")
-                {
                     continue;
-                }
 
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
                     if (childNode.Name != "DefineConstants")
-                    {
                         continue;
-                    }
 
                     string[] defines = childNode.InnerText.Split(';');
-                    HashSet<string> hs = new HashSet<string>(defines);
-
-                    string tmpMacro = string.Empty;
-                    foreach (string macro in macros)
+                    HashSet<string> hashSets = new HashSet<string>(defines);
+                    foreach (string yooMacro in YooAssetMacros)
                     {
-                        tmpMacro = macro.Trim();
-                        if (string.IsNullOrEmpty(tmpMacro))
-                            continue;
-                        //加入YooAsset定义的宏
-                        hs.Add(tmpMacro);
+                        string tmpMacro = yooMacro.Trim();
+                        if (hashSets.Contains(tmpMacro) == false)
+                            hashSets.Add(tmpMacro);
                     }
-                    //更新节点InnerText
-                    childNode.InnerText = string.Join(";", hs.ToArray());
-
+                    childNode.InnerText = string.Join(";", hashSets.ToArray());
                     processed = true;
                 }
             }
@@ -91,36 +79,31 @@ namespace YooAsset.Editor
             return processed;
         }
 
-        static bool IsCSProjectReferenced(XmlElement element)
+        /// <summary>
+        /// 检测工程是否引用了YooAsset
+        /// </summary>
+        private static bool IsCSProjectReferenced(XmlElement element)
         {
             if (element == null)
-            {
                 return false;
-            }
 
             foreach (XmlNode node in element.ChildNodes)
             {
                 if (node.Name != "ItemGroup")
-                {
                     continue;
-                }
+
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
                     if (childNode.Name != "Reference" && childNode.Name != "ProjectReference")
-                    {
                         continue;
-                    }
-                    //工程引用了YooAsset
+
                     string include = childNode.Attributes["Include"].Value;
                     if (include.Contains("YooAsset"))
-                    {
                         return true;
-                    }
                 }
             }
 
             return false;
         }
     }
-
 }
