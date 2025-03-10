@@ -73,3 +73,5 @@ sysinfo.txt
 crashlytics-build.properties
 
 *.vsconfig
+Assets/csc.rsp
+Assets/csc.rsp.meta
