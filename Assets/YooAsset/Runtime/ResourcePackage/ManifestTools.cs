@@ -8,7 +8,6 @@ namespace YooAsset
 {
     internal static class ManifestTools
     {
-#if UNITY_EDITOR
         /// <summary>
         /// 序列化（JSON文件）
         /// </summary>
@@ -160,7 +159,7 @@ namespace YooAsset
             InitManifest(manifest);
             return manifest;
         }
-#endif
+
 
         #region 解析资源清单辅助方法
         public static void InitManifest(PackageManifest manifest)
