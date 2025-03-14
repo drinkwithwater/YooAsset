@@ -429,20 +429,8 @@ namespace YooAsset
         {
             if (_records.TryGetValue(bundleGUID, out RecordFileElement wrapper))
             {
-                try
-                {
-                    string dataFilePath = wrapper.DataFilePath;
-                    FileInfo fileInfo = new FileInfo(dataFilePath);
-                    if (fileInfo.Exists)
-                        fileInfo.Directory.Delete(true);
-                    _records.Remove(bundleGUID);
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    YooLogger.Error($"Failed to delete cache file ! {e.Message}");
-                    return false;
-                }
+                _records.Remove(bundleGUID);
+                return wrapper.DeleteFolder();
             }
             else
             {
