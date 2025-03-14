@@ -26,10 +26,10 @@ namespace YooAsset
             using (FileStream fs = new FileStream(savePath, FileMode.Create))
             {
                 // 创建缓存器
-                BufferWriter buffer = new BufferWriter(YooAssetSettings.ManifestFileMaxSize);
+                BufferWriter buffer = new BufferWriter(ManifestDefine.FileMaxSize);
 
                 // 写入文件标记
-                buffer.WriteUInt32(YooAssetSettings.ManifestFileSign);
+                buffer.WriteUInt32(ManifestDefine.FileSign);
 
                 // 写入文件版本
                 buffer.WriteUTF8(manifest.FileVersion);
@@ -97,13 +97,13 @@ namespace YooAsset
 
             // 读取文件标记
             uint fileSign = buffer.ReadUInt32();
-            if (fileSign != YooAssetSettings.ManifestFileSign)
+            if (fileSign != ManifestDefine.FileSign)
                 throw new Exception("Invalid manifest file !");
 
             // 读取文件版本
             string fileVersion = buffer.ReadUTF8();
-            if (fileVersion != YooAssetSettings.ManifestFileVersion)
-                throw new Exception($"The manifest file version are not compatible : {fileVersion} != {YooAssetSettings.ManifestFileVersion}");
+            if (fileVersion != ManifestDefine.FileVersion)
+                throw new Exception($"The manifest file version are not compatible : {fileVersion} != {ManifestDefine.FileVersion}");
 
             PackageManifest manifest = new PackageManifest();
             {
