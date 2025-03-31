@@ -221,9 +221,16 @@ namespace YooAsset
             manifest.AssetDic = new Dictionary<string, PackageAsset>(assetCount);
 
             if (manifest.EnableAddressable)
+            {
                 manifest.AssetPathMapping1 = new Dictionary<string, string>(assetCount * 3);
+            }
             else
-                manifest.AssetPathMapping1 = new Dictionary<string, string>(assetCount * 2);
+            {
+                if (manifest.LocationToLower)
+                    manifest.AssetPathMapping1 = new Dictionary<string, string>(assetCount * 2, StringComparer.OrdinalIgnoreCase);
+                else
+                    manifest.AssetPathMapping1 = new Dictionary<string, string>(assetCount * 2);
+            }
 
             if (manifest.IncludeAssetGUID)
                 manifest.AssetPathMapping2 = new Dictionary<string, string>(assetCount);
@@ -245,8 +252,6 @@ namespace YooAsset
             // 填充AssetPathMapping1
             {
                 string location = packageAsset.AssetPath;
-                if (manifest.LocationToLower)
-                    location = location.ToLower();
 
                 // 添加原生路径的映射
                 if (manifest.AssetPathMapping1.ContainsKey(location))
