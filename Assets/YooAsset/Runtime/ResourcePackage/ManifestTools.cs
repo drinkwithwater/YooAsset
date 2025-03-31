@@ -9,6 +9,30 @@ namespace YooAsset
     internal static class ManifestTools
     {
         /// <summary>
+        /// 验证清单文件的二进制数据
+        /// </summary>
+        public static bool VerifyManifestData(byte[] fileData, string hashValue)
+        {
+            if (fileData == null || fileData.Length == 0)
+                return false;
+            if (string.IsNullOrEmpty(hashValue))
+                return false;
+
+            // 注意：兼容俩种验证方式
+            // 注意：计算MD5的哈希值通常为32个字符
+            string fileHash;
+            if (hashValue.Length == 32)
+                fileHash = HashUtility.BytesMD5(fileData);
+            else
+                fileHash = HashUtility.BytesCRC32(fileData);
+
+            if (fileHash == hashValue)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
         /// 序列化（JSON文件）
         /// </summary>
         public static void SerializeToJson(string savePath, PackageManifest manifest)
