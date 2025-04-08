@@ -42,8 +42,8 @@ namespace YooAsset
         /// <summary>
         /// 下载Bundle文件
         /// </summary>
-        FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param);
-
+        FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options);
+        
         /// <summary>
         /// 加载Bundle文件
         /// </summary>

@@ -154,9 +154,9 @@ namespace YooAsset
                 return operation;
             }
         }
-        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
         {
-            var downloader = DownloadCenter.DownloadFileAsync(bundle, param);
+            var downloader = DownloadCenter.DownloadFileAsync(bundle, options);
             downloader.Reference(); //增加下载器的引用计数
 
             // 注意：将下载器进行包裹，可以避免父类任务终止的时候，连带子任务里的下载器也一起被终止！

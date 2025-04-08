@@ -144,11 +144,11 @@ internal class WechatFileSystem : IFileSystem
             return operation;
         }
     }
-    public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+    public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
     {
-        param.MainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
-        param.FallbackURL = RemoteServices.GetRemoteFallbackURL(bundle.FileName);
-        var operation = new WXFSDownloadFileOperation(this, bundle, param);
+        options.MainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
+        options.FallbackURL = RemoteServices.GetRemoteFallbackURL(bundle.FileName);
+        var operation = new WXFSDownloadFileOperation(this, bundle, options);
         return operation;
     }
     public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)

@@ -78,7 +78,7 @@ namespace YooAsset
             var operation = new FSClearCacheFilesCompleteOperation();
             return operation;
         }
-        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
+        public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadFileOptions options)
         {
             throw new System.NotImplementedException();
         }
