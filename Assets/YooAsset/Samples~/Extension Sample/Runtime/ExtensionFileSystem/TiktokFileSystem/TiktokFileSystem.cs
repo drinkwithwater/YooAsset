@@ -124,7 +124,7 @@ internal class TiktokFileSystem : IFileSystem
         var operation = new TTFSRequestPackageVersionOperation(this, timeout);
         return operation;
     }
-    public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+    public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
     {
         var operation = new FSClearCacheFilesCompleteOperation();
         return operation;

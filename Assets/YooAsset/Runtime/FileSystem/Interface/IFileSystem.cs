@@ -37,7 +37,7 @@ namespace YooAsset
         /// <summary>
         /// 清理缓存文件
         /// </summary>
-        FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam);
+        FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options);
 
         /// <summary>
         /// 下载Bundle文件

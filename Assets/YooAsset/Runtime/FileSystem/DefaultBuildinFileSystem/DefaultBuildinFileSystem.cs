@@ -109,9 +109,9 @@ namespace YooAsset
             var operation = new DBFSRequestPackageVersionOperation(this);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
-            return _unpackFileSystem.ClearCacheFilesAsync(manifest, clearMode, clearParam);
+            return _unpackFileSystem.ClearCacheFilesAsync(manifest, options);
         }
         public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
         {

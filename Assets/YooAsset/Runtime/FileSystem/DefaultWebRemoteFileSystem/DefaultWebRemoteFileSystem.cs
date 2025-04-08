@@ -73,7 +73,7 @@ namespace YooAsset
             var operation = new DWRFSRequestPackageVersionOperation(this, appendTimeTicks, timeout);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
             var operation = new FSClearCacheFilesCompleteOperation();
             return operation;

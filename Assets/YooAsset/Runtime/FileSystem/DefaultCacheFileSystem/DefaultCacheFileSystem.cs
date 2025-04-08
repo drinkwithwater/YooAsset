@@ -120,36 +120,36 @@ namespace YooAsset
             var operation = new DCFSRequestPackageVersionOperation(this, appendTimeTicks, timeout);
             return operation;
         }
-        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+        public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
         {
-            if (clearMode == EFileClearMode.ClearAllBundleFiles.ToString())
+            if (options.ClearMode == EFileClearMode.ClearAllBundleFiles.ToString())
             {
                 var operation = new ClearAllCacheBundleFilesOperation(this);
                 return operation;
             }
-            else if (clearMode == EFileClearMode.ClearUnusedBundleFiles.ToString())
+            else if (options.ClearMode == EFileClearMode.ClearUnusedBundleFiles.ToString())
             {
                 var operation = new ClearUnusedCacheBundleFilesOperation(this, manifest);
                 return operation;
             }
-            else if (clearMode == EFileClearMode.ClearBundleFilesByTags.ToString())
+            else if (options.ClearMode == EFileClearMode.ClearBundleFilesByTags.ToString())
             {
-                var operation = new ClearCacheBundleFilesByTagsOperaiton(this, manifest, clearParam);
+                var operation = new ClearCacheBundleFilesByTagsOperaiton(this, manifest, options.ClearParam);
                 return operation;
             }
-            else if (clearMode == EFileClearMode.ClearAllManifestFiles.ToString())
+            else if (options.ClearMode == EFileClearMode.ClearAllManifestFiles.ToString())
             {
                 var operation = new ClearAllCacheManifestFilesOperation(this);
                 return operation;
             }
-            else if (clearMode == EFileClearMode.ClearUnusedManifestFiles.ToString())
+            else if (options.ClearMode == EFileClearMode.ClearUnusedManifestFiles.ToString())
             {
                 var operation = new ClearUnusedCacheManifestFilesOperation(this, manifest);
                 return operation;
             }
             else
             {
-                string error = $"Invalid clear mode : {clearMode}";
+                string error = $"Invalid clear mode : {options.ClearMode}";
                 var operation = new FSClearCacheFilesCompleteOperation(error);
                 return operation;
             }

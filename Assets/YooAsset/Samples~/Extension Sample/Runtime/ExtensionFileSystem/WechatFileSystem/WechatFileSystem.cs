@@ -125,21 +125,21 @@ internal class WechatFileSystem : IFileSystem
         var operation = new WXFSRequestPackageVersionOperation(this, appendTimeTicks, timeout);
         return operation;
     }
-    public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, string clearMode, object clearParam)
+    public virtual FSClearCacheFilesOperation ClearCacheFilesAsync(PackageManifest manifest, ClearCacheFilesOptions options)
     {
-        if (clearMode == EFileClearMode.ClearAllBundleFiles.ToString())
+        if (options.ClearMode == EFileClearMode.ClearAllBundleFiles.ToString())
         {
             var operation = new WXFSClearAllBundleFilesOperation(this);
             return operation;
         }
-        else if (clearMode == EFileClearMode.ClearUnusedBundleFiles.ToString())
+        else if (options.ClearMode == EFileClearMode.ClearUnusedBundleFiles.ToString())
         {
             var operation = new WXFSClearUnusedBundleFilesAsync(this, manifest);
             return operation;
         }
         else
         {
-            string error = $"Invalid clear mode : {clearMode}";
+            string error = $"Invalid clear mode : {options.ClearMode}";
             var operation = new FSClearCacheFilesCompleteOperation(error);
             return operation;
         }
