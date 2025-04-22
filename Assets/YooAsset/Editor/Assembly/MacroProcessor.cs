@@ -27,12 +27,11 @@ namespace YooAsset.Editor
                 var writerSettings = new XmlWriterSettings
                 {
                     Indent = true,
-                    Encoding = Encoding.UTF8,
+                    Encoding = new UTF8Encoding(false), //无BOM
                     OmitXmlDeclaration = false
                 };
 
-                using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
-                using (var xmlWriter = XmlWriter.Create(streamWriter, writerSettings))
+                using (var xmlWriter = XmlWriter.Create(memoryStream, writerSettings))
                 {
                     xmlDoc.Save(xmlWriter);
                 }
