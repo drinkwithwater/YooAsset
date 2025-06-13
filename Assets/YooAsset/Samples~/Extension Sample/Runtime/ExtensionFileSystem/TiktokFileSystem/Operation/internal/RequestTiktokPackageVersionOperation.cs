@@ -11,6 +11,7 @@ internal class RequestTiktokPackageVersionOperation : AsyncOperationBase
     }
 
     private readonly TiktokFileSystem _fileSystem;
+    private readonly bool _appendTimeTicks;
     private readonly int _timeout;
     private UnityWebTextRequestOperation _webTextRequestOp;
     private int _requestCount = 0;
@@ -21,10 +22,11 @@ internal class RequestTiktokPackageVersionOperation : AsyncOperationBase
     /// </summary>
     public string PackageVersion { private set; get; }
 
-    
-    public RequestTiktokPackageVersionOperation(TiktokFileSystem fileSystem, int timeout)
+
+    public RequestTiktokPackageVersionOperation(TiktokFileSystem fileSystem, bool appendTimeTicks, int timeout)
     {
         _fileSystem = fileSystem;
+        _appendTimeTicks = appendTimeTicks;
         _timeout = timeout;
     }
     internal override void InternalStart()
@@ -80,11 +82,19 @@ internal class RequestTiktokPackageVersionOperation : AsyncOperationBase
 
     private string GetRequestURL(string fileName)
     {
+        string url;
+
         // 轮流返回请求地址
         if (_requestCount % 2 == 0)
-            return _fileSystem.RemoteServices.GetRemoteMainURL(fileName);
+            url = _fileSystem.RemoteServices.GetRemoteMainURL(fileName);
         else
-            return _fileSystem.RemoteServices.GetRemoteFallbackURL(fileName);
+            url = _fileSystem.RemoteServices.GetRemoteFallbackURL(fileName);
+
+        // 在URL末尾添加时间戳
+        if (_appendTimeTicks)
+            return $"{url}?{System.DateTime.UtcNow.Ticks}";
+        else
+            return url;
     }
 }
 #endif

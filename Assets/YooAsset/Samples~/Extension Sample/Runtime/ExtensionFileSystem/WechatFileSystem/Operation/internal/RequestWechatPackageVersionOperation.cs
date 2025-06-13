@@ -11,8 +11,8 @@ internal class RequestWechatPackageVersionOperation : AsyncOperationBase
     }
 
     private readonly WechatFileSystem _fileSystem;
-    private readonly int _timeout;
     private readonly bool _appendTimeTicks;
+    private readonly int _timeout;
     private UnityWebTextRequestOperation _webTextRequestOp;
     private int _requestCount = 0;
     private ESteps _steps = ESteps.None;
