@@ -28,7 +28,7 @@ All notable changes to this package will be documented in this file.
   {
       /// <summary>
       /// 后备方式获取解密的资源包对象
-      /// 注意：当正常解密方法失败后，会触发后备加载！Add commentMore actions
+      /// 注意：当正常解密方法失败后，会触发后备加载！
       /// 说明：建议通过LoadFromMemory()方法加载资源对象作为保底机制。
       /// issues : https://github.com/tuyoogame/YooAsset/issues/562
       /// </summary>
