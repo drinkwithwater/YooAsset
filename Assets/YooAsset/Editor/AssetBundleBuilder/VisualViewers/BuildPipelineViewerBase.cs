@@ -125,10 +125,14 @@ namespace YooAsset.Editor
                 AssetBundleBuilderSetting.SetPackageBuildinFileCopyOption(PackageName, PipelineName, (EBuildinFileCopyOption)enumField.value);
 
                 // 设置内置资源标签显隐
-                bool tagsFiledVisible = buildinFileCopyOption == EBuildinFileCopyOption.ClearAndCopyByTags || buildinFileCopyOption == EBuildinFileCopyOption.OnlyCopyByTags;
-                tagField.visible = tagsFiledVisible;
+                SetCopyBuildinFileTagsVisible(tagField);
             });
             UIElementsTools.SetElementLabelMinWidth(enumField, LabelMinWidth);
+        }
+        protected void SetCopyBuildinFileTagsVisible(TextField tagField)
+        {
+            var option = AssetBundleBuilderSetting.GetPackageBuildinFileCopyOption(PackageName, PipelineName);
+            tagField.visible = option == EBuildinFileCopyOption.ClearAndCopyByTags || option == EBuildinFileCopyOption.OnlyCopyByTags;
         }
         protected void SetCopyBuildinFileTagsField(TextField textField)
         {

@@ -55,6 +55,7 @@ namespace YooAsset.Editor
             // 首包文件拷贝参数
             _copyBuildinFileTagsField = Root.Q<TextField>("CopyBuildinFileParam");
             SetCopyBuildinFileTagsField(_copyBuildinFileTagsField);
+            SetCopyBuildinFileTagsVisible(_copyBuildinFileTagsField);
 
             // 首包文件拷贝选项
             _copyBuildinFileOptionField = Root.Q<EnumField>("CopyBuildinFileOption");
