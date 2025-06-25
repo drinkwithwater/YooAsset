@@ -187,12 +187,15 @@ namespace YooAsset
         {
             while (true)
             {
-                //TODO 如果是导入或解压本地文件，执行等待完毕
+                //TODO 如果是导入或解压本地文件，执行等待完毕，该操作会挂起主线程！
                 if (_isReuqestLocalFile)
                 {
                     InternalUpdate();
                     if (IsDone)
                         break;
+
+                    // 短暂休眠避免完全卡死
+                    System.Threading.Thread.Sleep(1);
                 }
                 else
                 {
