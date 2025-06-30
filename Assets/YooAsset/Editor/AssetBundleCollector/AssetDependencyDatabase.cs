@@ -186,7 +186,15 @@ namespace YooAsset.Editor
                 throw new Exception($"Fatal : can not found cache info : {assetPath}");
             }
 
-            var result = new HashSet<string> { assetPath };
+            var result = new HashSet<string>();
+            
+            // 递归收集依赖时，依赖列表中包含主资源
+            if (recursive)
+            {
+                result.Add(assetPath);
+            }
+            
+            // 收集依赖
             CollectDependencies(assetPath, assetPath, result, recursive);
 
             // 注意：AssetDatabase.GetDependencies保持一致，将主资源添加到依赖列表最前面
