@@ -72,6 +72,7 @@ public static class TestPackageBuilder
             buildParameters.UseAssetDependencyDB = true;
             buildParameters.BuiltinShadersBundleName = builtinShaderBundleName;
             buildParameters.EncryptionServices = new TestFileStreamEncryption();
+            buildParameters.ManifestServices = new TestProcessManifest();
 
             var pipeline = new ScriptableBuildPipeline();
             BuildResult buildResult = pipeline.Run(buildParameters, false);
@@ -109,6 +110,7 @@ public static class TestPackageBuilder
             buildParameters.ClearBuildCacheFiles = true;
             buildParameters.UseAssetDependencyDB = true;
             buildParameters.EncryptionServices = new TestFileStreamEncryption();
+            buildParameters.ManifestServices = new TestProcessManifest();
 
             var pipeline = new BuiltinBuildPipeline();
             BuildResult buildResult = pipeline.Run(buildParameters, false);

@@ -6,7 +6,7 @@ using UnityEngine;
 using NUnit.Framework;
 using YooAsset;
 
-public class TestManifestEncryption : IManifestServices
+public class TestProcessManifest : IManifestServices
 {
     public byte[] ProcessManifest(byte[] fileData)
     {
