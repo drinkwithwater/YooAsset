@@ -60,7 +60,7 @@ public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
 
             // 初始化资源包
             var initParams = new OfflinePlayModeParameters();
-            var decryption = new FileStreamTestDecryption();
+            var decryption = new TestFileStreamDecryption();
             initParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(decryption, packageRoot);
             initParams.BuildinFileSystemParameters.AddParameter(FileSystemParametersDefine.DISABLE_CATALOG_FILE, true);
             var initializeOp = package.InitializeAsync(initParams);
