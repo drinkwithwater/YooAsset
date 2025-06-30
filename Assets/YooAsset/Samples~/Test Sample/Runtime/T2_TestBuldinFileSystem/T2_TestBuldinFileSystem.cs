@@ -62,6 +62,7 @@ public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
             var initParams = new OfflinePlayModeParameters();
             var decryption = new FileStreamTestDecryption();
             initParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(decryption, packageRoot);
+            initParams.BuildinFileSystemParameters.AddParameter(FileSystemParametersDefine.DISABLE_CATALOG_FILE, true);
             var initializeOp = package.InitializeAsync(initParams);
             yield return initializeOp;
             if (initializeOp.Status != EOperationStatus.Succeed)
@@ -98,6 +99,7 @@ public class T2_TestBuldinFileSystem : IPrebuildSetup, IPostBuildCleanup
             var initParams = new OfflinePlayModeParameters();
             initParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters(null, packageRoot);
             initParams.BuildinFileSystemParameters.AddParameter(FileSystemParametersDefine.APPEND_FILE_EXTENSION, true);
+            initParams.BuildinFileSystemParameters.AddParameter(FileSystemParametersDefine.DISABLE_CATALOG_FILE, true);
             var initializeOp = package.InitializeAsync(initParams);
             yield return initializeOp;
             if (initializeOp.Status != EOperationStatus.Succeed)
