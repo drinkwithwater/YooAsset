@@ -24,9 +24,9 @@ namespace YooAsset
         public string FallbackURL { set; get; }
 
         /// <summary>
-        /// 导入的本地文件路径
+        /// 拷贝的本地文件路径
         /// </summary>
-        public string ImportFilePath { set; get; }
+        public string LocalFilePath { set; get; }
 
         public DownloadFileOptions(int failedTryAgain, int timeout)
         {

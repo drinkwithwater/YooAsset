@@ -84,7 +84,7 @@ namespace YooAsset
 
             // 创建新的下载器
             DefaultDownloadFileOperation newDownloader;
-            if (string.IsNullOrEmpty(options.ImportFilePath))
+            if (string.IsNullOrEmpty(options.LocalFilePath))
             {
                 // 远端下载地址
                 options.MainURL = _fileSystem.RemoteServices.GetRemoteMainURL(bundle.FileName);
@@ -107,7 +107,7 @@ namespace YooAsset
             else
             {
                 // 注意：把本地文件路径指定为可下载地址
-                options.MainURL = DownloadSystemHelper.ConvertToWWWPath(options.ImportFilePath);
+                options.MainURL = DownloadSystemHelper.ConvertToWWWPath(options.LocalFilePath);
                 options.FallbackURL = options.MainURL;
 
                 // 创建新的下载器
