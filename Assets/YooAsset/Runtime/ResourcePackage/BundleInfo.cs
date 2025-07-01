@@ -39,7 +39,7 @@ namespace YooAsset
         public FSDownloadFileOperation CreateDownloader(int failedTryAgain, int timeout)
         {
             DownloadFileOptions options = new DownloadFileOptions(failedTryAgain, timeout);
-            options.LocalFilePath = _importFilePath;
+            options.ImportFilePath = _importFilePath;
             return _fileSystem.DownloadFileAsync(Bundle, options);
         }
 

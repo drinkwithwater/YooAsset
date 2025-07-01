@@ -26,7 +26,7 @@ namespace YooAsset
         /// <summary>
         /// 拷贝的本地文件路径
         /// </summary>
-        public string LocalFilePath { set; get; }
+        public string ImportFilePath { set; get; }
 
         public DownloadFileOptions(int failedTryAgain, int timeout)
         {
