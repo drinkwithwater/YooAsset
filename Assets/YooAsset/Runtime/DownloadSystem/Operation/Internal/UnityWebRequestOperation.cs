@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using UnityEngine.Networking;
 using UnityEngine;
 
@@ -8,24 +6,33 @@ namespace YooAsset
 {
     internal abstract class UnityWebRequestOperation : AsyncOperationBase
     {
-        protected enum ESteps
-        {
-            None,
-            CreateRequest,
-            Download,
-            Done,
-        }
-
         protected UnityWebRequest _webRequest;
         protected readonly string _requestURL;
-        protected ESteps _steps = ESteps.None;
 
         // 超时相关
-        protected readonly float _timeout;
-        protected ulong _latestDownloadBytes;
-        protected float _latestDownloadRealtime;
+        private readonly float _timeout;
+        private ulong _latestDownloadBytes;
+        private float _latestDownloadRealtime;
         private bool _isAbort = false;
 
+        /// <summary>
+        /// HTTP返回码
+        /// </summary>
+        public long HttpCode { private set; get; }
+
+        /// <summary>
+        /// 当前下载的字节数
+        /// </summary>
+        public long DownloadedBytes { protected set; get; }
+
+        /// <summary>
+        /// 当前下载进度（0f - 1f）
+        /// </summary>
+        public float DownloadProgress { protected set; get; }
+
+        /// <summary>
+        /// 请求的URL地址
+        /// </summary>
         public string URL
         {
             get { return _requestURL; }
@@ -44,9 +51,19 @@ namespace YooAsset
         {
             if (_webRequest != null)
             {
+                //注意：引擎底层会自动调用Abort方法
                 _webRequest.Dispose();
                 _webRequest = null;
             }
+        }
+
+        /// <summary>
+        /// 重置超时计时
+        /// </summary>
+        protected void ResetTimeout()
+        {
+            _latestDownloadBytes = 0;
+            _latestDownloadRealtime = Time.realtimeSinceStartup;
         }
 
         /// <summary>
@@ -54,10 +71,13 @@ namespace YooAsset
         /// </summary>
         protected void CheckRequestTimeout()
         {
+            if (_webRequest.isDone)
+                return;
+
             // 注意：在连续时间段内无新增下载数据及判定为超时
             if (_isAbort == false)
             {
-                if ( _latestDownloadBytes != _webRequest.downloadedBytes)
+                if (_latestDownloadBytes != _webRequest.downloadedBytes)
                 {
                     _latestDownloadBytes = _webRequest.downloadedBytes;
                     _latestDownloadRealtime = Time.realtimeSinceStartup;
@@ -66,6 +86,7 @@ namespace YooAsset
                 float offset = Time.realtimeSinceStartup - _latestDownloadRealtime;
                 if (offset > _timeout)
                 {
+                    YooLogger.Warning($"Web request timeout : {_requestURL}");
                     _webRequest.Abort();
                     _isAbort = true;
                 }
@@ -77,6 +98,8 @@ namespace YooAsset
         /// </summary>
         protected bool CheckRequestResult()
         {
+            HttpCode = _webRequest.responseCode;
+
 #if UNITY_2020_3_OR_NEWER
             if (_webRequest.result != UnityWebRequest.Result.Success)
             {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace YooAsset
 {
-    internal class UnityWebTextRequestOperation : UnityWebRequestOperation
+    internal class UnityAssetBundleRequestOperation : UnityWebRequestOperation
     {
         protected enum ESteps
         {
@@ -14,16 +14,20 @@ namespace YooAsset
         }
 
         private UnityWebRequestAsyncOperation _requestOperation;
+        private DownloadHandlerAssetBundle _downloadhandler;
+        private readonly PackageBundle _packageBundle;
+        private readonly bool _disableUnityWebCache;
         private ESteps _steps = ESteps.None;
 
         /// <summary>
         /// 请求结果
         /// </summary>
-        public string Result { private set; get; }
+        public AssetBundle Result { private set; get; }
 
-
-        internal UnityWebTextRequestOperation(string url, int timeout = 60) : base(url, timeout)
+        internal UnityAssetBundleRequestOperation(PackageBundle packageBundle, bool disableUnityWebCache, string url, int timeout = 60) : base(url, timeout)
         {
+            _packageBundle = packageBundle;
+            _disableUnityWebCache = disableUnityWebCache;
         }
         internal override void InternalStart()
         {
@@ -54,17 +58,17 @@ namespace YooAsset
 
                 if (CheckRequestResult())
                 {
-                    var fileText = _webRequest.downloadHandler.text;
-                    if (string.IsNullOrEmpty(fileText))
+                    AssetBundle assetBundle = _downloadhandler.assetBundle;
+                    if (assetBundle == null)
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
-                        Error = $"URL : {_requestURL} Download handler text is null or empty !";
+                        Error = $"URL : {_requestURL} Download handler asset bundle object is null !";
                     }
                     else
                     {
                         _steps = ESteps.Done;
-                        Result = fileText;
+                        Result = assetBundle;
                         Status = EOperationStatus.Succeed;
                     }
                 }
@@ -86,11 +90,33 @@ namespace YooAsset
 
         private void CreateWebRequest()
         {
+            _downloadhandler = CreateWebDownloadHandler();
             _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
-            DownloadHandlerBuffer handler = new DownloadHandlerBuffer();
-            _webRequest.downloadHandler = handler;
+            _webRequest.downloadHandler = _downloadhandler;
             _webRequest.disposeDownloadHandlerOnDispose = true;
             _requestOperation = _webRequest.SendWebRequest();
+        }
+        private DownloadHandlerAssetBundle CreateWebDownloadHandler()
+        {
+            if (_disableUnityWebCache)
+            {
+                var downloadhandler = new DownloadHandlerAssetBundle(_requestURL, _packageBundle.UnityCRC);
+#if UNITY_2020_3_OR_NEWER
+                downloadhandler.autoLoadAssetBundle = false;
+#endif
+                return downloadhandler;
+            }
+            else
+            {
+                // 注意：优先从浏览器缓存里获取文件
+                // The file hash defining the version of the asset bundle.
+                Hash128 fileHash = Hash128.Parse(_packageBundle.FileHash);
+                var downloadhandler = new DownloadHandlerAssetBundle(_requestURL, fileHash, _packageBundle.UnityCRC);
+#if UNITY_2020_3_OR_NEWER
+                downloadhandler.autoLoadAssetBundle = false;
+#endif
+                return downloadhandler;
+            }
         }
     }
 }

@@ -5,7 +5,17 @@ namespace YooAsset
 {
     internal class UnityWebDataRequestOperation : UnityWebRequestOperation
     {
+        protected enum ESteps
+        {
+            None,
+            CreateRequest,
+            Download,
+            Done,
+        }
+
         private UnityWebRequestAsyncOperation _requestOperation;
+        private bool _checkTimeout = true;
+        private ESteps _steps = ESteps.None;
 
         /// <summary>
         /// 请求结果
@@ -27,27 +37,38 @@ namespace YooAsset
 
             if (_steps == ESteps.CreateRequest)
             {
-                _latestDownloadBytes = 0;
-                _latestDownloadRealtime = Time.realtimeSinceStartup;
-
+                ResetTimeout();
                 CreateWebRequest();
                 _steps = ESteps.Download;
             }
 
             if (_steps == ESteps.Download)
             {
+                DownloadProgress = _webRequest.downloadProgress;
+                DownloadedBytes = (long)_webRequest.downloadedBytes;
                 Progress = _requestOperation.progress;
                 if (_requestOperation.isDone == false)
                 {
-                    CheckRequestTimeout();
+                    if (_checkTimeout)
+                        CheckRequestTimeout();
                     return;
                 }
 
                 if (CheckRequestResult())
                 {
-                    _steps = ESteps.Done;
-                    Result = _webRequest.downloadHandler.data;
-                    Status = EOperationStatus.Succeed;
+                    var fileData = _webRequest.downloadHandler.data;
+                    if (fileData == null || fileData.Length == 0)
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = $"URL : {_requestURL} Download handler data is null or empty !";
+                    }
+                    else
+                    {
+                        _steps = ESteps.Done;
+                        Result = fileData;
+                        Status = EOperationStatus.Succeed;
+                    }
                 }
                 else
                 {
@@ -63,6 +84,14 @@ namespace YooAsset
         {
             _steps = ESteps.Done;
             DisposeRequest();
+        }
+
+        /// <summary>
+        /// 不检测超时
+        /// </summary>
+        public void DontCheckTimeout()
+        {
+            _checkTimeout = false;
         }
 
         private void CreateWebRequest()
