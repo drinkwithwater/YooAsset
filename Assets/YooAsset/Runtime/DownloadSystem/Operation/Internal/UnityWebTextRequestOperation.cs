@@ -78,11 +78,6 @@ namespace YooAsset
                 DisposeRequest();
             }
         }
-        internal override void InternalAbort()
-        {
-            _steps = ESteps.Done;
-            DisposeRequest();
-        }
 
         private void CreateWebRequest()
         {

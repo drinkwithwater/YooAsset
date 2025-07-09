@@ -43,6 +43,20 @@ namespace YooAsset
             _requestURL = url;
             _timeout = timeout;
         }
+        internal override void InternalAbort()
+        {
+            //TODO
+            // 1. 编辑器下停止运行游戏的时候主动终止下载任务
+            // 2. 真机上销毁包裹的时候主动终止下载任务
+            if (_isAbort == false)
+            {
+                if (_webRequest != null)
+                {
+                    _webRequest.Abort();
+                    _isAbort = true;
+                }
+            }
+        }
 
         /// <summary>
         /// 释放下载器

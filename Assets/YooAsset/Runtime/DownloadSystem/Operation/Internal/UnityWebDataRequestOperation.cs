@@ -80,11 +80,6 @@ namespace YooAsset
                 DisposeRequest();
             }
         }
-        internal override void InternalAbort()
-        {
-            _steps = ESteps.Done;
-            DisposeRequest();
-        }
 
         /// <summary>
         /// 不检测超时
