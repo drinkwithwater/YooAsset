@@ -28,7 +28,7 @@ internal class GooglePlayFileSystem : DefaultBuildinFileSystem
     {
         if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
         {
-            var operation = new DBFSLoadAssetBundleOperation(this, bundle);
+            var operation = new GPFSLoadAssetBundleOperation(this, bundle);
             return operation;
         }
         else
