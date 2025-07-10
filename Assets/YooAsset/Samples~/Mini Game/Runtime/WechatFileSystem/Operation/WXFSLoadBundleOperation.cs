@@ -39,7 +39,7 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
 
                 if (_bundle.Encrypted)
                 {
-                    _downloadAssetBundleOp = new DownloadWebEncryptAssetBundleOperation(false, _fileSystem.DecryptionServices, _bundle, options);
+                    _downloadAssetBundleOp = new DownloadEncryptAssetBundleOperation(false, _fileSystem.DecryptionServices, _bundle, options);
                     _downloadAssetBundleOp.StartOperation();
                     AddChildOperation(_downloadAssetBundleOp);
                 }
