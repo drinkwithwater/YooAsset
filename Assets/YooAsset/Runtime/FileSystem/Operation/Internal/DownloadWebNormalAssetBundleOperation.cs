@@ -1,16 +1,33 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 
 namespace YooAsset
 {
-    internal class DownloadWebNormalAssetBundleOperation : DownloadAssetBundleOperation
+    internal class DownloadNormalAssetBundleOperation : DownloadAssetBundleOperation
     {
+        protected enum ESteps
+        {
+            None,
+            CreateRequest,
+            CheckRequest,
+            TryAgain,
+            Done,
+        }
+
+        private UnityAssetBundleRequestOperation _unityAssetBundleRequestOp;
+        private readonly PackageBundle _bundle;
+        private readonly DownloadFileOptions _options;
         private readonly bool _disableUnityWebCache;
-        private DownloadHandlerAssetBundle _downloadhandler;
+       
+        protected int _requestCount = 0;
+        protected float _tryAgainTimer;
+        protected int _failedTryAgain;
         private ESteps _steps = ESteps.None;
 
-        internal DownloadWebNormalAssetBundleOperation(bool disableUnityWebCache, PackageBundle bundle, DownloadFileOptions options) : base(bundle, options)
+
+        internal DownloadNormalAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, bool disableUnityWebCache)
         {
+            _bundle = bundle;
+            _options = options;
             _disableUnityWebCache = disableUnityWebCache;
         }
         internal override void InternalStart()
@@ -25,120 +42,78 @@ namespace YooAsset
             // 创建下载器
             if (_steps == ESteps.CreateRequest)
             {
-                // 获取请求地址
-                _requestURL = GetRequestURL();
-
-                // 重置变量
-                ResetRequestFiled();
-
-                // 创建下载器
-                CreateWebRequest();
-
+                string url = GetRequestURL();
+                _unityAssetBundleRequestOp = new UnityAssetBundleRequestOperation(_bundle, _disableUnityWebCache, url, _options.Timeout);
+                _unityAssetBundleRequestOp.StartOperation();
                 _steps = ESteps.CheckRequest;
             }
 
             // 检测下载结果
             if (_steps == ESteps.CheckRequest)
             {
-                DownloadProgress = _webRequest.downloadProgress;
-                DownloadedBytes = (long)_webRequest.downloadedBytes;
-                Progress = DownloadProgress;
-                if (_webRequest.isDone == false)
-                {
-                    CheckRequestTimeout();
+                _unityAssetBundleRequestOp.UpdateOperation();
+                Progress = _unityAssetBundleRequestOp.Progress;
+                DownloadedBytes = _unityAssetBundleRequestOp.DownloadedBytes;
+                DownloadProgress = _unityAssetBundleRequestOp.DownloadProgress;
+                if (_unityAssetBundleRequestOp.IsDone == false)
                     return;
-                }
 
-                // 检查网络错误
-                if (CheckRequestResult())
+                if (_unityAssetBundleRequestOp.Status == EOperationStatus.Succeed)
                 {
-                    AssetBundle assetBundle = _downloadhandler.assetBundle;
-                    if (assetBundle == null)
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Succeed;
+                    Result = _unityAssetBundleRequestOp.Result;
+                }
+                else
+                {
+                    if (_failedTryAgain > 0)
                     {
-                        _steps = ESteps.Done;
-                        Status = EOperationStatus.Failed;
-                        Error = "Download handler asset bundle object is null !";
+                        _steps = ESteps.TryAgain;
+                        YooLogger.Warning($"Failed download : {_unityAssetBundleRequestOp.URL} Try again !");
                     }
                     else
                     {
                         _steps = ESteps.Done;
-                        Result = assetBundle;
-                        Status = EOperationStatus.Succeed;
+                        Status = EOperationStatus.Failed;
+                        Error = _unityAssetBundleRequestOp.Error;
+                        YooLogger.Error(Error);
                     }
                 }
-                else
-                {
-                    _steps = ESteps.TryAgain;
-                }
-
-                // 注意：最终释放请求器
-                DisposeWebRequest();
             }
 
             // 重新尝试下载
             if (_steps == ESteps.TryAgain)
             {
-                if (FailedTryAgain <= 0)
-                {
-                    Status = EOperationStatus.Failed;
-                    _steps = ESteps.Done;
-                    YooLogger.Error(Error);
-                    return;
-                }
-
                 _tryAgainTimer += Time.unscaledDeltaTime;
                 if (_tryAgainTimer > 1f)
                 {
-                    FailedTryAgain--;
+                    _tryAgainTimer = 0f;
+                    _failedTryAgain--;
+                    Progress = 0f;
+                    DownloadProgress = 0f;
+                    DownloadedBytes = 0;
                     _steps = ESteps.CreateRequest;
-                    YooLogger.Warning(Error);
                 }
             }
         }
         internal override void InternalAbort()
         {
             _steps = ESteps.Done;
-            DisposeWebRequest();
+            if (_unityAssetBundleRequestOp != null)
+                _unityAssetBundleRequestOp.AbortOperation();
         }
 
-        private void CreateWebRequest()
+        /// <summary>
+        /// 获取网络请求地址
+        /// </summary>
+        protected string GetRequestURL()
         {
-            _downloadhandler = CreateWebDownloadHandler();
-            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
-            _webRequest.downloadHandler = _downloadhandler;
-            _webRequest.disposeDownloadHandlerOnDispose = true;
-            _webRequest.SendWebRequest();
-        }
-        private void DisposeWebRequest()
-        {
-            if (_webRequest != null)
-            {
-                //注意：引擎底层会自动调用Abort方法
-                _webRequest.Dispose();
-                _webRequest = null;
-            }
-        }
-        private DownloadHandlerAssetBundle CreateWebDownloadHandler()
-        {
-            if (_disableUnityWebCache)
-            {
-                var downloadhandler = new DownloadHandlerAssetBundle(_requestURL, Bundle.UnityCRC);
-#if UNITY_2020_3_OR_NEWER
-                downloadhandler.autoLoadAssetBundle = false;
-#endif
-                return downloadhandler;
-            }
+            // 轮流返回请求地址
+            _requestCount++;
+            if (_requestCount % 2 == 0)
+                return _options.FallbackURL;
             else
-            {
-                // 注意：优先从浏览器缓存里获取文件
-                // The file hash defining the version of the asset bundle.
-                Hash128 fileHash = Hash128.Parse(Bundle.FileHash);
-                var downloadhandler = new DownloadHandlerAssetBundle(_requestURL, fileHash, Bundle.UnityCRC);
-#if UNITY_2020_3_OR_NEWER
-                downloadhandler.autoLoadAssetBundle = false;
-#endif
-                return downloadhandler;
-            }
+                return _options.MainURL;
         }
     }
 }

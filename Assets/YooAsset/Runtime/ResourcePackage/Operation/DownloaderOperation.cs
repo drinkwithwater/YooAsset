@@ -366,7 +366,7 @@ namespace YooAsset
 
                 foreach (var downloader in _downloaders)
                 {
-                    downloader.Release();
+                    downloader.AbortOperation();
                 }
             }
         }

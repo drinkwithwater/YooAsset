@@ -1,17 +1,33 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 
 namespace YooAsset
 {
-    internal class DownloadWebEncryptAssetBundleOperation : DownloadAssetBundleOperation
+    internal class DownloadEncryptAssetBundleOperation : DownloadAssetBundleOperation
     {
+        protected enum ESteps
+        {
+            None,
+            CreateRequest,
+            CheckRequest,
+            TryAgain,
+            Done,
+        }
+
+        private UnityWebDataRequestOperation _unityWebDataRequestOp;
+        private readonly PackageBundle _bundle;
+        private readonly DownloadFileOptions _options;
         private readonly bool _checkTimeout;
         private readonly IWebDecryptionServices _decryptionServices;
-        private DownloadHandlerBuffer _downloadhandler;
+
+        protected int _requestCount = 0;
+        protected float _tryAgainTimer;
+        protected int _failedTryAgain;
         private ESteps _steps = ESteps.None;
 
-        internal DownloadWebEncryptAssetBundleOperation(bool checkTimeout, IWebDecryptionServices decryptionServices, PackageBundle bundle, DownloadFileOptions options) : base(bundle, options)
+        internal DownloadEncryptAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, bool checkTimeout, IWebDecryptionServices decryptionServices)
         {
+            _bundle = bundle;
+            _options = options;
             _checkTimeout = checkTimeout;
             _decryptionServices = decryptionServices;
         }
@@ -27,118 +43,87 @@ namespace YooAsset
             // 创建下载器
             if (_steps == ESteps.CreateRequest)
             {
-                // 获取请求地址
-                _requestURL = GetRequestURL();
+                if (_decryptionServices == null)
+                {
+                    _steps = ESteps.Done;
+                    Status = EOperationStatus.Failed;
+                    Error = $"The {nameof(IWebDecryptionServices)} is null !";
+                    YooLogger.Error(Error);
+                    return;
+                }
 
-                // 重置变量
-                ResetRequestFiled();
-
-                // 创建下载器
-                CreateWebRequest();
-
+                string url = GetRequestURL();
+                _unityWebDataRequestOp = new UnityWebDataRequestOperation(url, _options.Timeout);
+                _unityWebDataRequestOp.StartOperation();
+                if (_checkTimeout == false)
+                    _unityWebDataRequestOp.DontCheckTimeout();
                 _steps = ESteps.CheckRequest;
             }
 
             // 检测下载结果
             if (_steps == ESteps.CheckRequest)
             {
-                DownloadProgress = _webRequest.downloadProgress;
-                DownloadedBytes = (long)_webRequest.downloadedBytes;
-                Progress = DownloadProgress;
-                if (_webRequest.isDone == false)
-                {
-                    if (_checkTimeout)
-                        CheckRequestTimeout();
+                _unityWebDataRequestOp.UpdateOperation();
+                Progress = _unityWebDataRequestOp.Progress;
+                DownloadProgress = _unityWebDataRequestOp.DownloadProgress;
+                DownloadedBytes = _unityWebDataRequestOp.DownloadedBytes;
+                if (_unityWebDataRequestOp.IsDone == false)
                     return;
-                }
 
                 // 检查网络错误
-                if (CheckRequestResult())
+                if (_unityWebDataRequestOp.Status == EOperationStatus.Succeed)
                 {
-                    if (_decryptionServices == null)
-                    {
-                        _steps = ESteps.Done;
-                        Status = EOperationStatus.Failed;
-                        Error = $"The {nameof(IWebDecryptionServices)} is null !";
-                        YooLogger.Error(Error);
-                        return;
-                    }
-
-                    var fileData = _downloadhandler.data;
-                    if (fileData == null || fileData.Length == 0)
-                    {
-                        _steps = ESteps.Done;
-                        Status = EOperationStatus.Failed;
-                        Error = $"The download handler data is null or empty !";
-                        YooLogger.Error(Error);
-                        return;
-                    }
-
-                    AssetBundle assetBundle = LoadEncryptedAssetBundle(fileData);
+                    AssetBundle assetBundle = LoadEncryptedAssetBundle(_unityWebDataRequestOp.Result);
                     if (assetBundle == null)
                     {
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
-                        Error = "Download handler asset bundle object is null !";
+                        Error = "Failed load encrypted AssetBundle !";
                     }
                     else
                     {
                         _steps = ESteps.Done;
-                        Result = assetBundle;
                         Status = EOperationStatus.Succeed;
+                        Result = assetBundle;
                     }
                 }
                 else
                 {
-                    _steps = ESteps.TryAgain;
+                    if (_failedTryAgain > 0)
+                    {
+                        _steps = ESteps.TryAgain;
+                        YooLogger.Warning($"Failed download : {_unityWebDataRequestOp.URL} Try again !");
+                    }
+                    else
+                    {
+                        _steps = ESteps.Done;
+                        Status = EOperationStatus.Failed;
+                        Error = _unityWebDataRequestOp.Error;
+                        YooLogger.Error(Error);
+                    }
                 }
-
-                // 注意：最终释放请求器
-                DisposeWebRequest();
             }
 
             // 重新尝试下载
             if (_steps == ESteps.TryAgain)
             {
-                if (FailedTryAgain <= 0)
-                {
-                    Status = EOperationStatus.Failed;
-                    _steps = ESteps.Done;
-                    YooLogger.Error(Error);
-                    return;
-                }
-
                 _tryAgainTimer += Time.unscaledDeltaTime;
                 if (_tryAgainTimer > 1f)
                 {
-                    FailedTryAgain--;
+                    _tryAgainTimer = 0f;
+                    _failedTryAgain--;
+                    Progress = 0f;
+                    DownloadProgress = 0f;
+                    DownloadedBytes = 0;
                     _steps = ESteps.CreateRequest;
-                    YooLogger.Warning(Error);
                 }
             }
         }
         internal override void InternalAbort()
         {
             _steps = ESteps.Done;
-            DisposeWebRequest();
-        }
-
-        private void CreateWebRequest()
-        {
-            _downloadhandler = new DownloadHandlerBuffer();
-            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
-            _webRequest.downloadHandler = _downloadhandler;
-            _webRequest.disposeDownloadHandlerOnDispose = true;
-            _webRequest.SendWebRequest();
-        }
-        private void DisposeWebRequest()
-        {
-            if (_webRequest != null)
-            {
-                //注意：引擎底层会自动调用Abort方法
-                _webRequest.Dispose();
-                _webRequest = null;
-            }
+            if (_unityWebDataRequestOp != null)
+                _unityWebDataRequestOp.AbortOperation();
         }
 
         /// <summary>
@@ -147,11 +132,24 @@ namespace YooAsset
         private AssetBundle LoadEncryptedAssetBundle(byte[] fileData)
         {
             var fileInfo = new WebDecryptFileInfo();
-            fileInfo.BundleName = Bundle.BundleName;
-            fileInfo.FileLoadCRC = Bundle.UnityCRC;
+            fileInfo.BundleName = _bundle.BundleName;
+            fileInfo.FileLoadCRC = _bundle.UnityCRC;
             fileInfo.FileData = fileData;
             var decryptResult = _decryptionServices.LoadAssetBundle(fileInfo);
             return decryptResult.Result;
+        }
+
+        /// <summary>
+        /// 获取网络请求地址
+        /// </summary>
+        protected string GetRequestURL()
+        {
+            // 轮流返回请求地址
+            _requestCount++;
+            if (_requestCount % 2 == 0)
+                return _options.FallbackURL;
+            else
+                return _options.MainURL;
         }
     }
 }

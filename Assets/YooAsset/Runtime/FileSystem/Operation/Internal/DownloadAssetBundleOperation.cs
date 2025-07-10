@@ -2,12 +2,21 @@
 
 namespace YooAsset
 {
-    internal abstract class DownloadAssetBundleOperation : DefaultDownloadFileOperation
+    internal abstract class DownloadAssetBundleOperation : AsyncOperationBase
     {
-        internal DownloadAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options) : base(bundle, options)
-        {
-        }
-
+        /// <summary>
+        /// AssetBundle对象
+        /// </summary>
         public AssetBundle Result;
+
+        /// <summary>
+        /// 下载进度
+        /// </summary>
+        public float DownloadProgress { protected set; get; } = 0;
+
+        /// <summary>
+        /// 下载大小
+        /// </summary>
+        public long DownloadedBytes { protected set; get; } = 0;
     }
 }

@@ -55,7 +55,6 @@ namespace YooAsset
 
             if (_steps == ESteps.DownloadFile)
             {
-                // 注意：边玩边下下载器引用计数没有Release
                 if (_downloadFileOp == null)
                 {
                     DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
@@ -303,7 +302,6 @@ namespace YooAsset
 
             if (_steps == ESteps.DownloadFile)
             {
-                // 注意：边玩边下下载器引用计数没有Release
                 if (_downloadFileOp == null)
                 {
                     DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);

@@ -34,20 +34,20 @@ namespace YooAsset
             {
                 if (_downloadAssetBundleOp == null)
                 {
-                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
                     string fileLoadPath = _fileSystem.GetWebFileLoadPath(_bundle);
-                    options.MainURL = DownloadSystemHelper.ConvertToWWWPath(fileLoadPath);
-                    options.FallbackURL = options.MainURL;
+                    string mainURL = DownloadSystemHelper.ConvertToWWWPath(fileLoadPath);
+                    DownloadFileOptions options = new DownloadFileOptions(int.MaxValue, 60);
+                    options.SetURL(mainURL, mainURL);
 
                     if (_bundle.Encrypted)
                     {
-                        _downloadAssetBundleOp = new DownloadWebEncryptAssetBundleOperation(true, _fileSystem.DecryptionServices, _bundle, options);
+                        _downloadAssetBundleOp = new DownloadEncryptAssetBundleOperation(_bundle, options,  true, _fileSystem.DecryptionServices);
                         _downloadAssetBundleOp.StartOperation();
                         AddChildOperation(_downloadAssetBundleOp);
                     }
                     else
                     {
-                        _downloadAssetBundleOp = new DownloadWebNormalAssetBundleOperation(_fileSystem.DisableUnityWebCache, _bundle, options);
+                        _downloadAssetBundleOp = new DownloadNormalAssetBundleOperation(_bundle, options, _fileSystem.DisableUnityWebCache);
                         _downloadAssetBundleOp.StartOperation();
                         AddChildOperation(_downloadAssetBundleOp);
                     }
