@@ -67,7 +67,7 @@ namespace YooAsset
                 }
 
                 string url = GetRequestURL();
-                _unityDownloadFileOp = _fileSystem.DownloadCenter.DownloadFileAsync(Bundle, url, _options.Timeout);
+                _unityDownloadFileOp = _fileSystem.DownloadCenter.DownloadFileAsync(Bundle, url);
                 _steps = ESteps.CheckRequest;
             }
 

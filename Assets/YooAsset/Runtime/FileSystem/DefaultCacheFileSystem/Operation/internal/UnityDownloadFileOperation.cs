@@ -22,7 +22,7 @@ namespace YooAsset
         /// </summary>
         public int RefCount { private set; get; }
 
-        internal UnityDownloadFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url, int timeout) : base(url, timeout)
+        internal UnityDownloadFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url) : base(url)
         {
             _fileSystem = fileSystem;
             _bundle = bundle;

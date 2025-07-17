@@ -2,7 +2,7 @@
 
 namespace YooAsset
 {
-    internal class DownloadNormalAssetBundleOperation : DownloadAssetBundleOperation
+    internal class LoadWebNormalAssetBundleOperation : LoadWebAssetBundleOperation
     {
         protected enum ESteps
         {
@@ -13,18 +13,18 @@ namespace YooAsset
             Done,
         }
 
-        private UnityAssetBundleRequestOperation _unityAssetBundleRequestOp;
         private readonly PackageBundle _bundle;
         private readonly DownloadFileOptions _options;
         private readonly bool _disableUnityWebCache;
-       
+        private UnityAssetBundleRequestOperation _unityAssetBundleRequestOp;
+
         protected int _requestCount = 0;
         protected float _tryAgainTimer;
         protected int _failedTryAgain;
         private ESteps _steps = ESteps.None;
 
 
-        internal DownloadNormalAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, bool disableUnityWebCache)
+        internal LoadWebNormalAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, bool disableUnityWebCache)
         {
             _bundle = bundle;
             _options = options;
@@ -43,7 +43,7 @@ namespace YooAsset
             if (_steps == ESteps.CreateRequest)
             {
                 string url = GetRequestURL();
-                _unityAssetBundleRequestOp = new UnityAssetBundleRequestOperation(_bundle, _disableUnityWebCache, url, _options.Timeout);
+                _unityAssetBundleRequestOp = new UnityAssetBundleRequestOperation(_bundle, _disableUnityWebCache, url);
                 _unityAssetBundleRequestOp.StartOperation();
                 _steps = ESteps.CheckRequest;
             }

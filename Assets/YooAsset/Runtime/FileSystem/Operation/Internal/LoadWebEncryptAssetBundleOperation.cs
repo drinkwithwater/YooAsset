@@ -2,7 +2,7 @@
 
 namespace YooAsset
 {
-    internal class DownloadEncryptAssetBundleOperation : DownloadAssetBundleOperation
+    internal class LoadWebEncryptAssetBundleOperation : LoadWebAssetBundleOperation
     {
         protected enum ESteps
         {
@@ -16,7 +16,6 @@ namespace YooAsset
         private UnityWebDataRequestOperation _unityWebDataRequestOp;
         private readonly PackageBundle _bundle;
         private readonly DownloadFileOptions _options;
-        private readonly bool _checkTimeout;
         private readonly IWebDecryptionServices _decryptionServices;
 
         protected int _requestCount = 0;
@@ -24,11 +23,10 @@ namespace YooAsset
         protected int _failedTryAgain;
         private ESteps _steps = ESteps.None;
 
-        internal DownloadEncryptAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, bool checkTimeout, IWebDecryptionServices decryptionServices)
+        internal LoadWebEncryptAssetBundleOperation(PackageBundle bundle, DownloadFileOptions options, IWebDecryptionServices decryptionServices)
         {
             _bundle = bundle;
             _options = options;
-            _checkTimeout = checkTimeout;
             _decryptionServices = decryptionServices;
         }
         internal override void InternalStart()
@@ -53,10 +51,8 @@ namespace YooAsset
                 }
 
                 string url = GetRequestURL();
-                _unityWebDataRequestOp = new UnityWebDataRequestOperation(url, _options.Timeout);
+                _unityWebDataRequestOp = new UnityWebDataRequestOperation(url, 0);
                 _unityWebDataRequestOp.StartOperation();
-                if (_checkTimeout == false)
-                    _unityWebDataRequestOp.DontCheckTimeout();
                 _steps = ESteps.CheckRequest;
             }
 

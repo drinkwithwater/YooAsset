@@ -24,7 +24,7 @@ namespace YooAsset
         /// </summary>
         public AssetBundle Result { private set; get; }
 
-        internal UnityAssetBundleRequestOperation(PackageBundle packageBundle, bool disableUnityWebCache, string url, int timeout = 60) : base(url, timeout)
+        internal UnityAssetBundleRequestOperation(PackageBundle packageBundle, bool disableUnityWebCache, string url) : base(url)
         {
             _packageBundle = packageBundle;
             _disableUnityWebCache = disableUnityWebCache;
@@ -40,7 +40,6 @@ namespace YooAsset
 
             if (_steps == ESteps.CreateRequest)
             {
-                ResetTimeout();
                 CreateWebRequest();
                 _steps = ESteps.Download;
             }
@@ -51,10 +50,7 @@ namespace YooAsset
                 DownloadedBytes = (long)_webRequest.downloadedBytes;
                 Progress = _requestOperation.progress;
                 if (_requestOperation.isDone == false)
-                {
-                    CheckRequestTimeout();
                     return;
-                }
 
                 if (CheckRequestResult())
                 {

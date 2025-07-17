@@ -85,7 +85,7 @@ namespace YooAsset
         /// <summary>
         /// 创建下载任务
         /// </summary>
-        public UnityDownloadFileOperation DownloadFileAsync(PackageBundle bundle, string url, int timeout)
+        public UnityDownloadFileOperation DownloadFileAsync(PackageBundle bundle, string url)
         {
             // 查询旧的下载器
             if (_downloaders.TryGetValue(bundle.BundleGUID, out var oldDownloader))
@@ -99,7 +99,7 @@ namespace YooAsset
             bool isRequestLocalFile = DownloadSystemHelper.IsRequestLocalFile(url);
             if (isRequestLocalFile)
             {
-                newDownloader = new UnityDownloadLocalFileOperation(_fileSystem, bundle, url, timeout);
+                newDownloader = new UnityDownloadLocalFileOperation(_fileSystem, bundle, url);
                 AddChildOperation(newDownloader);
                 _downloaders.Add(bundle.BundleGUID, newDownloader);
             }
@@ -107,13 +107,13 @@ namespace YooAsset
             {
                 if (bundle.FileSize >= _fileSystem.ResumeDownloadMinimumSize)
                 {
-                    newDownloader = new UnityDownloadResumeFileOperation(_fileSystem, bundle, url, timeout);
+                    newDownloader = new UnityDownloadResumeFileOperation(_fileSystem, bundle, url);
                     AddChildOperation(newDownloader);
                     _downloaders.Add(bundle.BundleGUID, newDownloader);
                 }
                 else
                 {
-                    newDownloader = new UnityDownloadNormalFileOperation(_fileSystem, bundle, url, timeout);
+                    newDownloader = new UnityDownloadNormalFileOperation(_fileSystem, bundle, url);
                     AddChildOperation(newDownloader);
                     _downloaders.Add(bundle.BundleGUID, newDownloader);
                 }

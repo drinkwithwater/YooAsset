@@ -10,8 +10,8 @@ namespace YooAsset
         private long _fileOriginLength = 0;
         private ESteps _steps = ESteps.None;
 
-        internal UnityDownloadResumeFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url, int timeout = 60)
-            : base(fileSystem, bundle, url, timeout)
+        internal UnityDownloadResumeFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url)
+            : base(fileSystem, bundle, url)
         {
         }
         internal override void InternalStart()
@@ -46,7 +46,6 @@ namespace YooAsset
                     }
                 }
 
-                ResetTimeout();
                 CreateWebRequest(fileBeginLength);
                 _steps = ESteps.Download;
             }
@@ -58,10 +57,7 @@ namespace YooAsset
                 DownloadedBytes = _fileOriginLength + (long)_webRequest.downloadedBytes;
                 Progress = DownloadProgress;
                 if (_webRequest.isDone == false)
-                {
-                    CheckRequestTimeout();
                     return;
-                }
 
                 // 检查网络错误
                 if (CheckRequestResult())
@@ -147,9 +143,9 @@ namespace YooAsset
         }
         private void CreateWebRequest(long fileBeginLength)
         {
-            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
             var handler = new DownloadHandlerFile(_tempFilePath, true);
             handler.removeFileOnAbort = false;
+            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
             _webRequest.downloadHandler = handler;
             _webRequest.disposeDownloadHandlerOnDispose = true;
             if (fileBeginLength > 0)

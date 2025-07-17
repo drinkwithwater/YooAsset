@@ -9,8 +9,8 @@ namespace YooAsset
         private VerifyTempFileOperation _verifyOperation;
         private ESteps _steps = ESteps.None;
 
-        internal UnityDownloadNormalFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url, int timeout = 60)
-            : base(fileSystem, bundle, url, timeout)
+        internal UnityDownloadNormalFileOperation(DefaultCacheFileSystem fileSystem, PackageBundle bundle, string url)
+            : base(fileSystem, bundle, url)
         {
         }
         internal override void InternalStart()
@@ -29,7 +29,6 @@ namespace YooAsset
                 if (File.Exists(_tempFilePath))
                     File.Delete(_tempFilePath);
 
-                ResetTimeout();
                 CreateWebRequest();
                 _steps = ESteps.Download;
             }
@@ -41,10 +40,7 @@ namespace YooAsset
                 DownloadedBytes = (long)_webRequest.downloadedBytes;
                 Progress = DownloadProgress;
                 if (_webRequest.isDone == false)
-                {
-                    CheckRequestTimeout();
                     return;
-                }
 
                 // 检查网络错误
                 if (CheckRequestResult())
@@ -115,9 +111,9 @@ namespace YooAsset
 
         private void CreateWebRequest()
         {
-            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
             DownloadHandlerFile handler = new DownloadHandlerFile(_tempFilePath);
             handler.removeFileOnAbort = true;
+            _webRequest = DownloadSystemHelper.NewUnityWebRequestGet(_requestURL);
             _webRequest.downloadHandler = handler;
             _webRequest.disposeDownloadHandlerOnDispose = true;
             _webRequest.SendWebRequest();

@@ -8,11 +8,6 @@ namespace YooAsset
     {
         protected UnityWebRequest _webRequest;
         protected readonly string _requestURL;
-
-        // 超时相关
-        private readonly float _timeout;
-        private ulong _latestDownloadBytes;
-        private float _latestDownloadRealtime;
         private bool _isAbort = false;
 
         /// <summary>
@@ -38,10 +33,9 @@ namespace YooAsset
             get { return _requestURL; }
         }
 
-        internal UnityWebRequestOperation(string url, int timeout)
+        internal UnityWebRequestOperation(string url)
         {
             _requestURL = url;
-            _timeout = timeout;
         }
         internal override void InternalAbort()
         {
@@ -68,42 +62,6 @@ namespace YooAsset
                 //注意：引擎底层会自动调用Abort方法
                 _webRequest.Dispose();
                 _webRequest = null;
-            }
-        }
-
-        /// <summary>
-        /// 重置超时计时
-        /// </summary>
-        protected void ResetTimeout()
-        {
-            _latestDownloadBytes = 0;
-            _latestDownloadRealtime = Time.realtimeSinceStartup;
-        }
-
-        /// <summary>
-        /// 检测超时
-        /// </summary>
-        protected void CheckRequestTimeout()
-        {
-            if (_webRequest.isDone)
-                return;
-
-            // 注意：在连续时间段内无新增下载数据及判定为超时
-            if (_isAbort == false)
-            {
-                if (_latestDownloadBytes != _webRequest.downloadedBytes)
-                {
-                    _latestDownloadBytes = _webRequest.downloadedBytes;
-                    _latestDownloadRealtime = Time.realtimeSinceStartup;
-                }
-
-                float offset = Time.realtimeSinceStartup - _latestDownloadRealtime;
-                if (offset > _timeout)
-                {
-                    YooLogger.Warning($"Web request timeout : {_requestURL}");
-                    _webRequest.Abort();
-                    _isAbort = true;
-                }
             }
         }
 

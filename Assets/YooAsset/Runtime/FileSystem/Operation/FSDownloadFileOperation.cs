@@ -9,11 +9,6 @@ namespace YooAsset
         public readonly int FailedTryAgain;
 
         /// <summary>
-        /// 超时时间
-        /// </summary>
-        public readonly int Timeout;
-
-        /// <summary>
         /// 主资源地址
         /// </summary>
         public string MainURL { private set; get; }
@@ -28,10 +23,9 @@ namespace YooAsset
         /// </summary>
         public string ImportFilePath { set; get; }
 
-        public DownloadFileOptions(int failedTryAgain, int timeout)
+        public DownloadFileOptions(int failedTryAgain)
         {
             FailedTryAgain = failedTryAgain;
-            Timeout = timeout;
         }
 
         /// <summary>
