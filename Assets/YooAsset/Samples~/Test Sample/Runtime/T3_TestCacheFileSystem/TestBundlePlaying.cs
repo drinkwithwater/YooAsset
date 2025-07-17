@@ -24,7 +24,7 @@ public class TestBundlePlaying
         {
             Assert.Fail("Load bundle is already existed !");
         }
-
+        
         // 测试异步加载
         {
             var assetsHandle = package.LoadAssetAsync<GameObject>("panel_a");
@@ -34,10 +34,18 @@ public class TestBundlePlaying
 
         // 测试同步加载
         {
+            // 验证失败结果
+            UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
             var assetsHandle = package.LoadAssetSync<GameObject>("panel_b");
             yield return assetsHandle;
             Assert.AreEqual(EOperationStatus.Failed, assetsHandle.Status);
+            UnityEngine.TestTools.LogAssert.ignoreFailingMessages = false;
 
+            // 清理加载器
+            assetsHandle.Release();
+            package.UnloadUnusedAssetsAsync();
+
+            // 验证成功结果
             yield return new WaitForSeconds(1f);
             assetsHandle = package.LoadAssetSync<GameObject>("panel_b");
             yield return assetsHandle;

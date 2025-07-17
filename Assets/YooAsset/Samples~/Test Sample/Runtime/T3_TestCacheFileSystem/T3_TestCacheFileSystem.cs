@@ -36,7 +36,7 @@ public class T3_TestCacheFileSystem : IPrebuildSetup, IPostBuildCleanup
                 throw new Exception($"Not found package root : {packageRoot}");
 
             string testServerDirectory = "C://xampp/htdocs/CDN/Android/Test";
-
+            CopyDirectory(packageRoot, testServerDirectory);
         }
 
         // 初始化资源包 ASSET_BUNDLE
@@ -100,18 +100,46 @@ public class T3_TestCacheFileSystem : IPrebuildSetup, IPostBuildCleanup
         var tester = new TestBundlePlaying();
         yield return tester.RuntimeTester();
     }
-    
+
     [UnityTest]
     public IEnumerator B2_TestBundleImporter()
     {
         var tester = new TestBundleImporter();
         yield return tester.RuntimeTester();
     }
-    
+
     [UnityTest]
     public IEnumerator B3_TestBundleDownloader()
     {
         var tester = new TestBundleDownloader();
         yield return tester.RuntimeTester();
+    }
+
+    private static void CopyDirectory(string sourceDir, string targetDir)
+    {
+        // 检查源目录是否存在
+        if (!Directory.Exists(sourceDir))
+        {
+            throw new DirectoryNotFoundException($"源目录不存在: {sourceDir}");
+        }
+
+        // 创建目标目录（如果不存在）
+        Directory.CreateDirectory(targetDir);
+
+        // 拷贝所有文件
+        foreach (string file in Directory.GetFiles(sourceDir))
+        {
+            string fileName = Path.GetFileName(file);
+            string destFile = Path.Combine(targetDir, fileName);
+            File.Copy(file, destFile, true); // true 表示覆盖已存在文件
+        }
+
+        // 递归拷贝子目录
+        foreach (string subDir in Directory.GetDirectories(sourceDir))
+        {
+            string dirName = Path.GetFileName(subDir);
+            string newTargetDir = Path.Combine(targetDir, dirName);
+            CopyDirectory(subDir, newTargetDir);
+        }
     }
 }
