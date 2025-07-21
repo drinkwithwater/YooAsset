@@ -188,7 +188,7 @@ namespace YooAsset.Editor
                 independAsset.AssetPath = removeValue.AssetInfo.AssetPath;
                 independAsset.AssetGUID = removeValue.AssetInfo.AssetGUID;
                 independAsset.AssetType = removeValue.AssetInfo.AssetType.ToString();
-                independAsset.FileSize = Alter.FileUtility.GetFileSize(removeValue.AssetInfo.AssetPath);
+                independAsset.FileSize = Common.FileUtility.GetFileSize(removeValue.AssetInfo.AssetPath);
                 context.IndependAssets.Add(independAsset);
 
                 allCollectAssets.Remove(removeValue);

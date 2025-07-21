@@ -15,7 +15,7 @@ namespace YooAsset.Editor
             string buildinRootDirectory = buildParametersContext.GetBuildinRootDirectory();
             string buildPackageName = buildParametersContext.Parameters.PackageName;
             var manifestServices = buildParametersContext.Parameters.ManifestServices;
-            Alter.DefaultBuildinFileSystemBuild.CreateBuildinCatalogFile(manifestServices, buildPackageName, buildinRootDirectory);
+            Common.DefaultBuildinFileSystemBuild.CreateBuildinCatalogFile(manifestServices, buildPackageName, buildinRootDirectory);
 
             // 刷新目录
             AssetDatabase.Refresh();

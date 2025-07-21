@@ -16,7 +16,7 @@ namespace YooAsset.Editor
         protected override string GetUnityHash(BuildBundleInfo bundleInfo, BuildContext context)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return Alter.HashUtility.FileMD5(filePath);
+            return Common.HashUtility.FileMD5(filePath);
         }
         protected override uint GetUnityCRC(BuildBundleInfo bundleInfo, BuildContext context)
         {
@@ -25,17 +25,17 @@ namespace YooAsset.Editor
         protected override string GetBundleFileHash(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return Alter.HashUtility.FileMD5(filePath);
+            return Common.HashUtility.FileMD5(filePath);
         }
         protected override string GetBundleFileCRC(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return Alter.HashUtility.FileCRC32(filePath);
+            return Common.HashUtility.FileCRC32(filePath);
         }
         protected override long GetBundleFileSize(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return Alter.FileUtility.GetFileSize(filePath);
+            return Common.FileUtility.GetFileSize(filePath);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 资源包名称样式
         /// </summary>
-        public Alter.EFileNameStyle FileNameStyle = Alter.EFileNameStyle.HashName;
+        public Common.EFileNameStyle FileNameStyle = Common.EFileNameStyle.HashName;
 
         /// <summary>
         /// 内置文件的拷贝选项
@@ -96,12 +96,12 @@ namespace YooAsset.Editor
         /// <summary>
         /// 资源包加密服务类
         /// </summary>
-        public Alter.IEncryptionServices EncryptionServices;
+        public Common.IEncryptionServices EncryptionServices;
 
         /// <summary>
         /// 资源清单服务类
         /// </summary>
-        public Alter.IManifestServices ManifestServices;
+        public Common.IManifestServices ManifestServices;
 
 
         private string _pipelineOutputDirectory = string.Empty;
@@ -142,7 +142,7 @@ namespace YooAsset.Editor
                 string message = BuildLogger.GetErrorMessage(ErrorCode.BuildPipelineIsNullOrEmpty, "Build pipeline is null or empty !");
                 throw new Exception(message);
             }
-            if (BuildBundleType == (int)Alter.EBuildBundleType.Unknown)
+            if (BuildBundleType == (int)Common.EBuildBundleType.Unknown)
             {
                 string message = BuildLogger.GetErrorMessage(ErrorCode.BuildBundleTypeIsUnknown, $"Build bundle type is unknown {BuildBundleType} !");
                 throw new Exception(message);
@@ -174,7 +174,7 @@ namespace YooAsset.Editor
         {
             if (string.IsNullOrEmpty(_pipelineOutputDirectory))
             {
-                _pipelineOutputDirectory = $"{BuildOutputRoot}/{BuildTarget}/{PackageName}/{Alter.YooAssetSettings.OutputFolderName}";
+                _pipelineOutputDirectory = $"{BuildOutputRoot}/{BuildTarget}/{PackageName}/{Common.YooAssetSettings.OutputFolderName}";
             }
             return _pipelineOutputDirectory;
         }

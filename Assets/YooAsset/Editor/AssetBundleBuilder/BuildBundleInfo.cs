@@ -174,9 +174,9 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建PackageBundle类
         /// </summary>
-        internal Alter.PackageBundle CreatePackageBundle()
+        internal Common.PackageBundle CreatePackageBundle()
         {
-            Alter.PackageBundle packageBundle = new Alter.PackageBundle();
+            Common.PackageBundle packageBundle = new Common.PackageBundle();
             packageBundle.BundleName = BundleName;
             packageBundle.UnityCRC = PackageUnityCRC;
             packageBundle.FileHash = PackageFileHash;

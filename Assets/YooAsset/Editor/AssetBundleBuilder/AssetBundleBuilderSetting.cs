@@ -32,14 +32,14 @@ namespace YooAsset.Editor
         }
 
         // EFileNameStyle
-        public static Alter.EFileNameStyle GetPackageFileNameStyle(string packageName, string buildPipeline)
+        public static Common.EFileNameStyle GetPackageFileNameStyle(string packageName, string buildPipeline)
         {
-            string key = $"{Application.productName}_{packageName}_{buildPipeline}_{nameof(Alter.EFileNameStyle)}";
-            return (Alter.EFileNameStyle)EditorPrefs.GetInt(key, (int)Alter.EFileNameStyle.HashName);
+            string key = $"{Application.productName}_{packageName}_{buildPipeline}_{nameof(Common.EFileNameStyle)}";
+            return (Common.EFileNameStyle)EditorPrefs.GetInt(key, (int)Common.EFileNameStyle.HashName);
         }
-        public static void SetPackageFileNameStyle(string packageName, string buildPipeline, Alter.EFileNameStyle fileNameStyle)
+        public static void SetPackageFileNameStyle(string packageName, string buildPipeline, Common.EFileNameStyle fileNameStyle)
         {
-            string key = $"{Application.productName}_{packageName}_{buildPipeline}_{nameof(Alter.EFileNameStyle)}";
+            string key = $"{Application.productName}_{packageName}_{buildPipeline}_{nameof(Common.EFileNameStyle)}";
             EditorPrefs.SetInt(key, (int)fileNameStyle);
         }
 

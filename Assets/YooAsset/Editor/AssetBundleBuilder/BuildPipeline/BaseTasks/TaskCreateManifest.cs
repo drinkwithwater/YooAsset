@@ -7,7 +7,7 @@ namespace YooAsset.Editor
 {
     public class ManifestContext : IContextObject
     {
-        internal Alter.PackageManifest Manifest;
+        internal Common.PackageManifest Manifest;
     }
 
     public abstract class TaskCreateManifest
@@ -29,8 +29,8 @@ namespace YooAsset.Editor
             CheckBundleHashConflict(buildMapContext);
 
             // 创建新补丁清单
-            Alter.PackageManifest manifest = new Alter.PackageManifest();
-            manifest.FileVersion = Alter.ManifestDefine.FileVersion;
+            Common.PackageManifest manifest = new Common.PackageManifest();
+            manifest.FileVersion = Common.ManifestDefine.FileVersion;
             manifest.EnableAddressable = buildMapContext.Command.EnableAddressable;
             manifest.LocationToLower = buildMapContext.Command.LocationToLower;
             manifest.IncludeAssetGUID = buildMapContext.Command.IncludeAssetGUID;
@@ -60,9 +60,9 @@ namespace YooAsset.Editor
 
             // 创建资源清单文本文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetManifestJsonFileName(buildParameters.PackageName, buildParameters.PackageVersion);
+                string fileName = Common.YooAssetSettingsData.GetManifestJsonFileName(buildParameters.PackageName, buildParameters.PackageVersion);
                 string filePath = $"{packageOutputDirectory}/{fileName}";
-                Alter.ManifestTools.SerializeToJson(filePath, manifest);
+                Common.ManifestTools.SerializeToJson(filePath, manifest);
                 BuildLogger.Log($"Create package manifest file: {filePath}");
             }
 
@@ -70,34 +70,34 @@ namespace YooAsset.Editor
             string packageHash;
             string packagePath;
             {
-                string fileName = Alter.YooAssetSettingsData.GetManifestBinaryFileName(buildParameters.PackageName, buildParameters.PackageVersion);
+                string fileName = Common.YooAssetSettingsData.GetManifestBinaryFileName(buildParameters.PackageName, buildParameters.PackageVersion);
                 packagePath = $"{packageOutputDirectory}/{fileName}";
-                Alter.ManifestTools.SerializeToBinary(packagePath, manifest, buildParameters.ManifestServices);
-                packageHash = Alter.HashUtility.FileCRC32(packagePath);
+                Common.ManifestTools.SerializeToBinary(packagePath, manifest, buildParameters.ManifestServices);
+                packageHash = Common.HashUtility.FileCRC32(packagePath);
                 BuildLogger.Log($"Create package manifest file: {packagePath}");
             }
 
             // 创建资源清单哈希文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetPackageHashFileName(buildParameters.PackageName, buildParameters.PackageVersion);
+                string fileName = Common.YooAssetSettingsData.GetPackageHashFileName(buildParameters.PackageName, buildParameters.PackageVersion);
                 string filePath = $"{packageOutputDirectory}/{fileName}";
-                Alter.FileUtility.WriteAllText(filePath, packageHash);
+                Common.FileUtility.WriteAllText(filePath, packageHash);
                 BuildLogger.Log($"Create package manifest hash file: {filePath}");
             }
 
             // 创建资源清单版本文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetPackageVersionFileName(buildParameters.PackageName);
+                string fileName = Common.YooAssetSettingsData.GetPackageVersionFileName(buildParameters.PackageName);
                 string filePath = $"{packageOutputDirectory}/{fileName}";
-                Alter.FileUtility.WriteAllText(filePath, buildParameters.PackageVersion);
+                Common.FileUtility.WriteAllText(filePath, buildParameters.PackageVersion);
                 BuildLogger.Log($"Create package manifest version file: {filePath}");
             }
 
             // 填充上下文
             {
                 ManifestContext manifestContext = new ManifestContext();
-                byte[] bytesData = Alter.FileUtility.ReadAllBytes(packagePath);
-                manifestContext.Manifest = Alter.ManifestTools.DeserializeFromBinary(bytesData, buildParameters.ManifestServices);
+                byte[] bytesData = Common.FileUtility.ReadAllBytes(packagePath);
+                manifestContext.Manifest = Common.ManifestTools.DeserializeFromBinary(bytesData, buildParameters.ManifestServices);
                 context.SetContextObject(manifestContext);
             }
         }
@@ -132,15 +132,15 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建资源对象列表
         /// </summary>
-        private List<Alter.PackageAsset> CreatePackageAssetList(BuildMapContext buildMapContext)
+        private List<Common.PackageAsset> CreatePackageAssetList(BuildMapContext buildMapContext)
         {
-            var result = new List<Alter.PackageAsset>(1000);
+            var result = new List<Common.PackageAsset>(1000);
             foreach (var bundleInfo in buildMapContext.Collection)
             {
                 var assetInfos = bundleInfo.GetAllManifestAssetInfos();
                 foreach (var assetInfo in assetInfos)
                 {
-                    var packageAsset = new Alter.PackageAsset();
+                    var packageAsset = new Common.PackageAsset();
                     packageAsset.Address = buildMapContext.Command.EnableAddressable ? assetInfo.Address : string.Empty;
                     packageAsset.AssetPath = assetInfo.AssetInfo.AssetPath;
                     packageAsset.AssetGUID = buildMapContext.Command.IncludeAssetGUID ? assetInfo.AssetInfo.AssetGUID : string.Empty;
@@ -158,9 +158,9 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建资源包列表
         /// </summary>
-        private List<Alter.PackageBundle> CreatePackageBundleList(BuildMapContext buildMapContext)
+        private List<Common.PackageBundle> CreatePackageBundleList(BuildMapContext buildMapContext)
         {
-            var result = new List<Alter.PackageBundle>(1000);
+            var result = new List<Common.PackageBundle>(1000);
             foreach (var bundleInfo in buildMapContext.Collection)
             {
                 var packageBundle = bundleInfo.CreatePackageBundle();
@@ -175,7 +175,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 处理资源清单的资源对象列表
         /// </summary>
-        private void ProcessPacakgeAsset(Alter.PackageManifest manifest)
+        private void ProcessPacakgeAsset(Common.PackageManifest manifest)
         {
             // 注意：优先缓存资源包索引
             for (int index = 0; index < manifest.BundleList.Count; index++)
@@ -203,7 +203,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 处理资源包的依赖集合
         /// </summary>
-        private void ProcessBundleDepends(BuildContext context, Alter.PackageManifest manifest)
+        private void ProcessBundleDepends(BuildContext context, Common.PackageManifest manifest)
         {
             // 查询引擎生成的资源包依赖关系，然后记录到清单
             foreach (var packageBundle in manifest.BundleList)
@@ -227,7 +227,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 处理资源包的标签集合
         /// </summary>
-        private void ProcessBundleTags(Alter.PackageManifest manifest)
+        private void ProcessBundleTags(Common.PackageManifest manifest)
         {
             foreach (var packageBundle in manifest.BundleList)
             {
@@ -298,7 +298,7 @@ namespace YooAsset.Editor
         }
 
         #region YOOASSET_LEGACY_DEPENDENCY
-        private void ProcessBuiltinBundleDependency(BuildContext context, Alter.PackageManifest manifest)
+        private void ProcessBuiltinBundleDependency(BuildContext context, Common.PackageManifest manifest)
         {
             // 注意：如果是可编程构建管线，需要补充内置资源包
             // 注意：该步骤依赖前面的操作！
@@ -306,12 +306,12 @@ namespace YooAsset.Editor
             if (buildResultContext != null)
             {
                 // 注意：初始化资源清单建立引用关系
-                Alter.ManifestTools.InitManifest(manifest);
+                Common.ManifestTools.InitManifest(manifest);
                 ProcessBuiltinBundleReference(context, manifest, buildResultContext.BuiltinShadersBundleName);
                 ProcessBuiltinBundleReference(context, manifest, buildResultContext.MonoScriptsBundleName);
             }
         }
-        private void ProcessBuiltinBundleReference(BuildContext context, Alter.PackageManifest manifest, string builtinBundleName)
+        private void ProcessBuiltinBundleReference(BuildContext context, Common.PackageManifest manifest, string builtinBundleName)
         {
             if (string.IsNullOrEmpty(builtinBundleName))
                 return;

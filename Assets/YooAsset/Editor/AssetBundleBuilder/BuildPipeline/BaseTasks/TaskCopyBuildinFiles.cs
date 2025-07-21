@@ -11,7 +11,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 拷贝首包资源文件
         /// </summary>
-        internal void CopyBuildinFilesToStreaming(BuildParametersContext buildParametersContext, Alter.PackageManifest manifest)
+        internal void CopyBuildinFilesToStreaming(BuildParametersContext buildParametersContext, Common.PackageManifest manifest)
         {
             EBuildinFileCopyOption copyOption = buildParametersContext.Parameters.BuildinFileCopyOption;
             string packageOutputDirectory = buildParametersContext.GetPackageOutputDirectory();
@@ -27,7 +27,7 @@ namespace YooAsset.Editor
 
             // 拷贝补丁清单文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetManifestBinaryFileName(buildPackageName, buildPackageVersion);
+                string fileName = Common.YooAssetSettingsData.GetManifestBinaryFileName(buildPackageName, buildPackageVersion);
                 string sourcePath = $"{packageOutputDirectory}/{fileName}";
                 string destPath = $"{buildinRootDirectory}/{fileName}";
                 EditorTools.CopyFile(sourcePath, destPath, true);
@@ -35,7 +35,7 @@ namespace YooAsset.Editor
 
             // 拷贝补丁清单哈希文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetPackageHashFileName(buildPackageName, buildPackageVersion);
+                string fileName = Common.YooAssetSettingsData.GetPackageHashFileName(buildPackageName, buildPackageVersion);
                 string sourcePath = $"{packageOutputDirectory}/{fileName}";
                 string destPath = $"{buildinRootDirectory}/{fileName}";
                 EditorTools.CopyFile(sourcePath, destPath, true);
@@ -43,7 +43,7 @@ namespace YooAsset.Editor
 
             // 拷贝补丁清单版本文件
             {
-                string fileName = Alter.YooAssetSettingsData.GetPackageVersionFileName(buildPackageName);
+                string fileName = Common.YooAssetSettingsData.GetPackageVersionFileName(buildPackageName);
                 string sourcePath = $"{packageOutputDirectory}/{fileName}";
                 string destPath = $"{buildinRootDirectory}/{fileName}";
                 EditorTools.CopyFile(sourcePath, destPath, true);

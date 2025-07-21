@@ -7,7 +7,7 @@ namespace YooAsset.Editor
 {
     internal class RemotePlayerSession
     {
-        private readonly Queue<YooAsset.Alter.DebugReport> _reports = new();
+        private readonly Queue<YooAsset.Common.DebugReport> _reports = new();
 
         /// <summary>
         /// 用户ID
@@ -55,7 +55,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 添加一个调试报告
         /// </summary>
-        public void AddDebugReport(Alter.DebugReport report)
+        public void AddDebugReport(Common.DebugReport report)
         {
             if (report == null)
                 Debug.LogWarning("Invalid debug report data !");
@@ -68,7 +68,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 获取调试报告
         /// </summary>
-        public Alter.DebugReport GetDebugReport(int rangeIndex)
+        public Common.DebugReport GetDebugReport(int rangeIndex)
         {
             if (_reports.Count == 0)
                 return null;

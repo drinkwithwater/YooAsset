@@ -109,7 +109,7 @@ namespace YooAsset.Editor
                 return;
 
             _reportFilePath = selectFilePath;
-            string jsonData = YooAsset.Alter.FileUtility.ReadAllText(_reportFilePath);
+            string jsonData = YooAsset.Common.FileUtility.ReadAllText(_reportFilePath);
             _buildReport = BuildReport.Deserialize(jsonData);
             _summaryViewer.FillViewData(_buildReport);
             _assetListViewer.FillViewData(_buildReport, _reportFilePath);

@@ -22,7 +22,7 @@ namespace YooAsset.Editor
         /// </summary>
         public static string GetStreamingAssetsRoot()
         {
-            return Alter.YooAssetSettingsData.GetYooDefaultBuildinRoot();
+            return Common.YooAssetSettingsData.GetYooDefaultBuildinRoot();
         }
     }
 }

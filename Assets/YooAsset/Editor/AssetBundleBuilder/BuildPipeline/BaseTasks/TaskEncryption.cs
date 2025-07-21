@@ -24,14 +24,14 @@ namespace YooAsset.Editor
             string pipelineOutputDirectory = buildParametersContext.GetPipelineOutputDirectory();
             foreach (var bundleInfo in buildMapContext.Collection)
             {
-                var fileInfo = new Alter.EncryptFileInfo();
+                var fileInfo = new Common.EncryptFileInfo();
                 fileInfo.BundleName = bundleInfo.BundleName;
                 fileInfo.FileLoadPath = $"{pipelineOutputDirectory}/{bundleInfo.BundleName}";
                 var encryptResult = encryptionServices.Encrypt(fileInfo);
                 if (encryptResult.Encrypted)
                 {
                     string filePath = $"{pipelineOutputDirectory}/{bundleInfo.BundleName}.encrypt";
-                    Alter.FileUtility.WriteAllBytes(filePath, encryptResult.EncryptedData);
+                    Common.FileUtility.WriteAllBytes(filePath, encryptResult.EncryptedData);
                     bundleInfo.EncryptedFilePath = filePath;
                     bundleInfo.Encrypted = true;
                     BuildLogger.Log($"Bundle file encryption complete: {filePath}");

@@ -113,7 +113,7 @@ namespace YooAsset.Editor
             buildReport.IndependAssets = new List<ReportIndependAsset>(buildMapContext.IndependAssets);
 
             // 序列化文件
-            string fileName = Alter.YooAssetSettingsData.GetBuildReportFileName(buildParameters.PackageName, buildParameters.PackageVersion);
+            string fileName = Common.YooAssetSettingsData.GetBuildReportFileName(buildParameters.PackageName, buildParameters.PackageVersion);
             string filePath = $"{packageOutputDirectory}/{fileName}";
             BuildReport.Serialize(filePath, buildReport);
             BuildLogger.Log($"Create build report file: {filePath}");
@@ -138,7 +138,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 获取资源对象依赖的资源包集合
         /// </summary>
-        private List<string> GetAssetDependBundles(Alter.PackageManifest manifest, Alter.PackageAsset packageAsset)
+        private List<string> GetAssetDependBundles(Common.PackageManifest manifest, Common.PackageAsset packageAsset)
         {
             List<string> dependBundles = new List<string>(packageAsset.DependBundleIDs.Length);
             foreach (int index in packageAsset.DependBundleIDs)
@@ -153,7 +153,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 获取资源包依赖的资源包集合
         /// </summary>
-        private List<string> GetBundleDependBundles(Alter.PackageManifest manifest, Alter.PackageBundle packageBundle)
+        private List<string> GetBundleDependBundles(Common.PackageManifest manifest, Common.PackageBundle packageBundle)
         {
             List<string> dependBundles = new List<string>(packageBundle.DependBundleIDs.Length);
             foreach (int index in packageBundle.DependBundleIDs)
@@ -168,7 +168,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 获取引用该资源包的资源包集合
         /// </summary>
-        private List<string> GetBundleReferenceBundles(Alter.PackageManifest manifest, Alter.PackageBundle packageBundle)
+        private List<string> GetBundleReferenceBundles(Common.PackageManifest manifest, Common.PackageBundle packageBundle)
         {
             List<string> referenceBundles = new List<string>(packageBundle.ReferenceBundleIDs.Count);
             foreach (int index in packageBundle.ReferenceBundleIDs)
@@ -191,15 +191,15 @@ namespace YooAsset.Editor
             return result;
         }
 
-        private int GetMainAssetCount(Alter.PackageManifest manifest)
+        private int GetMainAssetCount(Common.PackageManifest manifest)
         {
             return manifest.AssetList.Count;
         }
-        private int GetAllBundleCount(Alter.PackageManifest manifest)
+        private int GetAllBundleCount(Common.PackageManifest manifest)
         {
             return manifest.BundleList.Count;
         }
-        private long GetAllBundleSize(Alter.PackageManifest manifest)
+        private long GetAllBundleSize(Common.PackageManifest manifest)
         {
             long fileBytes = 0;
             foreach (var packageBundle in manifest.BundleList)
@@ -208,7 +208,7 @@ namespace YooAsset.Editor
             }
             return fileBytes;
         }
-        private int GetEncryptedBundleCount(Alter.PackageManifest manifest)
+        private int GetEncryptedBundleCount(Common.PackageManifest manifest)
         {
             int fileCount = 0;
             foreach (var packageBundle in manifest.BundleList)
@@ -218,7 +218,7 @@ namespace YooAsset.Editor
             }
             return fileCount;
         }
-        private long GetEncryptedBundleSize(Alter.PackageManifest manifest)
+        private long GetEncryptedBundleSize(Common.PackageManifest manifest)
         {
             long fileBytes = 0;
             foreach (var packageBundle in manifest.BundleList)

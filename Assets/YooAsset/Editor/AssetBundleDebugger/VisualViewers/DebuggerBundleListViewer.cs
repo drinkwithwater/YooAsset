@@ -13,16 +13,16 @@ namespace YooAsset.Editor
     {
         private class BundleTableData : DefaultTableData
         {
-            public Alter.DebugPackageData PackageData;
-            public Alter.DebugBundleInfo BundleInfo;
+            public Common.DebugPackageData PackageData;
+            public Common.DebugBundleInfo BundleInfo;
         }
         private class UsingTableData : DefaultTableData
         {
-            public Alter.DebugProviderInfo ProviderInfo;
+            public Common.DebugProviderInfo ProviderInfo;
         }
         private class ReferenceTableData : DefaultTableData
         {
-            public Alter.DebugBundleInfo BundleInfo;
+            public Common.DebugBundleInfo BundleInfo;
         }
 
         private VisualTreeAsset _visualAsset;
@@ -151,7 +151,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var bundleTableData = data as BundleTableData;
-                    if (bundleTableData.BundleInfo.Status == Alter.EOperationStatus.Failed.ToString())
+                    if (bundleTableData.BundleInfo.Status == Common.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -267,7 +267,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var usingTableData = data as UsingTableData;
-                    if (usingTableData.ProviderInfo.Status == Alter.EOperationStatus.Failed.ToString())
+                    if (usingTableData.ProviderInfo.Status == Common.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -341,7 +341,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var feferenceTableData = data as ReferenceTableData;
-                    if (feferenceTableData.BundleInfo.Status == Alter.EOperationStatus.Failed.ToString())
+                    if (feferenceTableData.BundleInfo.Status == Common.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -357,7 +357,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 填充页面数据
         /// </summary>
-        public void FillViewData(Alter.DebugReport debugReport)
+        public void FillViewData(Common.DebugReport debugReport)
         {
             // 清空旧数据
             _bundleTableView.ClearAll(false, true);

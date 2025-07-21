@@ -150,7 +150,7 @@ namespace YooAsset.Editor
         public static string GetPackageManagerYooVersion()
         {
 #if UNITY_2019_4_OR_NEWER
-            UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(YooAsset.Alter.YooAssets).Assembly);
+            UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(YooAsset.Common.PackageManifest).Assembly);
             if (packageInfo != null)
                 return packageInfo.version;
             else

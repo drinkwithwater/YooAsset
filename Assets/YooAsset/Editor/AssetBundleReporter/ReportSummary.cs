@@ -73,7 +73,7 @@ namespace YooAsset.Editor
         public bool SingleReferencedPackAlone;
         public string EncryptionServicesClassName;
         public string ManifestServicesClassName;
-        public YooAsset.Alter.EFileNameStyle FileNameStyle;
+        public YooAsset.Common.EFileNameStyle FileNameStyle;
         
         // 引擎参数
         public ECompressOption CompressOption;

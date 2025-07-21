@@ -9,17 +9,17 @@ namespace YooAsset.Editor
         /// <summary>
         /// 模拟构建
         /// </summary>
-        public static Alter.PackageInvokeBuildResult SimulateBuild(string packageName)
+        public static Common.PackageInvokeBuildResult SimulateBuild(string packageName)
         {
             var buildParameters = new EditorSimulateBuildParameters();
             buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
             buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
             buildParameters.BuildPipeline = EBuildPipeline.EditorSimulateBuildPipeline.ToString();
-            buildParameters.BuildBundleType = (int)Alter.EBuildBundleType.VirtualBundle;
+            buildParameters.BuildBundleType = (int)Common.EBuildBundleType.VirtualBundle;
             buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
             buildParameters.PackageName = packageName;
             buildParameters.PackageVersion = "Simulate";
-            buildParameters.FileNameStyle = Alter.EFileNameStyle.HashName;
+            buildParameters.FileNameStyle = Common.EFileNameStyle.HashName;
             buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
             buildParameters.BuildinFileCopyParams = string.Empty;
             buildParameters.UseAssetDependencyDB = true;
@@ -28,7 +28,7 @@ namespace YooAsset.Editor
             BuildResult buildResult = pipeline.Run(buildParameters, false);
             if (buildResult.Success)
             {
-                var reulst = new Alter.PackageInvokeBuildResult();
+                var reulst = new Common.PackageInvokeBuildResult();
                 reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
                 return reulst;
             }

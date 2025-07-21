@@ -16,7 +16,7 @@ namespace YooAsset.Editor
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException(filePath);
 
-            string jsonData = Alter.FileUtility.ReadAllText(filePath);
+            string jsonData = Common.FileUtility.ReadAllText(filePath);
             ScanReport report = JsonUtility.FromJson<ScanReport>(jsonData);
 
             // 检测配置文件的签名
@@ -48,7 +48,7 @@ namespace YooAsset.Editor
                 File.Delete(savePath);
 
             string json = JsonUtility.ToJson(scanReport, true);
-            Alter.FileUtility.WriteAllText(savePath, json);
+            Common.FileUtility.WriteAllText(savePath, json);
         }
     }
 }

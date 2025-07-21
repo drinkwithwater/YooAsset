@@ -57,7 +57,7 @@ namespace YooAsset.Editor
 
         private EViewMode _viewMode;
         private string _searchKeyWord;
-        private Alter.DebugReport _currentReport;
+        private Common.DebugReport _currentReport;
         private RemotePlayerSession _currentPlayerSession;
 
         private double _lastRepaintTime = 0;
@@ -147,9 +147,9 @@ namespace YooAsset.Editor
                 EditorConnection.instance.Initialize();
                 EditorConnection.instance.RegisterConnection(OnHandleConnectionEvent);
                 EditorConnection.instance.RegisterDisconnection(OnHandleDisconnectionEvent);
-                EditorConnection.instance.Register(Alter.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
-                Alter.RemoteEditorConnection.Instance.Initialize();
-                Alter.RemoteEditorConnection.Instance.Register(Alter.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
+                EditorConnection.instance.Register(Common.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
+                Common.RemoteEditorConnection.Instance.Initialize();
+                Common.RemoteEditorConnection.Instance.Register(Common.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
             }
             catch (Exception e)
             {
@@ -161,8 +161,8 @@ namespace YooAsset.Editor
             // 远程调试
             EditorConnection.instance.UnregisterConnection(OnHandleConnectionEvent);
             EditorConnection.instance.UnregisterDisconnection(OnHandleDisconnectionEvent);
-            EditorConnection.instance.Unregister(Alter.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
-            Alter.RemoteEditorConnection.Instance.Unregister(Alter.RemoteDebuggerDefine.kMsgPlayerSendToEditor);
+            EditorConnection.instance.Unregister(Common.RemoteDebuggerDefine.kMsgPlayerSendToEditor, OnHandlePlayerMessage);
+            Common.RemoteEditorConnection.Instance.Unregister(Common.RemoteDebuggerDefine.kMsgPlayerSendToEditor);
             _playerSessions.Clear();
         }
         public void Update()
@@ -192,11 +192,11 @@ namespace YooAsset.Editor
         private void OnHandlePlayerMessage(MessageEventArgs args)
         {
             int playerId = args.playerId;
-            var debugReport = Alter.DebugReport.Deserialize(args.data);
+            var debugReport = Common.DebugReport.Deserialize(args.data);
 
-            if (debugReport.DebuggerVersion != Alter.RemoteDebuggerDefine.DebuggerVersion)
+            if (debugReport.DebuggerVersion != Common.RemoteDebuggerDefine.DebuggerVersion)
             {
-                Debug.LogWarning($"Debugger versions are inconsistent : {debugReport.DebuggerVersion} != {Alter.RemoteDebuggerDefine.DebuggerVersion}");
+                Debug.LogWarning($"Debugger versions are inconsistent : {debugReport.DebuggerVersion} != {Common.RemoteDebuggerDefine.DebuggerVersion}");
                 return;
             }
 
@@ -254,23 +254,23 @@ namespace YooAsset.Editor
         private void OnRecordToggleValueChange(ChangeEvent<bool> evt)
         {
             // 发送采集数据的命令
-            Alter.RemoteCommand command = new Alter.RemoteCommand();
-            command.CommandType = (int)Alter.ERemoteCommand.SampleAuto;
+            Common.RemoteCommand command = new Common.RemoteCommand();
+            command.CommandType = (int)Common.ERemoteCommand.SampleAuto;
             command.CommandParam = evt.newValue ? "open" : "close";
-            byte[] data = Alter.RemoteCommand.Serialize(command);
-            EditorConnection.instance.Send(Alter.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
-            Alter.RemoteEditorConnection.Instance.Send(Alter.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
+            byte[] data = Common.RemoteCommand.Serialize(command);
+            EditorConnection.instance.Send(Common.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
+            Common.RemoteEditorConnection.Instance.Send(Common.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
         }
 
         private void SampleBtn_onClick()
         {
             // 发送采集数据的命令
-            Alter.RemoteCommand command = new Alter.RemoteCommand();
-            command.CommandType = (int)Alter.ERemoteCommand.SampleOnce;
+            Common.RemoteCommand command = new Common.RemoteCommand();
+            command.CommandType = (int)Common.ERemoteCommand.SampleOnce;
             command.CommandParam = string.Empty;
-            byte[] data = Alter.RemoteCommand.Serialize(command);
-            EditorConnection.instance.Send(Alter.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
-            Alter.RemoteEditorConnection.Instance.Send(Alter.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
+            byte[] data = Common.RemoteCommand.Serialize(command);
+            EditorConnection.instance.Send(Common.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
+            Common.RemoteEditorConnection.Instance.Send(Common.RemoteDebuggerDefine.kMsgEditorSendToPlayer, data);
         }
         private void ExportBtn_clicked()
         {
@@ -293,9 +293,9 @@ namespace YooAsset.Editor
                     }
                 }
 
-                string filePath = $"{resultPath}/{nameof(Alter.DebugReport)}_{_currentReport.FrameCount}.json";
+                string filePath = $"{resultPath}/{nameof(Common.DebugReport)}_{_currentReport.FrameCount}.json";
                 string fileContent = JsonUtility.ToJson(_currentReport, true);
-                Alter.FileUtility.WriteAllText(filePath, fileContent);
+                Common.FileUtility.WriteAllText(filePath, fileContent);
                 Debug.Log($"Debug report file saved : {filePath}");
             }
         }

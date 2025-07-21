@@ -4,7 +4,7 @@
     "references": [
         "Unity.ScriptableBuildPipeline",
         "Unity.ScriptableBuildPipeline.Editor",
-        "YooAsset.Alter"
+        "YooAsset.Common"
     ],
     "includePlatforms": [
         "Editor"

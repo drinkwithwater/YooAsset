@@ -1,7 +1,7 @@
 ﻿
 namespace YooAsset.Editor
 {
-    public class ManifestNone : Alter.IManifestServices
+    public class ManifestNone : Common.IManifestServices
     {
         public byte[] ProcessManifest(byte[] fileData)
         {

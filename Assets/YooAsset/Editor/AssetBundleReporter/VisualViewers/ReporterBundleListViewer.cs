@@ -348,7 +348,7 @@ namespace YooAsset.Editor
             if (bundleTableData.BundleInfo.Encrypted)
                 return;
 
-            if (_buildReport.Summary.BuildBundleType == (int)YooAsset.Alter.EBuildBundleType.AssetBundle)
+            if (_buildReport.Summary.BuildBundleType == (int)YooAsset.Common.EBuildBundleType.AssetBundle)
             {
                 string rootDirectory = Path.GetDirectoryName(_reportFilePath);
                 string filePath = $"{rootDirectory}/{bundleTableData.BundleInfo.FileName}";
