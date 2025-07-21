@@ -5,46 +5,37 @@ namespace YooAsset.Editor
 {
     public static class AssetBundleSimulateBuilder
     {
+
         /// <summary>
         /// 模拟构建
         /// </summary>
-        public static PackageInvokeBuildResult SimulateBuild(PackageInvokeBuildParam buildParam)
+        public static PackageInvokeBuildResult SimulateBuild(string packageName)
         {
-            string packageName = buildParam.PackageName;
-            string buildPipelineName = buildParam.BuildPipelineName;
+            var buildParameters = new EditorSimulateBuildParameters();
+            buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+            buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
+            buildParameters.BuildPipeline = EBuildPipeline.EditorSimulateBuildPipeline.ToString();
+            buildParameters.BuildBundleType = (int)EBuildBundleType.VirtualBundle;
+            buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
+            buildParameters.PackageName = packageName;
+            buildParameters.PackageVersion = "Simulate";
+            buildParameters.FileNameStyle = EFileNameStyle.HashName;
+            buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
+            buildParameters.BuildinFileCopyParams = string.Empty;
+            buildParameters.UseAssetDependencyDB = true;
 
-            if (buildPipelineName == "EditorSimulateBuildPipeline")
+            var pipeline = new EditorSimulateBuildPipeline();
+            BuildResult buildResult = pipeline.Run(buildParameters, false);
+            if (buildResult.Success)
             {
-                var buildParameters = new EditorSimulateBuildParameters();
-                buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
-                buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
-                buildParameters.BuildPipeline = EBuildPipeline.EditorSimulateBuildPipeline.ToString();
-                buildParameters.BuildBundleType = (int)EBuildBundleType.VirtualBundle;
-                buildParameters.BuildTarget = EditorUserBuildSettings.activeBuildTarget;
-                buildParameters.PackageName = packageName;
-                buildParameters.PackageVersion = "Simulate";
-                buildParameters.FileNameStyle = EFileNameStyle.HashName;
-                buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
-                buildParameters.BuildinFileCopyParams = string.Empty;
-                buildParameters.UseAssetDependencyDB = true;
-
-                var pipeline = new EditorSimulateBuildPipeline();
-                BuildResult buildResult = pipeline.Run(buildParameters, false);
-                if (buildResult.Success)
-                {
-                    var reulst = new PackageInvokeBuildResult();
-                    reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
-                    return reulst;
-                }
-                else
-                {
-                    Debug.LogError(buildResult.ErrorInfo);
-                    throw new System.Exception($"{nameof(EditorSimulateBuildPipeline)} build failed !");
-                }
+                var reulst = new PackageInvokeBuildResult();
+                reulst.PackageRootDirectory = buildResult.OutputPackageDirectory;
+                return reulst;
             }
             else
             {
-                throw new System.NotImplementedException(buildPipelineName);
+                Debug.LogError(buildResult.ErrorInfo);
+                throw new System.Exception($"{nameof(EditorSimulateBuildPipeline)} build failed !");
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace YooAsset
@@ -235,6 +236,25 @@ namespace YooAsset
 
             if (package == null)
                 throw new Exception("Package instance is null !");
+        }
+
+        public static PackageInvokeBuildResult SimulateBuild(string packageName)
+        {
+#if UNITY_EDITOR
+            var assemblyName = "YooAsset.Editor";
+            var className = "YooAsset.Editor.AssetBundleSimulateBuilder";
+            var methodName = "SimulateBuild";
+            var classType = Assembly.Load(assemblyName).GetType(className);
+            var methodInfo = classType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            if (methodInfo == null)
+            {
+                UnityEngine.Debug.LogError($"{classType.FullName} not found method : {methodName}");
+                return null;
+            }
+            return (PackageInvokeBuildResult)methodInfo.Invoke(null, new []{packageName});
+#else 
+            throw new System.Exception("Only support in unity editor platform !");
+#endif
         }
 
         #region 系统参数
