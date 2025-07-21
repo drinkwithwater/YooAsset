@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 场景卸载异步操作类

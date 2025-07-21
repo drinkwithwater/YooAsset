@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 资源系统调试信息

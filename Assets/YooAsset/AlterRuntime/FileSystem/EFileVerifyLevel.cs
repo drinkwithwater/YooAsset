@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 文件校验等级

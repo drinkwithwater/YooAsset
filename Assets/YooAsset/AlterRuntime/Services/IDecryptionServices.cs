@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public struct DecryptFileInfo
     {

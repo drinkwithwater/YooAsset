@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class FileVerifyHelper
     {

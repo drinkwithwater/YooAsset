@@ -40,7 +40,7 @@ namespace YooAsset.Editor
     {
         PackRuleResult IPackRule.GetPackRuleResult(PackRuleData data)
         {
-            string bundleName = PathUtility.RemoveExtension(data.AssetPath);
+            string bundleName = Alter.PathUtility.RemoveExtension(data.AssetPath);
             PackRuleResult result = new PackRuleResult(bundleName, DefaultPackRule.AssetBundleFileExtension);
             return result;
         }
@@ -110,7 +110,7 @@ namespace YooAsset.Editor
             }
             else
             {
-                bundleName = PathUtility.RemoveExtension(collectPath);
+                bundleName = Alter.PathUtility.RemoveExtension(collectPath);
             }
 
             PackRuleResult result = new PackRuleResult(bundleName, DefaultPackRule.AssetBundleFileExtension);

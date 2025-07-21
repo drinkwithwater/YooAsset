@@ -46,13 +46,13 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建资源加密服务类实例
         /// </summary>
-        protected IEncryptionServices CreateEncryptionServicesInstance()
+        protected Alter.IEncryptionServices CreateEncryptionServicesInstance()
         {
             var className = AssetBundleBuilderSetting.GetPackageEncyptionServicesClassName(PackageName, PipelineName);
-            var classTypes = EditorTools.GetAssignableTypes(typeof(IEncryptionServices));
+            var classTypes = EditorTools.GetAssignableTypes(typeof(Alter.IEncryptionServices));
             var classType = classTypes.Find(x => x.FullName.Equals(className));
             if (classType != null)
-                return (IEncryptionServices)Activator.CreateInstance(classType);
+                return (Alter.IEncryptionServices)Activator.CreateInstance(classType);
             else
                 return null;
         }
@@ -60,13 +60,13 @@ namespace YooAsset.Editor
         /// <summary>
         /// 创建资源清单服务类实例
         /// </summary>
-        protected IManifestServices CreateManifestServicesInstance()
+        protected Alter.IManifestServices CreateManifestServicesInstance()
         {
             var className = AssetBundleBuilderSetting.GetPackageManifestServicesClassName(PackageName, PipelineName);
-            var classTypes = EditorTools.GetAssignableTypes(typeof(IManifestServices));
+            var classTypes = EditorTools.GetAssignableTypes(typeof(Alter.IManifestServices));
             var classType = classTypes.Find(x => x.FullName.Equals(className));
             if (classType != null)
-                return (IManifestServices)Activator.CreateInstance(classType);
+                return (Alter.IManifestServices)Activator.CreateInstance(classType);
             else
                 return null;
         }
@@ -109,7 +109,7 @@ namespace YooAsset.Editor
             enumField.style.width = StyleWidth;
             enumField.RegisterValueChangedCallback(evt =>
             {
-                AssetBundleBuilderSetting.SetPackageFileNameStyle(PackageName, PipelineName, (EFileNameStyle)enumField.value);
+                AssetBundleBuilderSetting.SetPackageFileNameStyle(PackageName, PipelineName, (Alter.EFileNameStyle)enumField.value);
             });
             UIElementsTools.SetElementLabelMinWidth(enumField, LabelMinWidth);
         }
@@ -170,7 +170,7 @@ namespace YooAsset.Editor
         protected PopupField<Type> CreateEncryptionServicesField(VisualElement container)
         {
             // 加密服务类
-            var classTypes = EditorTools.GetAssignableTypes(typeof(IEncryptionServices));
+            var classTypes = EditorTools.GetAssignableTypes(typeof(Alter.IEncryptionServices));
             if (classTypes.Count > 0)
             {
                 var className = AssetBundleBuilderSetting.GetPackageEncyptionServicesClassName(PackageName, PipelineName);
@@ -201,7 +201,7 @@ namespace YooAsset.Editor
         protected PopupField<Type> CreateManifestServicesField(VisualElement container)
         {
             // 清单服务类
-            var classTypes = EditorTools.GetAssignableTypes(typeof(IManifestServices));
+            var classTypes = EditorTools.GetAssignableTypes(typeof(Alter.IManifestServices));
             if (classTypes.Count > 0)
             {
                 var className = AssetBundleBuilderSetting.GetPackageManifestServicesClassName(PackageName, PipelineName);

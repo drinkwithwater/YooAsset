@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     [Serializable]
     internal class PackageBundle

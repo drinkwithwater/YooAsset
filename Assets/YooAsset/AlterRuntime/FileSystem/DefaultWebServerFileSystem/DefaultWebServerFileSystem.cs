@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// Web文件系统

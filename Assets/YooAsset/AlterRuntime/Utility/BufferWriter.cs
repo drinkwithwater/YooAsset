@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 数据存储以小端字节序为标准

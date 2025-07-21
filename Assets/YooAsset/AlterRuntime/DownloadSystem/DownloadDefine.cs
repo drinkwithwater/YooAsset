@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 下载器结束

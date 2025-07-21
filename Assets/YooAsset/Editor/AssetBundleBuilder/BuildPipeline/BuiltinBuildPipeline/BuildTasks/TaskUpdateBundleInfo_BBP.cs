@@ -43,17 +43,17 @@ namespace YooAsset.Editor
         protected override string GetBundleFileHash(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return HashUtility.FileMD5(filePath);
+            return Alter.HashUtility.FileMD5(filePath);
         }
         protected override string GetBundleFileCRC(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return HashUtility.FileCRC32(filePath);
+            return Alter.HashUtility.FileCRC32(filePath);
         }
         protected override long GetBundleFileSize(BuildBundleInfo bundleInfo, BuildParametersContext buildParametersContext)
         {
             string filePath = bundleInfo.PackageSourceFilePath;
-            return FileUtility.GetFileSize(filePath);
+            return Alter.FileUtility.GetFileSize(filePath);
         }
     }
 }

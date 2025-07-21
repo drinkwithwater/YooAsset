@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class LoadEditorPackageVersionOperation : AsyncOperationBase
     {

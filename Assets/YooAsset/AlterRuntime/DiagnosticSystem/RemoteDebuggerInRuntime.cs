@@ -3,7 +3,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class RemoteDebuggerInRuntime : MonoBehaviour
     {

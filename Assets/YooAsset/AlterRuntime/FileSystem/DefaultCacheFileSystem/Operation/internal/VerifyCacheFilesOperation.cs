@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 缓存文件验证（线程版）

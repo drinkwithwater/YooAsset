@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 自定义日志处理

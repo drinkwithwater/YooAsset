@@ -1,9 +1,9 @@
 ﻿
 namespace YooAsset.Editor
 {
-    public class EncryptionNone : IEncryptionServices
+    public class EncryptionNone : Alter.IEncryptionServices
     {
-        public EncryptResult Encrypt(EncryptFileInfo fileInfo)
+        public Alter.EncryptResult Encrypt(Alter.EncryptFileInfo fileInfo)
         {
             throw new System.NotImplementedException();
         }

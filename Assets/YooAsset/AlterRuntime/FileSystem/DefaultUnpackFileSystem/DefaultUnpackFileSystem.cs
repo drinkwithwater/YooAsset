@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 解压文件系统

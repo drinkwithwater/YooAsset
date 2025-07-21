@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class VirtualBundleResult : BundleResult
     {

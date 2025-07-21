@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 应用程序水印

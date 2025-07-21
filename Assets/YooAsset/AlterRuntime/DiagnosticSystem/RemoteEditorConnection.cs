@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.Networking.PlayerConnection;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class RemoteEditorConnection
     {

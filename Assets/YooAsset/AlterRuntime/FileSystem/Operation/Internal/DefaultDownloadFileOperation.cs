@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal abstract class DefaultDownloadFileOperation : FSDownloadFileOperation
     {

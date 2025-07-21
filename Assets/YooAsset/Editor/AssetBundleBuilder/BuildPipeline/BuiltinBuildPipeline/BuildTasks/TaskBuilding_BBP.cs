@@ -31,7 +31,7 @@ namespace YooAsset.Editor
             }
 
             // 检测输出目录
-            string unityOutputManifestFilePath = $"{pipelineOutputDirectory}/{YooAssetSettings.OutputFolderName}";
+            string unityOutputManifestFilePath = $"{pipelineOutputDirectory}/{Alter.YooAssetSettings.OutputFolderName}";
             if (System.IO.File.Exists(unityOutputManifestFilePath) == false)
             {
                 string message = BuildLogger.GetErrorMessage(ErrorCode.UnityEngineBuildFatal, $"Not found output {nameof(AssetBundleManifest)} file : {unityOutputManifestFilePath}");

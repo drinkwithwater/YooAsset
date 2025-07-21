@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     [Serializable]
     internal class PackageAsset

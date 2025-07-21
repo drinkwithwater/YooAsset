@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public abstract class DownloaderOperation : AsyncOperationBase
     {

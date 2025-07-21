@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class UnityWebFileRequestOperation : UnityWebRequestOperation
     {

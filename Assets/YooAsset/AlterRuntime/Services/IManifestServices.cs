@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 资源清单文件处理服务接口

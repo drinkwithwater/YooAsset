@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal static class ManifestTools
     {

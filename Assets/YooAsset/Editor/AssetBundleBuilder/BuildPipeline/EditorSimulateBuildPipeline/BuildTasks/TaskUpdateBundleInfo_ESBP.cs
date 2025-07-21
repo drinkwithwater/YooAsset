@@ -36,7 +36,7 @@ namespace YooAsset.Editor
         private string GetFilePathTempHash(string filePath)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(filePath);
-            return HashUtility.BytesMD5(bytes);
+            return Alter.HashUtility.BytesMD5(bytes);
 
             // 注意：在文件路径的哈希值冲突的情况下，可以使用下面的方法
             //return $"{HashUtility.BytesMD5(bytes)}-{Guid.NewGuid():N}";
@@ -48,7 +48,7 @@ namespace YooAsset.Editor
             var assetPaths = bundleInfo.GetAllPackAssetPaths();
             foreach (var assetPath in assetPaths)
             {
-                long size = FileUtility.GetFileSize(assetPath);
+                long size = Alter.FileUtility.GetFileSize(assetPath);
                 tempSize += size;
             }
 

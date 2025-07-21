@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 文件系统参数

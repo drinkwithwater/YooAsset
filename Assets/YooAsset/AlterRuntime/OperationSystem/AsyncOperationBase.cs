@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public abstract class AsyncOperationBase : IEnumerator, IComparable<AsyncOperationBase>
     {

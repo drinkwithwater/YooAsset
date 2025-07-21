@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public static partial class YooAssets
     {

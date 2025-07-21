@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class AssetBundleResult : BundleResult
     {

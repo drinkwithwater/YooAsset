@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 支持Unity2018版本的断点续传下载器

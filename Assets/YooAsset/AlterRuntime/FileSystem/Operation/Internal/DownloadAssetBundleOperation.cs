@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal abstract class DownloadAssetBundleOperation : DefaultDownloadFileOperation
     {

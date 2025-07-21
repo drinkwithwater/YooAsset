@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 清单文件

@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     [Serializable]
     internal class DebugPackageData

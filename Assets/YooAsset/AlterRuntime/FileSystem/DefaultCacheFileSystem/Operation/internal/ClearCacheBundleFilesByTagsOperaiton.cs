@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class ClearCacheBundleFilesByTagsOperaiton : FSClearCacheFilesOperation
     {

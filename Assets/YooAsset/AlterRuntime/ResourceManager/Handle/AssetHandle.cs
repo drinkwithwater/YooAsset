@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public sealed class AssetHandle : HandleBase
     {

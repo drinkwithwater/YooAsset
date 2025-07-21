@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 下载文件验证（线程版）

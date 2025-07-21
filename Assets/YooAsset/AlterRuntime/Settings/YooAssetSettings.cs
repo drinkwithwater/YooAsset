@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     [CreateAssetMenu(fileName = "YooAssetSettings", menuName = "YooAsset/Create YooAsset Settings")]
     internal class YooAssetSettings : ScriptableObject

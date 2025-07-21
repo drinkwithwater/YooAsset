@@ -36,7 +36,7 @@ namespace YooAsset.Editor
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException(filePath);
 
-            string json = FileUtility.ReadAllText(filePath);
+            string json = Alter.FileUtility.ReadAllText(filePath);
             ConfigWrapper setting = JsonUtility.FromJson<ConfigWrapper>(json);
 
             // 检测配置文件的签名
@@ -79,7 +79,7 @@ namespace YooAsset.Editor
             wrapper.Scanners = AssetArtScannerSettingData.Setting.Scanners;
 
             string json = JsonUtility.ToJson(wrapper, true);
-            FileUtility.WriteAllText(savePath, json);
+            Alter.FileUtility.WriteAllText(savePath, json);
         }
     }
 }

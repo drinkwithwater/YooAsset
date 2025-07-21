@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal sealed class LoadBuildinCatalogFileOperation : AsyncOperationBase
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public abstract class HandleBase : IEnumerator, IDisposable
     {

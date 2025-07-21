@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 内置资源清单目录

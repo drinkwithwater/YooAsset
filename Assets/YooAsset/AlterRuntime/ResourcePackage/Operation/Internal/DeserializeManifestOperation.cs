@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class DeserializeManifestOperation : AsyncOperationBase
     {

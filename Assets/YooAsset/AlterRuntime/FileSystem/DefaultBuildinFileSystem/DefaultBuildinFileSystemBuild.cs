@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public class DefaultBuildinFileSystemBuild : UnityEditor.Build.IPreprocessBuildWithReport
     {

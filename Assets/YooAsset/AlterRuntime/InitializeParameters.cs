@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 运行模式

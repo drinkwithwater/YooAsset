@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class YooAssetsDriver : MonoBehaviour
     {

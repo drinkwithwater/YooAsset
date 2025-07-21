@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 内置文件系统

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class BufferReader
     {

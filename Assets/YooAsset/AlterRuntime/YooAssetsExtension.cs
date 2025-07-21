@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public static partial class YooAssets
     {

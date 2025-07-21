@@ -101,7 +101,7 @@ namespace YooAsset.Editor
             buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
             buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
             buildParameters.BuildPipeline = PipelineName.ToString();
-            buildParameters.BuildBundleType = (int)EBuildBundleType.RawBundle;
+            buildParameters.BuildBundleType = (int)Alter.EBuildBundleType.RawBundle;
             buildParameters.BuildTarget = BuildTarget;
             buildParameters.PackageName = PackageName;
             buildParameters.PackageVersion = _buildVersionField.value;

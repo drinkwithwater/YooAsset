@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class DownloadFileWrapper : FSDownloadFileOperation
     {

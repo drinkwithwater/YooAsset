@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 路径工具类

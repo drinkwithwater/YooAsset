@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 自定义下载器的请求委托

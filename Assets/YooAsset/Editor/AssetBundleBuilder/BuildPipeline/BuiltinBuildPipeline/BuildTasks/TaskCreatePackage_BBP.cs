@@ -23,15 +23,15 @@ namespace YooAsset.Editor
 
             // 拷贝UnityManifest序列化文件
             {
-                string sourcePath = $"{pipelineOutputDirectory}/{YooAssetSettings.OutputFolderName}";
-                string destPath = $"{packageOutputDirectory}/{YooAssetSettings.OutputFolderName}";
+                string sourcePath = $"{pipelineOutputDirectory}/{Alter.YooAssetSettings.OutputFolderName}";
+                string destPath = $"{packageOutputDirectory}/{Alter.YooAssetSettings.OutputFolderName}";
                 EditorTools.CopyFile(sourcePath, destPath, true);
             }
 
             // 拷贝UnityManifest文本文件
             {
-                string sourcePath = $"{pipelineOutputDirectory}/{YooAssetSettings.OutputFolderName}.manifest";
-                string destPath = $"{packageOutputDirectory}/{YooAssetSettings.OutputFolderName}.manifest";
+                string sourcePath = $"{pipelineOutputDirectory}/{Alter.YooAssetSettings.OutputFolderName}.manifest";
+                string destPath = $"{packageOutputDirectory}/{Alter.YooAssetSettings.OutputFolderName}.manifest";
                 EditorTools.CopyFile(sourcePath, destPath, true);
             }
 

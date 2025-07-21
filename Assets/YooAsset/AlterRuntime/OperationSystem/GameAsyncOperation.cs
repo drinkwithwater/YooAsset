@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public abstract class GameAsyncOperation : AsyncOperationBase
     {

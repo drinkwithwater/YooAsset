@@ -13,12 +13,12 @@ namespace YooAsset.Editor
     {
         private class ProviderTableData : DefaultTableData
         {
-            public DebugPackageData PackageData;
-            public DebugProviderInfo ProviderInfo;
+            public Alter.DebugPackageData PackageData;
+            public Alter.DebugProviderInfo ProviderInfo;
         }
         private class DependTableData : DefaultTableData
         {
-            public DebugBundleInfo BundleInfo;
+            public Alter.DebugBundleInfo BundleInfo;
         }
 
         private VisualTreeAsset _visualAsset;
@@ -206,7 +206,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var providerTableData = data as ProviderTableData;
-                    if (providerTableData.ProviderInfo.Status == EOperationStatus.Failed.ToString())
+                    if (providerTableData.ProviderInfo.Status == Alter.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -280,7 +280,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var dependTableData = data as DependTableData;
-                    if (dependTableData.BundleInfo.Status == EOperationStatus.Failed.ToString())
+                    if (dependTableData.BundleInfo.Status == Alter.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -296,7 +296,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 填充页面数据
         /// </summary>
-        public void FillViewData(DebugReport debugReport)
+        public void FillViewData(Alter.DebugReport debugReport)
         {
             // 清空旧数据
             _providerTableView.ClearAll(false, true);
@@ -372,8 +372,8 @@ namespace YooAsset.Editor
         private void OnProviderTableViewSelectionChanged(ITableData data)
         {
             var providerTableData = data as ProviderTableData;
-            DebugPackageData packageData = providerTableData.PackageData;
-            DebugProviderInfo providerInfo = providerTableData.ProviderInfo;
+            Alter.DebugPackageData packageData = providerTableData.PackageData;
+            Alter.DebugProviderInfo providerInfo = providerTableData.ProviderInfo;
 
             // 填充依赖数据
             var sourceDatas = new List<ITableData>(providerInfo.DependBundles.Count);

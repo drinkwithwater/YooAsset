@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public class SceneHandle : HandleBase
     {

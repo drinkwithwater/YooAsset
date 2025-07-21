@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 缓存文件系统

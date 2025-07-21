@@ -1,5 +1,5 @@
 ﻿
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 覆盖安装清理模式

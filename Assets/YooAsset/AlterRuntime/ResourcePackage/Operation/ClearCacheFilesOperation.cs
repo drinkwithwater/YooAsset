@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public sealed class ClearCacheFilesOperation : AsyncOperationBase
     {

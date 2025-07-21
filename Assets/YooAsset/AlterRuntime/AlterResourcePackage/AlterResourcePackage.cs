@@ -1,4 +1,4 @@
-﻿namespace YooAsset.AlterResourcePackage
+﻿namespace YooAsset.Alter.AlterResourcePackage
 {
     public class AlterResourcePackage
     {

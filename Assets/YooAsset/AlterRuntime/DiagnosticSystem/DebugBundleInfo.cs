@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     [Serializable]
     internal struct DebugBundleInfo : IComparer<DebugBundleInfo>, IComparable<DebugBundleInfo>

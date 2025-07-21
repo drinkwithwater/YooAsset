@@ -2,7 +2,7 @@
 using System.Text;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal enum ERemoteCommand
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class OperationSystem
     {

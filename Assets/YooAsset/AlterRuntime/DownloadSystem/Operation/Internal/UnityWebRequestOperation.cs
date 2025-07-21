@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using UnityEngine.Networking;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal abstract class UnityWebRequestOperation : AsyncOperationBase
     {

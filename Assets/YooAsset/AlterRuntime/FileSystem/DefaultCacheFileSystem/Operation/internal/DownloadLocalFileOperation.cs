@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     internal class DownloadLocalFileOperation : DefaultDownloadFileOperation
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     public sealed class UnloadAllAssetsOptions
     {

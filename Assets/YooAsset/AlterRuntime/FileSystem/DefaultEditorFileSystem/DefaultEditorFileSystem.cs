@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YooAsset
+namespace YooAsset.Alter
 {
     /// <summary>
     /// 模拟文件系统

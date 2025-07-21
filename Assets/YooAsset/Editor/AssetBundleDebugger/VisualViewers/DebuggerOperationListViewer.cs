@@ -13,8 +13,8 @@ namespace YooAsset.Editor
     {
         private class OperationTableData : DefaultTableData
         {
-            public DebugPackageData PackageData;
-            public DebugOperationInfo OperationInfo;
+            public Alter.DebugPackageData PackageData;
+            public Alter.DebugOperationInfo OperationInfo;
         }
 
         private VisualTreeAsset _visualAsset;
@@ -207,7 +207,7 @@ namespace YooAsset.Editor
                 {
                     StyleColor textColor;
                     var operationTableData = data as OperationTableData;
-                    if (operationTableData.OperationInfo.Status == EOperationStatus.Failed.ToString())
+                    if (operationTableData.OperationInfo.Status == Alter.EOperationStatus.Failed.ToString())
                         textColor = new StyleColor(Color.yellow);
                     else
                         textColor = new StyleColor(Color.white);
@@ -299,7 +299,7 @@ namespace YooAsset.Editor
         /// <summary>
         /// 填充页面数据
         /// </summary>
-        public void FillViewData(DebugReport debugReport)
+        public void FillViewData(Alter.DebugReport debugReport)
         {
             // 清空旧数据
             _operationTableView.ClearAll(false, true);
@@ -377,8 +377,8 @@ namespace YooAsset.Editor
         private void OnOperationTableViewSelectionChanged(ITableData data)
         {
             var operationTableData = data as OperationTableData;
-            DebugPackageData packageData = operationTableData.PackageData;
-            DebugOperationInfo operationInfo = operationTableData.OperationInfo;
+            Alter.DebugPackageData packageData = operationTableData.PackageData;
+            Alter.DebugOperationInfo operationInfo = operationTableData.OperationInfo;
 
             TreeNode rootNode = new TreeNode(operationInfo);
             FillTreeData(operationInfo, rootNode);
@@ -450,7 +450,7 @@ namespace YooAsset.Editor
         }
         private void BindTreeViewItem(VisualElement container, object userData)
         {
-            var operationInfo = (DebugOperationInfo)userData;
+            var operationInfo = (Alter.DebugOperationInfo)userData;
 
             // OperationName
             {
@@ -479,7 +479,7 @@ namespace YooAsset.Editor
             // Status
             {
                 StyleColor textColor;
-                if (operationInfo.Status == EOperationStatus.Failed.ToString())
+                if (operationInfo.Status == Alter.EOperationStatus.Failed.ToString())
                     textColor = new StyleColor(Color.yellow);
                 else
                     textColor = new StyleColor(Color.white);
@@ -495,7 +495,7 @@ namespace YooAsset.Editor
                 label.text = operationInfo.OperationDesc;
             }
         }
-        private void FillTreeData(DebugOperationInfo parentOperation, TreeNode rootNode)
+        private void FillTreeData(Alter.DebugOperationInfo parentOperation, TreeNode rootNode)
         {
             foreach (var childOperation in parentOperation.Childs)
             {
