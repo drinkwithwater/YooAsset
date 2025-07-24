@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 // 内部友元
+[assembly: InternalsVisibleTo("YooAsset.Alter")]
 [assembly: InternalsVisibleTo("YooAsset.Editor")]
 [assembly: InternalsVisibleTo("YooAsset.Test.Editor")]
 
